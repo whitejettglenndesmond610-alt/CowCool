@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Shawn Niu — Creative Developer & Digital Designer Portfolio">
+  <title>Shawn Niu | Portfolio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Custom Cursor -->
+  <div class="cursor-dot" aria-hidden="true"></div>
+  <div class="cursor-ring" aria-hidden="true"></div>
+
+  <!-- Mouse-follow glow -->
+  <div class="mouse-glow" aria-hidden="true"></div>
+
+  <!-- Particle Canvas Background -->
+  <canvas id="particles" aria-hidden="true"></canvas>
+
+  <!-- Floating Glow Orbs (background decoration) -->
+  <div class="glow-orb glow-orb--1" aria-hidden="true"></div>
+  <div class="glow-orb glow-orb--2" aria-hidden="true"></div>
+  <div class="glow-orb glow-orb--3" aria-hidden="true"></div>
+
+  <!-- ============ NAVIGATION ============ -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="#home" class="nav-logo" aria-label="Shawn Niu Home">SN</a>
+      <ul class="nav-links" role="menubar">
+        <li role="none"><a href="#home" role="menuitem" class="nav-link active">Home</a></li>
+        <li role="none"><a href="#about" role="menuitem" class="nav-link">About</a></li>
+        <li role="none"><a href="#skills" role="menuitem" class="nav-link">Skills</a></li>
+        <li role="none"><a href="#projects" role="menuitem" class="nav-link">Projects</a></li>
+        <li role="none"><a href="#timeline" role="menuitem" class="nav-link">Timeline</a></li>
+        <li role="none"><a href="#contact" role="menuitem" class="nav-link">Contact</a></li>
+      </ul>
+      <button class="nav-cta" onclick="document.querySelector('#contact').scrollIntoView({behavior:'smooth'})">Let's Talk</button>
+      <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu" aria-hidden="true">
+    <ul class="mobile-nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#timeline">Timeline</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+
+  <!-- ============ HERO SECTION ============ -->
+  <section id="home" class="hero">
+    <div class="hero-content">
+      <p class="hero-greeting reveal">Hello, I'm</p>
+      <h1 class="hero-title reveal">SHAWN NIU</h1>
+      <p class="hero-subtitle reveal"><span class="typewriter-text"></span><span class="typewriter-cursor">|</span></p>
+      <p class="hero-description reveal">I craft digital experiences at the intersection of code and design — building products that feel alive, look stunning, and work flawlessly.</p>
+      <div class="hero-buttons reveal">
+        <a href="#projects" class="btn btn-primary">
+          <span>View Projects</span>
+          <svg class="btn-arrow" width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a href="#contact" class="btn btn-outline">
+          <span>Contact Me</span>
+        </a>
+      </div>
+    </div>
+    <div class="scroll-indicator" aria-hidden="true">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT SECTION ============ -->
+  <section id="about" class="about section">
+    <div class="section-header reveal">
+      <h2 class="section-title">About Me</h2>
+      <p class="section-subtitle">The person behind the pixels</p>
+    </div>
+    <div class="about-grid">
+      <div class="about-card glass-card reveal">
+        <div class="avatar-wrapper">
+          <div class="avatar">
+            <svg viewBox="0 0 100 100" fill="none">
+              <circle cx="50" cy="38" r="16" stroke="currentColor" stroke-width="2"/>
+              <path d="M20 85c0-16.569 13.431-30 30-30s30 13.431 30 30" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="avatar-ring"></div>
+        </div>
+        <div class="identity-tags">
+          <span class="tag">Creative Developer</span>
+          <span class="tag">UI/UX Designer</span>
+          <span class="tag">Digital Artist</span>
+        </div>
+        <div class="about-text">
+          <p>I'm Shawn — a multidisciplinary creator who thrives at the intersection of development and design. With over 5 years of crafting digital products, I bring a rare blend of technical precision and aesthetic sensibility to every project I touch.</p>
+          <p>My philosophy is simple: build things that don't just work, but make people feel something. Whether it's a polished web app, a design system, or a brand identity — I chase that moment when code becomes art.</p>
+          <p>When I'm not pushing pixels or writing clean code, you'll find me exploring generative art, contributing to open-source, or obsessing over the latest design tools.</p>
+        </div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card glass-card reveal" data-count="47">
+          <span class="stat-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="12" y2="17"/></svg>
+          </span>
+          <span class="stat-number" data-target="47">0</span>
+          <span class="stat-label">Projects Completed</span>
+        </div>
+        <div class="stat-card glass-card reveal" data-count="18">
+          <span class="stat-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+          </span>
+          <span class="stat-number" data-target="18">0</span>
+          <span class="stat-label">Skills Mastered</span>
+        </div>
+        <div class="stat-card glass-card reveal" data-count="2400">
+          <span class="stat-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </span>
+          <span class="stat-number" data-target="2400" data-suffix="+">0</span>
+          <span class="stat-label">Learning Hours</span>
+        </div>
+        <div class="stat-card glass-card reveal" data-count="5">
+          <span class="stat-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </span>
+          <span class="stat-number" data-target="5" data-suffix="+">0</span>
+          <span class="stat-label">Years Experience</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SKILLS SECTION ============ -->
+  <section id="skills" class="skills section">
+    <div class="section-header reveal">
+      <h2 class="section-title">Skills & Expertise</h2>
+      <p class="section-subtitle">Tools and technologies I wield</p>
+    </div>
+
+    <div class="skills-categories">
+      <div class="skill-category reveal">
+        <h3 class="skill-cat-title">
+          <span class="skill-cat-icon">&#10132;</span> Frontend
+        </h3>
+        <div class="skill-tags">
+          <span class="skill-tag">React</span>
+          <span class="skill-tag">Vue</span>
+          <span class="skill-tag">TypeScript</span>
+          <span class="skill-tag">CSS / Sass</span>
+          <span class="skill-tag">Three.js</span>
+          <span class="skill-tag">GSAP</span>
+        </div>
+      </div>
+      <div class="skill-category reveal">
+        <h3 class="skill-cat-title">
+          <span class="skill-cat-icon">&#10132;</span> Backend
+        </h3>
+        <div class="skill-tags">
+          <span class="skill-tag">Node.js</span>
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">PostgreSQL</span>
+          <span class="skill-tag">GraphQL</span>
+          <span class="skill-tag">REST APIs</span>
+        </div>
+      </div>
+      <div class="skill-category reveal">
+        <h3 class="skill-cat-title">
+          <span class="skill-cat-icon">&#10132;</span> Design
+        </h3>
+        <div class="skill-tags">
+          <span class="skill-tag">Figma</span>
+          <span class="skill-tag">UI / UX</span>
+          <span class="skill-tag">Motion Design</span>
+          <span class="skill-tag">Brand Identity</span>
+          <span class="skill-tag">3D Modeling</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="skills-orbital" aria-hidden="true">
+      <div class="orbit-ring orbit-ring--1"></div>
+      <div class="orbit-ring orbit-ring--2"></div>
+      <div class="orbit-ring orbit-ring--3"></div>
+    </div>
+  </section>
+
+  <!-- ============ PROJECTS SECTION ============ -->
+  <section id="projects" class="projects section">
+    <div class="section-header reveal">
+      <h2 class="section-title">Selected Work</h2>
+      <p class="section-subtitle">Projects I'm proud of</p>
+    </div>
+
+    <div class="projects-grid">
+
+      <!-- Project 1: Neural Dashboard (Dev) -->
+      <article class="project-card reveal" data-project="neural-dashboard">
+        <div class="project-card-inner">
+          <div class="card-image">
+            <div class="card-image-placeholder">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+                <polyline points="6 10 10 7 14 10 18 7"/>
+              </svg>
+            </div>
+            <div class="card-image-glow"></div>
+          </div>
+          <div class="card-content">
+            <span class="card-type">Development</span>
+            <h3 class="card-title">Neural Dashboard</h3>
+            <p class="card-desc">Real-time analytics dashboard with neural network visualizations and live data streaming.</p>
+            <div class="card-tags">
+              <span>React</span><span>D3.js</span><span>WebSocket</span>
+            </div>
+          </div>
+          <button class="card-action">
+            <span>View Detail</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </article>
+
+      <!-- Project 2: Prism Design System (Design) -->
+      <article class="project-card reveal" data-project="prism-design">
+        <div class="project-card-inner">
+          <div class="card-image">
+            <div class="card-image-placeholder">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"/><line x1="12" y1="22" x2="12" y2="15.5"/><polyline points="22 8.5 12 15.5 2 8.5"/>
+              </svg>
+            </div>
+            <div class="card-image-glow"></div>
+          </div>
+          <div class="card-content">
+            <span class="card-type">Design</span>
+            <h3 class="card-title">Prism Design System</h3>
+            <p class="card-desc">A comprehensive design system with token-based theming, 200+ components, and detailed documentation.</p>
+            <div class="card-tags">
+              <span>Figma</span><span>Design Tokens</span><span>Storybook</span>
+            </div>
+          </div>
+          <button class="card-action">
+            <span>View Detail</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </article>
+
+      <!-- Project 3: CloudFlow Platform (Dev) -->
+      <article class="project-card reveal" data-project="cloudflow">
+        <div class="project-card-inner">
+          <div class="card-image">
+            <div class="card-image-placeholder">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
+              </svg>
+            </div>
+            <div class="card-image-glow"></div>
+          </div>
+          <div class="card-content">
+            <span class="card-type">Development</span>
+            <h3 class="card-title">CloudFlow Platform</h3>
+            <p class="card-desc">Serverless workflow automation platform with drag-and-drop pipeline builder and real-time logs.</p>
+            <div class="card-tags">
+              <span>Node.js</span><span>AWS</span><span>PostgreSQL</span>
+            </div>
+          </div>
+          <button class="card-action">
+            <span>View Detail</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </article>
+
+      <!-- Project 4: Aether Brand Identity (Design) -->
+      <article class="project-card reveal" data-project="aether-brand">
+        <div class="project-card-inner">
+          <div class="card-image">
+            <div class="card-image-placeholder">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+              </svg>
+            </div>
+            <div class="card-image-glow"></div>
+          </div>
+          <div class="card-content">
+            <span class="card-type">Design</span>
+            <h3 class="card-title">Aether Brand Identity</h3>
+            <p class="card-desc">Complete brand identity for a luxury tech startup — from logo to motion guidelines and brand strategy.</p>
+            <div class="card-tags">
+              <span>Brand Strategy</span><span>Visual Design</span><span>Motion</span>
+            </div>
+          </div>
+          <button class="card-action">
+            <span>View Detail</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </article>
+
+      <!-- Project 5: DataViz Explorer (Dev) -->
+      <article class="project-card reveal" data-project="dataviz-explorer">
+        <div class="project-card-inner">
+          <div class="card-image">
+            <div class="card-image-placeholder">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+              </svg>
+            </div>
+            <div class="card-image-glow"></div>
+          </div>
+          <div class="card-content">
+            <span class="card-type">Development</span>
+            <h3 class="card-title">DataViz Explorer</h3>
+            <p class="card-desc">3D data visualization tool with WebGL rendering, custom shaders, and interactive exploration modes.</p>
+            <div class="card-tags">
+              <span>Three.js</span><span>WebGL</span><span>TypeScript</span>
+            </div>
+          </div>
+          <button class="card-action">
+            <span>View Detail</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </article>
+
+      <!-- Project 6: Lumina Mobile App (Design) -->
+      <article class="project-card reveal" data-project="lumina-app">
+        <div class="project-card-inner">
+          <div class="card-image">
+            <div class="card-image-placeholder">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>
+              </svg>
+            </div>
+            <div class="card-image-glow"></div>
+          </div>
+          <div class="card-content">
+            <span class="card-type">Design</span>
+            <h3 class="card-title">Lumina Mobile App</h3>
+            <p class="card-desc">End-to-end mobile app design — user research, wireframes, high-fidelity prototypes, and usability testing.</p>
+            <div class="card-tags">
+              <span>UI/UX</span><span>Prototyping</span><span>User Research</span>
+            </div>
+          </div>
+          <button class="card-action">
+            <span>View Detail</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ TIMELINE SECTION ============ -->
+  <section id="timeline" class="timeline section">
+    <div class="section-header reveal">
+      <h2 class="section-title">My Journey</h2>
+      <p class="section-subtitle">The path that shaped who I am</p>
+    </div>
+
+    <div class="timeline-wrapper">
+      <div class="timeline-line" aria-hidden="true">
+        <div class="timeline-line-fill"></div>
+      </div>
+
+      <div class="timeline-items">
+        <div class="timeline-item reveal reveal--left">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content glass-card">
+            <span class="timeline-year">2018</span>
+            <h3 class="timeline-title">Started the Journey</h3>
+            <p class="timeline-desc">Began self-taught programming. Spent countless nights learning JavaScript, CSS, and the fundamentals of web development through building real projects.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal reveal--right">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content glass-card">
+            <span class="timeline-year">2019</span>
+            <h3 class="timeline-title">First Design Project</h3>
+            <p class="timeline-desc">Created a complete brand identity for a tech startup — logo, color system, typography, and UI kit. Discovered my passion for the intersection of design and code.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal reveal--left">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content glass-card">
+            <span class="timeline-year">2020</span>
+            <h3 class="timeline-title">Career Breakthrough</h3>
+            <p class="timeline-desc">Joined a leading digital agency as a Creative Developer. Worked on high-profile projects for Fortune 500 clients, mastering production-grade development.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal reveal--right">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content glass-card">
+            <span class="timeline-year">2022</span>
+            <h3 class="timeline-title">Major Platform Launch</h3>
+            <p class="timeline-desc">Led the full-stack development of a SaaS platform serving 100K+ users. Architected the system from scratch, managed a team of 4 developers, and shipped on time.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal reveal--left">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content glass-card">
+            <span class="timeline-year">2024 — Present</span>
+            <h3 class="timeline-title">Independent Creator</h3>
+            <p class="timeline-desc">Now working independently — building digital products, crafting brand identities, and helping startups bring their vision to life through design and code.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT SECTION ============ -->
+  <section id="contact" class="contact section">
+    <div class="contact-glow" aria-hidden="true"></div>
+    <div class="section-header reveal">
+      <h2 class="section-title section-title--large">Let's Create Something Cool</h2>
+      <p class="section-subtitle">Got a project in mind? Let's make it happen.</p>
+    </div>
+
+    <div class="contact-grid">
+      <form class="contact-form glass-card reveal" id="contact-form" novalidate>
+        <div class="form-group">
+          <input type="text" id="name" name="name" required placeholder="Your Name" autocomplete="name">
+          <label for="name">Your Name</label>
+          <span class="form-error">Please enter your name</span>
+        </div>
+        <div class="form-group">
+          <input type="email" id="email" name="email" required placeholder="Your Email" autocomplete="email">
+          <label for="email">Your Email</label>
+          <span class="form-error">Please enter a valid email</span>
+        </div>
+        <div class="form-group">
+          <textarea id="message" name="message" required placeholder="Your Message" rows="5"></textarea>
+          <label for="message">Your Message</label>
+          <span class="form-error">Please enter your message</span>
+        </div>
+        <button type="submit" class="btn btn-primary btn-submit">
+          <span>Send Message</span>
+          <svg class="btn-arrow" width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="form-success">Message sent successfully! I'll get back to you soon.</div>
+      </form>
+
+      <div class="contact-info reveal">
+        <div class="contact-card glass-card">
+          <span class="contact-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </span>
+          <span class="contact-label">Email</span>
+          <a href="mailto:shawn@example.com" class="contact-value" data-copy="shawn@example.com">shawn@example.com</a>
+        </div>
+
+        <div class="contact-socials">
+          <a href="#" class="social-link glass-card" aria-label="GitHub" title="GitHub">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          </a>
+          <a href="#" class="social-link glass-card" aria-label="LinkedIn" title="LinkedIn">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="#" class="social-link glass-card" aria-label="Twitter" title="Twitter">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+          </a>
+          <a href="#" class="social-link glass-card" aria-label="Dribbble" title="Dribbble">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6 4.37 12.5 0 18.5"/><path d="M12 2c3.2 4.7 3.2 15.3 0 20"/><path d="M2 12h20"/></svg>
+          </a>
+        </div>
+
+        <p class="contact-location">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Based in Shanghai, China — Available Worldwide
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-text">&copy; 2026 Shawn Niu. Crafted with code & creativity.</p>
+      <button class="back-to-top" aria-label="Scroll to top" onclick="document.querySelector('#home').scrollIntoView({behavior:'smooth'})">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 17V3M10 3L5 8M10 3L15 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </footer>
+
+  <!-- ============ PROJECT MODAL ============ -->
+  <div class="modal-overlay" id="project-modal" aria-hidden="true" role="dialog" aria-label="Project detail">
+    <div class="modal-backdrop"></div>
+    <div class="modal-panel">
+      <button class="modal-close" aria-label="Close project detail">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <div class="modal-body">
+        <!-- Dynamically filled by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FORM SUCCESS TOAST ============ -->
+  <div class="toast" id="form-toast" aria-hidden="true">
+    <span class="toast-icon">&#10004;</span>
+    <span class="toast-message">Message sent! I'll get back to you soon.</span>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
