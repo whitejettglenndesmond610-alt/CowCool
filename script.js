@@ -442,76 +442,76 @@ function initSmoothScroll() {
    ============================================ */
 
 const projectData = {
-  'neural-dashboard': {
-    type: 'Development',
-    title: 'Neural Dashboard',
-    desc: 'A real-time analytics dashboard that visualizes neural network training metrics with live data streaming. Features include interactive D3.js charts, WebSocket-powered live updates, and a modular React component architecture. Built for ML researchers to monitor model performance in real time.',
-    tech: ['React', 'D3.js', 'WebSocket', 'Node.js', 'Redis'],
+  'dance-booking': {
+    type: 'Full-Stack Project',
+    title: '舞蹈室课堂预约系统',
+    desc: 'A complete class booking platform built for dance studios. Features include a schedule management dashboard, student registration system, real-time availability tracking, and an admin panel for managing classes and instructors. Built as a hands-on full-stack learning project from frontend UI to database design.',
+    tech: ['HTML', 'CSS', 'JavaScript', 'Node.js', 'MySQL'],
     highlights: [
-      'Real-time data streaming with < 50ms latency',
-      'Custom D3.js visualizations for neural network metrics',
-      'Modular architecture supporting 20+ chart types',
-      'Dark theme optimized for extended monitoring sessions',
+      'Complete CRUD system for class and student management',
+      'Real-time availability display with conflict detection',
+      'Responsive admin dashboard with schedule overview',
+      'Form validation, error handling, and user-friendly UI',
     ],
   },
-  'prism-design': {
-    type: 'Design',
-    title: 'Prism Design System',
-    desc: 'A comprehensive design system built from the ground up with token-based theming. Includes 200+ meticulously crafted components, dark/light mode support, and extensive documentation. Used across 5 product teams serving 2M+ end users.',
-    tech: ['Figma', 'Design Tokens', 'Storybook', 'CSS Custom Properties', 'Accessibility'],
+  'portfolio-site': {
+    type: 'Frontend Project',
+    title: '学生个人作品集网站',
+    desc: 'This very website you\'re viewing — a custom-built personal portfolio designed and coded from scratch. Features particle canvas backgrounds, custom cursor effects, 3D card tilting, smooth scroll animations, and a project modal system. Every animation and interaction is hand-crafted with vanilla JavaScript and CSS.',
+    tech: ['HTML', 'CSS', 'JavaScript', 'CSS Animations', 'Canvas API'],
     highlights: [
-      '200+ components with full accessibility compliance',
-      'Token-based theming engine with dark/light modes',
-      'Interactive Storybook documentation with live playground',
-      'Adopted by 5 product teams across the organization',
+      'Particle system with mouse repulsion and connection lines',
+      '3D perspective card tilt following cursor movement',
+      'Custom cursor with lerp-smooth follow and hover states',
+      'IntersectionObserver-driven scroll reveal animations',
     ],
   },
-  'cloudflow': {
-    type: 'Development',
-    title: 'CloudFlow Platform',
-    desc: 'A serverless workflow automation platform featuring a drag-and-drop pipeline builder. Users can create complex automation flows connecting 50+ services. Includes real-time execution logs, error recovery, and team collaboration features.',
-    tech: ['Node.js', 'AWS Lambda', 'PostgreSQL', 'React', 'Docker'],
+  'ai-builder': {
+    type: 'AI Experiment',
+    title: 'AI 建站交互实验',
+    desc: 'An experimental project exploring how AI APIs can be used to generate website layouts from natural language descriptions. Users describe a page in plain text, and the system generates structured HTML/CSS output. This project deepened my understanding of prompt design, API integration, and the current capabilities and limitations of AI in web development.',
+    tech: ['AI API', 'JavaScript', 'Prompt Engineering', 'HTML/CSS Generation'],
     highlights: [
-      'Drag-and-drop visual pipeline builder',
-      'Serverless architecture auto-scaling to 10K+ concurrent executions',
-      'Integration with 50+ third-party services',
-      'Real-time execution monitoring and automated error recovery',
+      'Natural language input → structured HTML/CSS output',
+      'Multi-turn conversation for iterative design refinement',
+      'Template system combining AI output with predefined patterns',
+      'Explored prompt engineering techniques for code generation',
     ],
   },
-  'aether-brand': {
-    type: 'Design',
-    title: 'Aether Brand Identity',
-    desc: 'Complete brand identity project for a luxury AI startup. Delivered brand strategy, visual identity, motion guidelines, and a full UI kit. The brand system balances futuristic aesthetics with approachable luxury, positioning Aether as a premium AI brand.',
-    tech: ['Brand Strategy', 'Visual Design', 'Motion Design', 'Typography', 'Art Direction'],
+  'booking-app': {
+    type: 'UI/UX Design',
+    title: '课堂预约 App 原型',
+    desc: 'A mobile app prototype for classroom and course booking, designed in Figma. The project covers the full design process — from user research and persona creation to wireframes, high-fidelity mockups, and interactive prototypes. Focused on creating an intuitive booking flow with minimal friction for students.',
+    tech: ['Figma', 'Prototyping', 'Mobile UI Design', 'User Flows'],
     highlights: [
-      'Comprehensive brand strategy and positioning document',
-      'Dynamic logo system with responsive variants',
-      'Motion design guidelines for all brand touchpoints',
-      'Brand guideline documentation spanning 120+ pages',
+      'Complete user research phase with persona development',
+      'Interactive prototype with full booking flow simulation',
+      'Dark mode UI design for comfortable nighttime use',
+      'Responsive component library for consistent design',
     ],
   },
-  'dataviz-explorer': {
-    type: 'Development',
-    title: 'DataViz Explorer',
-    desc: 'An immersive 3D data visualization tool powered by WebGL and custom GLSL shaders. Transforms complex datasets into explorable 3D landscapes with real-time filtering, animation, and export capabilities. Used by data journalists and researchers worldwide.',
-    tech: ['Three.js', 'WebGL', 'TypeScript', 'GLSL', 'React'],
+  'dataviz-tool': {
+    type: 'Data Visualization',
+    title: '数据可视化小工具',
+    desc: 'An interactive data dashboard that fetches real-time data from REST APIs and renders dynamic charts using Chart.js and Canvas. Users can switch between chart types, filter data ranges, and export visualizations. Built to learn data visualization patterns and API integration.',
+    tech: ['Chart.js', 'Canvas API', 'JavaScript', 'REST API Integration'],
     highlights: [
-      'Custom GLSL shaders for unique visual effects',
-      'Handles datasets up to 1M+ data points smoothly',
-      'Interactive 3D camera with intuitive orbit controls',
-      'Export to high-resolution images and animated GIFs',
+      'Multiple chart types: bar, line, pie, and radar charts',
+      'Real-time data fetching with loading and error states',
+      'Interactive tooltips, zoom, and data point selection',
+      'Dark theme dashboard layout optimized for data viewing',
     ],
   },
-  'lumina-app': {
-    type: 'Design',
-    title: 'Lumina Mobile App',
-    desc: 'End-to-end mobile app design for a wellness and meditation platform. Conducted user research with 200+ participants, created wireframes, interactive prototypes, and final high-fidelity designs. The app achieved a 4.8-star rating within the first month of launch.',
-    tech: ['UI/UX Design', 'Prototyping', 'User Research', 'Design Systems', 'Motion'],
+  'interactive-ui': {
+    type: 'Creative Development',
+    title: '前端动态交互页面',
+    desc: 'A collection of creative frontend experiments exploring CSS animations, SVG interactions, and dynamic visual effects. Each experiment pushes the boundaries of what\'s possible with pure CSS and JavaScript — from morphing SVGs to physics-inspired motion and generative patterns.',
+    tech: ['CSS Animations', 'SVG', 'JavaScript', 'Creative Coding'],
     highlights: [
-      'User research with 200+ participants across 5 countries',
-      'Interactive prototypes tested with real users',
-      '4.8-star App Store rating within the first month',
-      'Design system documented for future feature development',
+      'CSS-only morphing shapes with keyframe animations',
+      'SVG path drawing on scroll with stroke-dasharray',
+      'Physics-inspired spring animations with easing curves',
+      'Generative geometric patterns with Canvas API',
     ],
   },
 };
@@ -740,17 +740,28 @@ function initFormValidation() {
     }
 
     if (isValid) {
-      /* Show success toast */
-      showToast(toast, "Message sent! I'll get back to you soon.");
+      /* Demo mode — show demo notice */
+      const submitBtn = form.querySelector('.btn-submit');
+      const submitText = submitBtn.querySelector('.btn-submit-text');
+      const originalText = submitText.textContent;
 
-      /* Show inline success message */
+      /* Change button to demo mode */
+      submitText.textContent = 'Demo Mode — Not Actually Sent';
+      submitBtn.style.opacity = '0.7';
+
+      /* Show success message */
       const successEl = form.querySelector('.form-success');
       if (successEl) {
         successEl.classList.add('visible');
       }
 
-      /* Reset form after delay */
+      /* Show toast */
+      showToast(toast, 'Demo form — reach me via email or social links!');
+
+      /* Reset after delay */
       setTimeout(() => {
+        submitText.textContent = originalText;
+        submitBtn.style.opacity = '1';
         form.reset();
         form.querySelectorAll('.form-group').forEach((g) => {
           g.classList.remove('success', 'error');
@@ -758,7 +769,7 @@ function initFormValidation() {
         if (successEl) {
           successEl.classList.remove('visible');
         }
-      }, 3000);
+      }, 4000);
     }
   });
 
@@ -789,19 +800,33 @@ function showToast(toast, message) {
    ============================================ */
 
 function initEmailCopy() {
+  /* Email card copy */
   const emailEl = document.querySelector('[data-copy]');
-  if (!emailEl) return;
-
-  emailEl.addEventListener('click', (e) => {
-    e.preventDefault();
-    const email = emailEl.dataset.copy;
-    navigator.clipboard.writeText(email).then(() => {
-      const toast = document.getElementById('form-toast');
-      showToast(toast, 'Email copied to clipboard!');
-    }).catch(() => {
-      /* Fallback: open mail client */
-      window.location.href = 'mailto:' + email;
+  if (emailEl) {
+    emailEl.addEventListener('click', (e) => {
+      e.preventDefault();
+      const email = emailEl.dataset.copy;
+      copyEmailToClipboard(email);
     });
+  }
+
+  /* Social icon with data-copy-trigger */
+  const copyTriggers = document.querySelectorAll('[data-copy-trigger]');
+  copyTriggers.forEach((trigger) => {
+    trigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      const email = trigger.dataset.copyTrigger;
+      copyEmailToClipboard(email);
+    });
+  });
+}
+
+function copyEmailToClipboard(email) {
+  navigator.clipboard.writeText(email).then(() => {
+    const toast = document.getElementById('form-toast');
+    showToast(toast, 'Email copied to clipboard!');
+  }).catch(() => {
+    window.location.href = 'mailto:' + email;
   });
 }
 
@@ -814,9 +839,9 @@ function initTypewriter() {
   if (!textEl) return;
 
   const phrases = [
-    'A Creative Developer & Digital Designer',
-    'Building the Future, One Pixel at a Time',
-    'Where Code Meets Aesthetic',
+    'Building Cool Stuff with Code & AI',
+    '前端学习者 · AI 探索者 · 创意制造者',
+    'Where Learning Meets Creating',
   ];
 
   let phraseIndex = 0;
@@ -875,6 +900,52 @@ function initHeroEntrance() {
 }
 
 /* ============================================
+   HERO PARALLAX — Background text follows mouse
+   ============================================ */
+
+function initHeroParallax() {
+  const bgText = document.querySelector('.hero-bg-text');
+  if (!bgText) return;
+
+  /* Skip on touch devices */
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  document.addEventListener('mousemove', (e) => {
+    const x = (e.clientX / window.innerWidth - 0.5) * -20;
+    const y = (e.clientY / window.innerHeight - 0.5) * -20;
+    bgText.style.transform = `translate(${x}px, ${y}px)`;
+  });
+}
+
+/* ============================================
+   SOCIAL STAGGER REVEAL — Contact icons pop in sequence
+   ============================================ */
+
+function initSocialStagger() {
+  const container = document.querySelector('.contact-socials.reveal-stagger');
+  if (!container) return;
+
+  const icons = container.querySelectorAll('.social-link');
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          icons.forEach((icon, i) => {
+            icon.style.animation = `socialPopIn 0.5s var(--ease-out-back) ${i * 0.12}s both`;
+          });
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.4 }
+  );
+
+  observer.observe(container);
+}
+
+/* ============================================
    INITIALIZATION
    ============================================ */
 
@@ -892,4 +963,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initEmailCopy();
   initTypewriter();
   initHeroEntrance();
+  initHeroParallax();
+  initSocialStagger();
 });
