@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<!-- ============================================================
+  这是你的个人作品集网站首页（index.html）
+  整个网站是一个单页应用（Single Page Application），
+  所有内容都在一个 HTML 文件里，通过滚动浏览不同区块。
+============================================================ -->
+<html lang="en">
+<head>
+  <!-- 字符编码：告诉浏览器用 UTF-8 解析文字，支持中文 -->
+  <meta charset="UTF-8">
+  <!-- 移动端视口设置：让页面在手机上正确缩放 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- 页面描述：搜索引擎抓取时显示的内容 -->
+  <meta name="description" content="Shawn Niu — Student Developer & AI Explorer Portfolio">
+  <!-- 浏览器标签页上显示的标题 -->
+  <title>Shawn Niu | Student Developer & AI Explorer</title>
+  <!-- 引入外部 CSS 样式文件 -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ============================================
+       自定义鼠标指针（Custom Cursor）
+       用两个 div 分别表示"小圆点"和"圆环"，
+       替换浏览器默认的鼠标样式，更酷！
+       aria-hidden="true" 表示对屏幕阅读器隐藏
+  ============================================ -->
+  <div class="cursor-dot" aria-hidden="true"></div>
+  <div class="cursor-ring" aria-hidden="true"></div>
+
+  <!-- 鼠标周围跟随的发光效果 -->
+  <div class="mouse-glow" aria-hidden="true"></div>
+
+  <!-- ============================================
+       粒子动画背景（Canvas）
+       <canvas> 是一个画布元素，JS 在上面画粒子线条
+  ============================================ -->
+  <canvas id="particles" aria-hidden="true"></canvas>
+
+  <!-- ============================================
+       漂浮的光球（装饰元素）
+       三个不同颜色的半透明球体，在背景中缓慢漂浮
+  ============================================ -->
+  <div class="glow-orb glow-orb--1" aria-hidden="true"></div>
+  <div class="glow-orb glow-orb--2" aria-hidden="true"></div>
+  <div class="glow-orb glow-orb--3" aria-hidden="true"></div>
+
+  <!-- ============================================
+       导航栏（NAVIGATION）
+       固定在页面顶部，滚动时会改变样式
+       role 和 aria-label 是为了无障碍访问（屏幕阅读器用）
+  ============================================ -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <!-- 左上角 Logo：点击回到顶部 -->
+      <a href="#home" class="nav-logo" aria-label="Shawn Niu Home">SN</a>
+      <!-- 桌面端的导航链接列表 -->
+      <ul class="nav-links" role="menubar">
+        <li role="none"><a href="#home" role="menuitem" class="nav-link active">首页</a></li>
+        <li role="none"><a href="#about" role="menuitem" class="nav-link">关于</a></li>
+        <li role="none"><a href="#skills" role="menuitem" class="nav-link">技能</a></li>
+        <li role="none"><a href="#projects" role="menuitem" class="nav-link">项目</a></li>
+        <li role="none"><a href="#timeline" role="menuitem" class="nav-link">历程</a></li>
+        <li role="none"><a href="#contact" role="menuitem" class="nav-link">联系</a></li>
+      </ul>
+      <!-- "Let's Talk" 按钮，点击直接滚动到联系区 -->
+      <button class="nav-cta" onclick="document.querySelector('#contact').scrollIntoView({behavior:'smooth'})">联系我</button>
+      <!-- 移动端汉堡菜单按钮（三条横线），点击弹出菜单 -->
+      <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ============================================
+       移动端菜单（覆盖层）
+       当点击汉堡按钮时显示，平时隐藏
+  ============================================ -->
+  <div class="mobile-menu" aria-hidden="true">
+    <ul class="mobile-nav-links">
+      <li><a href="#home">首页</a></li>
+      <li><a href="#about">关于</a></li>
+      <li><a href="#skills">技能</a></li>
+      <li><a href="#projects">项目</a></li>
+      <li><a href="#timeline">历程</a></li>
+      <li><a href="#contact">联系</a></li>
+    </ul>
+  </div>
+
+  <!-- ============================================
+       HERO 区域（首屏横幅）
+       这是用户打开页面时看到的第一个区域，
+       共 4 层：背景文字 → 能量环 → 浮动名片 → 前景内容
+  ============================================ -->
+  <section id="home" class="hero">
+    <!-- 第1层：巨大的背景文字（装饰），重复显示 "SHAWN NIU" -->
+    <div class="hero-bg-text" aria-hidden="true">
+      <span>SHAWN NIU</span><span>SHAWN NIU</span><span>SHAWN NIU</span>
+      <span>SHAWN NIU</span><span>SHAWN NIU</span><span>SHAWN NIU</span>
+      <span>SHAWN NIU</span><span>SHAWN NIU</span><span>SHAWN NIU</span>
+    </div>
+
+    <!-- 第2层：三个旋转的能量环（装饰），围绕中心旋转 -->
+    <div class="hero-rings" aria-hidden="true">
+      <div class="hero-ring hero-ring--1"></div>
+      <div class="hero-ring hero-ring--2"></div>
+      <div class="hero-ring hero-ring--3"></div>
+    </div>
+
+    <!-- 第3层：浮动名片，像一张 ID 卡片悬浮在空中 -->
+    <div class="hero-id-card glass-card reveal" aria-hidden="true">
+      <div class="id-card-avatar">
+        <!-- 用 SVG 绘制一个人形头像 -->
+        <svg viewBox="0 0 100 100" fill="none">
+          <circle cx="50" cy="38" r="16" stroke="currentColor" stroke-width="2"/>
+          <path d="M20 85c0-16.569 13.431-30 30-30s30 13.431 30 30" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </div>
+      <span class="id-card-name">SHAWN NIU</span>
+      <span class="id-card-role">学生开发者 & AI 探索者</span>
+      <div class="id-card-tags">
+        <span>前端</span><span>AI</span><span>设计</span>
+      </div>
+    </div>
+
+    <!-- 第4层：前景主要内容（标题、副标题、描述、按钮） -->
+    <div class="hero-content">
+      <p class="hero-greeting reveal">你好，我是</p>
+      <h1 class="hero-title reveal">SHAWN NIU</h1>
+      <!-- 打字机效果的文字（typewriter），由 JS 控制逐个显示 -->
+      <p class="hero-subtitle reveal"><span class="typewriter-text"></span><span class="typewriter-cursor">|</span></p>
+      <p class="hero-description reveal">一个对构建数字体验充满热情的学生开发者。我探索前端开发、AI 工具和创意设计的交汇点 — 在每天学习新东西的同时，构建能解决实际问题的项目。</p>
+      <!-- 两个按钮：查看项目 / 联系我 -->
+      <div class="hero-buttons reveal">
+        <a href="#projects" class="btn btn-primary">
+          <span>查看项目</span>
+          <svg class="btn-arrow" width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a href="#contact" class="btn btn-outline">
+          <span>联系我</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- 底部 "Scroll" 提示，引导用户向下滚动 -->
+    <div class="scroll-indicator" aria-hidden="true">
+      <span>滚动</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       ABOUT 区域（关于我）
+       左侧是个人介绍卡片，右侧是四个统计数字
+  ============================================ -->
+  <section id="about" class="about section">
+    <!-- 区块头部：标题 + 子标题 -->
+    <div class="section-header reveal">
+      <h2 class="section-title">关于我</h2>
+      <p class="section-subtitle">学生开发者 · AI 探索者 · 终身学习者</p>
+    </div>
+    <div class="about-grid">
+      <!-- 左侧：个人介绍卡片（毛玻璃效果） -->
+      <div class="about-card glass-card reveal">
+        <div class="avatar-wrapper">
+          <!-- 头像 SVG -->
+          <div class="avatar">
+            <svg viewBox="0 0 100 100" fill="none">
+              <circle cx="50" cy="38" r="16" stroke="currentColor" stroke-width="2"/>
+              <path d="M20 85c0-16.569 13.431-30 30-30s30 13.431 30 30" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <!-- 头像周围的旋转光环 -->
+          <div class="avatar-ring"></div>
+        </div>
+        <!-- 身份标签 -->
+        <div class="identity-tags">
+          <span class="tag">学生开发者</span>
+          <span class="tag">AI 探索者</span>
+          <span class="tag">前端学习者</span>
+        </div>
+        <!-- 自我介绍的段落文字 -->
+        <div class="about-text">
+          <p>嗨！我是 牛帅 (Shawn) — 一个爱上在网页上构建东西的学生。从对"网站是如何工作的"产生好奇开始，变成了对前端开发、创意编码和 AI 工具的满腔热情。</p>
+          <p>我相信最好的学习方式就是动手构建。这个作品集中的每个项目都始于一个问题 — "我能做出来吗？" — 最终成为一个可用的产品。在这个过程中，我学会了 HTML/CSS、JavaScript、React、Node.js，并且越来越着迷于 AI 如何为创意过程赋能。</p>
+          <p>现在，我正在深入学习全栈开发、探索 AI API，并尝试交互式网页体验。我一直在寻找下一个值得构建的酷东西。</p>
+        </div>
+      </div>
+
+      <!-- 右侧：统计数据（项目数、技能数、编程小时数、学习年数） -->
+      <div class="stats-grid">
+        <!-- data-count 属性告诉 JS 要滚动到的目标数字 -->
+        <div class="stat-card glass-card reveal" data-count="20">
+          <span class="stat-icon">
+            <!-- 项目图标 SVG -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="12" y2="17"/></svg>
+          </span>
+          <!-- data-target 是目标数字，data-suffix 是数字后面的 "+" 号 -->
+          <span class="stat-number" data-target="20" data-suffix="+">0</span>
+          <span class="stat-label">已完成项目</span>
+        </div>
+        <div class="stat-card glass-card reveal" data-count="12">
+          <span class="stat-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+          </span>
+          <span class="stat-number" data-target="12">0</span>
+          <span class="stat-label">学习中的技能</span>
+        </div>
+        <div class="stat-card glass-card reveal" data-count="1000">
+          <span class="stat-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </span>
+          <span class="stat-number" data-target="1000" data-suffix="+">0</span>
+          <span class="stat-label">编程时长</span>
+        </div>
+        <div class="stat-card glass-card reveal" data-count="2">
+          <span class="stat-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </span>
+          <span class="stat-number" data-target="2" data-suffix="+">0</span>
+          <span class="stat-label">学习年限</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       SKILLS 区域（技能）
+       将技能分为 "前端 / 后端 / 工具" 三类展示
+       背景有旋转的轨道环装饰
+  ============================================ -->
+  <section id="skills" class="skills section">
+    <div class="section-header reveal">
+      <h2 class="section-title">技能与工具</h2>
+      <p class="section-subtitle">我正在学习和使用的</p>
+    </div>
+
+    <div class="skills-categories">
+      <!-- 前端技能 -->
+      <div class="skill-category reveal">
+        <h3 class="skill-cat-title">
+          <span class="skill-cat-icon">&#10132;</span> 前端
+        </h3>
+        <div class="skill-tags">
+          <span class="skill-tag">HTML / CSS</span>
+          <span class="skill-tag">JavaScript</span>
+          <span class="skill-tag">React</span>
+          <span class="skill-tag">Vue</span>
+          <span class="skill-tag">Tailwind</span>
+          <span class="skill-tag">Git</span>
+        </div>
+      </div>
+      <!-- 后端技能 -->
+      <div class="skill-category reveal">
+        <h3 class="skill-cat-title">
+          <span class="skill-cat-icon">&#10132;</span> 后端
+        </h3>
+        <div class="skill-tags">
+          <span class="skill-tag">Node.js</span>
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">SQL</span>
+          <span class="skill-tag">REST APIs</span>
+          <span class="skill-tag">Linux</span>
+        </div>
+      </div>
+      <!-- 工具技能 -->
+      <div class="skill-category reveal">
+        <h3 class="skill-cat-title">
+          <span class="skill-cat-icon">&#10132;</span> 工具
+        </h3>
+        <div class="skill-tags">
+          <span class="skill-tag">Figma</span>
+          <span class="skill-tag">VS Code</span>
+          <span class="skill-tag">Claude AI</span>
+          <span class="skill-tag">Chrome DevTools</span>
+          <span class="skill-tag">Vite</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 背景装饰：三个旋转的同心圆环 -->
+    <div class="skills-orbital" aria-hidden="true">
+      <div class="orbit-ring orbit-ring--1"></div>
+      <div class="orbit-ring orbit-ring--2"></div>
+      <div class="orbit-ring orbit-ring--3"></div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       PROJECTS 区域（项目作品）
+       展示 6 个项目的卡片，每个卡片包含
+       - CSS 绘制的项目预览图（浏览器 / 手机 / 抽象图形）
+       - 项目类型标签、标题、描述、技术标签
+       - "View Detail" 按钮，点击弹出详情弹窗
+       鼠标悬停时，卡片有 3D 倾斜效果
+  ============================================ -->
+  <section id="projects" class="projects section">
+    <div class="section-header reveal">
+      <h2 class="section-title">精选作品</h2>
+      <p class="section-subtitle">我引以为豪的项目</p>
+    </div>
+
+    <div class="projects-grid">
+
+      <!-- 项目1：舞蹈室课堂预约系统（浏览器窗口 Mockup） -->
+      <article class="project-card reveal" data-project="dance-booking">
+        <div class="project-card-inner">
+          <div class="card-image">
+            <!-- 用纯 CSS 绘制浏览器窗口样式的预览图 -->
+            <div class="card-preview card-preview--browser card-preview--booking">
+              <div class="browser-bar">
+                <!-- 红黄绿三个 "窗口按钮" -->
+                <span class="browser-dot"></span>
+                <span class="browser-dot"></span>
+                <span class="browser-dot"></span>
+              </div>
+              <div class="browser-address">
+                <div class="address-shimmer"></div>
+              </div>
+              <div class="browser-content">
+                <!-- 用条纹模拟预约表格 -->
+                <div class="booking-table">
+                  <div class="booking-row booking-row--header"></div>
+                  <div class="booking-row"></div>
+                  <div class="booking-row"></div>
+                  <div class="booking-row"></div>
+                  <div class="booking-row booking-row--accent"></div>
+                </div>
+              </div>
+            </div>
+            <!-- 悬停时的发光效果 -->
+            <div class="card-image-glow"></div>
+          </div>
+          <div class="card-content">
+            <span class="card-type">全栈项目</span>
+            <h3 class="card-title">舞蹈室课堂预约系统</h3>
+            <p class="card-desc">一个完整的舞蹈室课程预约平台 — 包含课程管理、学生注册和实时可用性追踪功能。</p>
+            <div class="card-tags">
+              <span>HTML</span><span>CSS</span><span>JavaScript</span><span>Node.js</span><span>MySQL</span>
+            </div>
+          </div>
+          <!-- 悬停时显示的 "View Detail" 按钮 -->
+          <button class="card-action">
+            <span>查看详情</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </article>
+
+      <!-- 项目2：个人作品集网站（浏览器窗口 Mockup） -->
+      <article class="project-card reveal" data-project="portfolio-site">
+        <div class="project-card-inner">
+          <div class="card-image">
+            <div class="card-preview card-preview--browser card-preview--portfolio">
+              <div class="browser-bar">
+                <span class="browser-dot"></span>
+                <span class="browser-dot"></span>
+                <span class="browser-dot"></span>
+              </div>
+              <div class="browser-address">
+                <div class="address-shimmer"></div>
+              </div>
+              <div class="browser-content">
+                <!-- 迷你 hero 区域预览 -->
+                <div class="mini-hero">
+                  <div class="mini-hero-line mini-hero-line--short"></div>
+                  <div class="mini-hero-line mini-hero-line--long"></div>
+                  <div class="mini-hero-buttons">
+                    <span class="mini-btn"></span>
+                    <span class="mini-btn mini-btn--outline"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-image-glow"></div>
+          </div>
+          <div class="card-content">
+            <span class="card-type">前端项目</span>
+            <h3 class="card-title">学生个人作品集网站</h3>
+            <p class="card-desc">一个自建的个人作品集网站，带有粒子背景、3D 卡片效果和流畅的滚动动画 — 全部从零编写。</p>
+            <div class="card-tags">
+              <span>HTML</span><span>CSS</span><span>JavaScript</span><span>动画</span>
+            </div>
+          </div>
+          <button class="card-action">
+            <span>查看详情</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </article>
+
+      <!-- 项目3：AI 建站交互实验（抽象几何图形 — 节点连线） -->
+      <article class="project-card reveal" data-project="ai-builder">
+        <div class="project-card-inner">
+          <div class="card-image">
+            <div class="card-preview card-preview--abstract card-preview--ai">
+              <div class="ai-nodes">
+                <span class="ai-node ai-node--1"></span>
+                <span class="ai-node ai-node--2"></span>
+                <span class="ai-node ai-node--3"></span>
+                <span class="ai-node ai-node--4"></span>
+                <span class="ai-line ai-line--1"></span>
+                <span class="ai-line ai-line--2"></span>
+                <span class="ai-line ai-line--3"></span>
+              </div>
+            </div>
+            <div class="card-image-glow"></div>
+          </div>
+          <div class="card-content">
+            <span class="card-type">AI + 网页</span>
+            <h3 class="card-title">AI 建站交互实验</h3>
+            <p class="card-desc">尝试用 AI API 从自然语言生成网站布局 — 探索 AI 辅助开发的未来可能性。</p>
+            <div class="card-tags">
+              <span>AI API</span><span>JavaScript</span><span>提示词设计</span>
+            </div>
+          </div>
+          <button class="card-action">
+            <span>查看详情</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </article>
+
+      <!-- 项目4：课堂预约 App 原型（手机屏幕 Mockup） -->
+      <article class="project-card reveal" data-project="booking-app">
+        <div class="project-card-inner">
+          <div class="card-image">
+            <div class="card-preview card-preview--mobile card-preview--app">
+              <div class="mobile-frame">
+                <div class="mobile-notch"></div>
+                <div class="mobile-status">
+                  <span>9:41</span>
+                  <span class="mobile-signal">●●●●</span>
+                </div>
+                <div class="mobile-content">
+                  <div class="mobile-form-field"></div>
+                  <div class="mobile-form-field mobile-form-field--short"></div>
+                  <div class="mobile-form-btn"></div>
+                </div>
+              </div>
+            </div>
+            <div class="card-image-glow"></div>
+          </div>
+          <div class="card-content">
+            <span class="card-type">UI 设计</span>
+            <h3 class="card-title">课堂预约 App 原型</h3>
+            <p class="card-desc">一个课程预约的手机 App 原型 — 在 Figma 中设计了用户流程、线框图和交互式高保真模型。</p>
+            <div class="card-tags">
+              <span>Figma</span><span>原型设计</span><span>移动端 UI</span>
+            </div>
+          </div>
+          <button class="card-action">
+            <span>查看详情</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </article>
+
+      <!-- 项目5：数据可视化小工具（抽象柱状图） -->
+      <article class="project-card reveal" data-project="dataviz-tool">
+        <div class="project-card-inner">
+          <div class="card-image">
+            <div class="card-preview card-preview--abstract card-preview--dataviz">
+              <div class="dataviz-chart">
+                <div class="chart-grid"></div>
+                <div class="chart-bars">
+                  <span class="chart-bar" style="--h: 45%"></span>
+                  <span class="chart-bar" style="--h: 75%"></span>
+                  <span class="chart-bar chart-bar--active" style="--h: 90%"></span>
+                  <span class="chart-bar" style="--h: 60%"></span>
+                  <span class="chart-bar" style="--h: 35%"></span>
+                </div>
+              </div>
+            </div>
+            <div class="card-image-glow"></div>
+          </div>
+          <div class="card-content">
+            <span class="card-type">数据可视化</span>
+            <h3 class="card-title">数据可视化小工具</h3>
+            <p class="card-desc">一个用 Chart.js 和 Canvas 构建的交互式数据看板 — 获取实时数据并渲染动态图表。</p>
+            <div class="card-tags">
+              <span>Chart.js</span><span>Canvas</span><span>REST API</span>
+            </div>
+          </div>
+          <button class="card-action">
+            <span>查看详情</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </article>
+
+      <!-- 项目6：前端动态交互页面（抽象几何形状） -->
+      <article class="project-card reveal" data-project="interactive-ui">
+        <div class="project-card-inner">
+          <div class="card-image">
+            <div class="card-preview card-preview--abstract card-preview--ui">
+              <div class="ui-shapes">
+                <span class="ui-shape ui-shape--circle"></span>
+                <span class="ui-shape ui-shape--triangle"></span>
+                <span class="ui-shape ui-shape--square"></span>
+                <span class="ui-shape ui-shape--ring"></span>
+              </div>
+            </div>
+            <div class="card-image-glow"></div>
+          </div>
+          <div class="card-content">
+            <span class="card-type">创意开发</span>
+            <h3 class="card-title">前端动态交互页面</h3>
+            <p class="card-desc">一系列创意前端实验合集 — 包括 CSS 动画、SVG 交互和动态视觉效果。</p>
+            <div class="card-tags">
+              <span>CSS 动画</span><span>SVG</span><span>JavaScript</span>
+            </div>
+          </div>
+          <button class="card-action">
+            <span>查看详情</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================================
+       TIMELINE 区域（时间线 / 学习历程）
+       用垂直时间线展示从 2023 年至今的成长路径
+       左侧（奇数项）和右侧（偶数项）交替排列
+       中间有一条竖线，滚动时会逐渐填充颜色
+  ============================================ -->
+  <section id="timeline" class="timeline section">
+    <div class="section-header reveal">
+      <h2 class="section-title">我的历程</h2>
+      <p class="section-subtitle">至今的学习之路</p>
+    </div>
+
+    <div class="timeline-wrapper">
+      <!-- 中间竖线：填充颜色表示进度 -->
+      <div class="timeline-line" aria-hidden="true">
+        <div class="timeline-line-fill"></div>
+      </div>
+
+      <div class="timeline-items">
+        <!-- 时间线项目 1：2023 年初识前端（左侧） -->
+        <div class="timeline-item reveal reveal--left">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content glass-card">
+            <span class="timeline-year">2023</span>
+            <h3 class="timeline-title">初识前端 · First Steps</h3>
+            <p class="timeline-desc">从在线教程开始学习 HTML、CSS 和 JavaScript。构建了第一个静态网页，爱上了看到代码在浏览器中活起来的感觉。</p>
+          </div>
+        </div>
+
+        <!-- 时间线项目 2：2024 上半年（右侧） -->
+        <div class="timeline-item reveal reveal--right">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content glass-card">
+            <span class="timeline-year">2024 上</span>
+            <h3 class="timeline-title">第一个完整项目 · First Full Project</h3>
+            <p class="timeline-desc">构建了一个完整的全栈网页应用 — 一个带前端界面、后端 API 和数据库的舞蹈室课程预约系统。了解了各个部分如何协同工作。</p>
+          </div>
+        </div>
+
+        <!-- 时间线项目 3：2024 下半年（左侧） -->
+        <div class="timeline-item reveal reveal--left">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content glass-card">
+            <span class="timeline-year">2024 下</span>
+            <h3 class="timeline-title">探索 AI · Discovering AI</h3>
+            <p class="timeline-desc">开始尝试 AI 驱动的开发工具和 API。构建结合前端界面与 AI 能力的项目 — 彻底改变了我对可能性的认知。</p>
+          </div>
+        </div>
+
+        <!-- 时间线项目 4：2025 上半年（右侧） -->
+        <div class="timeline-item reveal reveal--right">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content glass-card">
+            <span class="timeline-year">2025 上</span>
+            <h3 class="timeline-title">作品集网站 · Portfolio Site</h3>
+            <p class="timeline-desc">从零开始设计和构建了这个个人作品集网站 — 展示了我学到的所有东西，包括自定义动画、交互元素和体现我个人风格的设计。</p>
+          </div>
+        </div>
+
+        <!-- 时间线项目 5：2025 至今（左侧） -->
+        <div class="timeline-item reveal reveal--left">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content glass-card">
+            <span class="timeline-year">2025-Now</span>
+            <h3 class="timeline-title">持续探索 · Keep Exploring</h3>
+            <p class="timeline-desc">深入学习现代前端框架、全栈模式和 AI 集成。构建更复杂的项目，始终在寻找下一个挑战。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       CONTACT 区域（联系我）
+       左侧：联系表单（演示用，不会真的发送）
+       右侧：邮箱、社交链接、位置信息
+  ============================================ -->
+  <section id="contact" class="contact section">
+    <!-- 背景发光装饰 -->
+    <div class="contact-glow" aria-hidden="true"></div>
+    <div class="section-header reveal">
+      <h2 class="section-title section-title--large">联系我</h2>
+      <p class="section-subtitle">有问题或只是想打个招呼？</p>
+    </div>
+
+    <div class="contact-grid">
+      <!-- 联系表单（左侧）
+           novalidate 表示不使用浏览器默认验证，由 JS 控制 -->
+      <form class="contact-form glass-card reveal" id="contact-form" novalidate>
+        <!-- 姓名输入框 -->
+        <div class="form-group">
+          <input type="text" id="name" name="name" required placeholder="你的姓名" autocomplete="name">
+          <label for="name">你的姓名</label>
+          <span class="form-error">请输入你的姓名</span>
+        </div>
+        <!-- 邮箱输入框 -->
+        <div class="form-group">
+          <input type="email" id="email" name="email" required placeholder="你的邮箱" autocomplete="email">
+          <label for="email">你的邮箱</label>
+          <span class="form-error">请输入有效的邮箱地址</span>
+        </div>
+        <!-- 留言输入框 -->
+        <div class="form-group">
+          <textarea id="message" name="message" required placeholder="你的留言" rows="5"></textarea>
+          <label for="message">你的留言</label>
+          <span class="form-error">请输入你的留言</span>
+        </div>
+        <!-- 提交按钮 -->
+        <button type="submit" class="btn btn-primary btn-submit">
+          <span class="btn-submit-text">发送消息</span>
+          <svg class="btn-arrow" width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <!-- 提交成功后显示的提示（演示模式） -->
+        <div class="form-success">这是演示模式。请通过邮箱或下方的社交链接联系我！</div>
+      </form>
+
+      <!-- 联系信息（右侧） -->
+      <div class="contact-info reveal">
+        <!-- 邮箱卡片，点击可复制邮箱地址 -->
+        <div class="contact-card glass-card">
+          <span class="contact-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </span>
+          <span class="contact-label">邮箱</span>
+          <a href="mailto:shawnniu@example.com" class="contact-value" data-copy="shawnniu@example.com">shawnniu@example.com</a>
+        </div>
+
+        <!-- 社交链接（GitHub / Bilibili / WeChat / Email）
+             reveal-stagger 表示逐个弹出动画 -->
+        <div class="contact-socials reveal-stagger">
+          <a href="#" class="social-link glass-card" aria-label="GitHub" title="GitHub">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          </a>
+          <a href="#" class="social-link glass-card" aria-label="Bilibili" title="Bilibili">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="9 10 14 12 9 14"/></svg>
+          </a>
+          <a href="#" class="social-link glass-card" aria-label="WeChat" title="WeChat">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 10.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/><path d="M16 12.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/><path d="M12 22c5.523 0 10-3.581 10-8s-4.477-8-10-8S2 9.581 2 14c0 2.1 1 4 2.6 5.2L4 22l3-2.5c1.5.5 3.2.7 5 .7z"/></svg>
+          </a>
+          <a href="#" class="social-link glass-card" aria-label="Email" title="Copy Email" data-copy-trigger="shawnniu@example.com">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M16 8v-2a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><rect x="2" y="10" width="20" height="12" rx="2"/></svg>
+          </a>
+        </div>
+
+        <!-- 位置信息 -->
+        <p class="contact-location">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          中国 — 学生开发者
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       页脚（FOOTER）
+       版权声明 + 回到顶部按钮
+  ============================================ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-text">&copy; 2026 Shawn Niu. 用好奇心和代码构建。</p>
+      <button class="back-to-top" aria-label="Scroll to top" onclick="document.querySelector('#home').scrollIntoView({behavior:'smooth'})">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 17V3M10 3L5 8M10 3L15 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </footer>
+
+  <!-- ============================================
+       项目详情弹窗（Project Modal）
+       点击项目卡片的 "View Detail" 时弹出，
+       从右侧滑入，显示项目的详细信息
+  ============================================ -->
+  <div class="modal-overlay" id="project-modal" aria-hidden="true" role="dialog" aria-label="项目详情">
+    <!-- 半透明背景遮罩 -->
+    <div class="modal-backdrop"></div>
+    <!-- 弹窗面板 -->
+    <div class="modal-panel">
+      <!-- 关闭按钮 -->
+      <button class="modal-close" aria-label="关闭项目详情">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <div class="modal-body">
+        <!-- 弹窗内容由 JavaScript 动态填充 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       表单提交成功提示（Toast）
+       提交表单后，底部弹出的小提示条
+  ============================================ -->
+  <div class="toast" id="form-toast" aria-hidden="true">
+    <span class="toast-icon">&#10004;</span>
+    <span class="toast-message">消息已发送！我会尽快回复你。</span>
+  </div>
+
+  <!-- GSAP 动画引擎 + ScrollTrigger 插件 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <!-- 引入外部 JavaScript 文件 -->
+  <script src="script.js"></script>
+</body>
+</html>

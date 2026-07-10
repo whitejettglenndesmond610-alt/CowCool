@@ -1,10 +1,36 @@
-/* ============================================
-   SCRIPT.JS — Shawn Niu Portfolio
-   All interactive logic for the portfolio site
-   ============================================ */
+/**
+ * =============================================
+ * SCRIPT.JS — Shawn Niu 个人作品集 交互逻辑
+ * 这个文件包含了网站所有的 JavaScript 功能：
+ *   粒子背景 | 自定义鼠标 | 滚动动画 | 导航栏
+ *   时间线 | 3D 卡片倾斜 | 项目弹窗 | 数字滚动
+ *   表单验证 | 邮箱复制 | 打字机效果 | 视差效果
+ *
+ * 动画引擎: GSAP 3 + ScrollTrigger
+ * =============================================
+ */
 
 /* ============================================
-   PARTICLE SYSTEM — Canvas 2D
+   GSAP 插件注册
+   ============================================ */
+
+gsap.registerPlugin(ScrollTrigger);
+ScrollTrigger.normalizeScroll(false);
+
+/* ============================================
+   性能预设 — 为所有 GSAP 动画设置默认值
+   ============================================ */
+
+gsap.defaults({
+  overwrite: 'auto',
+});
+
+/* ============================================
+   粒子系统（ParticleSystem）
+   — 在 Canvas 上绘制随机的粒子点
+   — 粒子之间会连成线条
+   — 鼠标靠近时粒子会被推开（斥力效果）
+   — 鼠标附近的粒子会改变颜色
    ============================================ */
 
 class ParticleSystem {
@@ -21,7 +47,6 @@ class ParticleSystem {
     this.animate();
   }
 
-  /* Responsive sizing + particle count */
   updateSize() {
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
@@ -32,7 +57,6 @@ class ParticleSystem {
     else                this.count = 25;
   }
 
-  /* Create particles */
   initParticles() {
     this.particles = [];
     for (let i = 0; i < this.count; i++) {
@@ -47,7 +71,6 @@ class ParticleSystem {
     }
   }
 
-  /* Event listeners */
   bindEvents() {
     window.addEventListener('resize', () => {
       this.updateSize();
@@ -65,7 +88,6 @@ class ParticleSystem {
     });
   }
 
-  /* Animation loop */
   animate() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.updateParticles();
@@ -74,19 +96,16 @@ class ParticleSystem {
     this.animationId = requestAnimationFrame(() => this.animate());
   }
 
-  /* Update particle positions */
   updateParticles() {
     for (const p of this.particles) {
       p.x += p.vx;
       p.y += p.vy;
 
-      /* Wrap around edges */
       if (p.x < -10) p.x = this.canvas.width + 10;
       if (p.x > this.canvas.width + 10) p.x = -10;
       if (p.y < -10) p.y = this.canvas.height + 10;
       if (p.y > this.canvas.height + 10) p.y = -10;
 
-      /* Mouse repulsion */
       const dx = p.x - this.mouse.x;
       const dy = p.y - this.mouse.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
@@ -98,11 +117,9 @@ class ParticleSystem {
         p.vy += (dy / dist) * force;
       }
 
-      /* Damping */
       p.vx *= 0.999;
       p.vy *= 0.999;
 
-      /* Speed limit */
       const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
       if (speed > 1.2) {
         p.vx = (p.vx / speed) * 1.2;
@@ -111,7 +128,6 @@ class ParticleSystem {
     }
   }
 
-  /* Draw connecting lines between nearby particles */
   drawConnections() {
     const ctx = this.ctx;
     for (let i = 0; i < this.particles.length; i++) {
@@ -135,14 +151,12 @@ class ParticleSystem {
     }
   }
 
-  /* Draw particle dots */
   drawParticles() {
     const ctx = this.ctx;
     for (const p of this.particles) {
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
 
-      /* Glow near mouse */
       const dx = p.x - this.mouse.x;
       const dy = p.y - this.mouse.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
@@ -168,7 +182,9 @@ function initParticles() {
 }
 
 /* ============================================
-   CUSTOM CURSOR
+   自定义鼠标指针（CustomCursor）
+   — 使用 GSAP quickTo 实现丝滑跟随
+   — 悬停在可交互元素上时放大
    ============================================ */
 
 class CustomCursor {
@@ -176,11 +192,17 @@ class CustomCursor {
     this.dot = dot;
     this.ring = ring;
     this.glow = glow || null;
-    this.target = { x: -100, y: -100 };
-    this.current = { x: -100, y: -100 };
-    this.ringCurrent = { x: -100, y: -100 };
     this.visible = false;
     this.interactive = false;
+    this.tX = 0;
+    this.tY = 0;
+    this.dX = 0;
+    this.dY = 0;
+    this.rX = 0;
+    this.rY = 0;
+
+    gsap.set([dot, ring], { xPercent: -50, yPercent: -50, scale: 1 });
+    gsap.set(this.glow, { xPercent: -50, yPercent: -50 });
 
     this.bindEvents();
     this.animate();
@@ -188,26 +210,28 @@ class CustomCursor {
 
   bindEvents() {
     document.addEventListener('mousemove', (e) => {
-      this.target.x = e.clientX;
-      this.target.y = e.clientY;
+      this.tX = e.clientX;
+      this.tY = e.clientY;
       if (!this.visible) {
-        this.current.x = e.clientX;
-        this.current.y = e.clientY;
-        this.ringCurrent.x = e.clientX;
-        this.ringCurrent.y = e.clientY;
+        this.dX = this.rX = e.clientX;
+        this.dY = this.rY = e.clientY;
         this.visible = true;
-        this.dot.style.opacity = '1';
-        this.ring.style.opacity = '1';
+        gsap.set(this.dot, { x: e.clientX, y: e.clientY, opacity: 1 });
+        gsap.set(this.ring, { x: e.clientX, y: e.clientY, opacity: 1 });
+        if (this.glow) {
+          gsap.set(this.glow, { x: e.clientX, y: e.clientY, opacity: 1 });
+        }
       }
     });
 
     document.addEventListener('mouseleave', () => {
       this.visible = false;
-      this.dot.style.opacity = '0';
-      this.ring.style.opacity = '0';
+      gsap.to([this.dot, this.ring], { opacity: 0, duration: 0.15 });
+      if (this.glow) {
+        gsap.to(this.glow, { opacity: 0, duration: 0.15 });
+      }
     });
 
-    /* Interactive hover detection */
     const interactives = document.querySelectorAll(
       'a, button, .project-card, .skill-tag, .social-link, .glass-card, input, textarea, .nav-link'
     );
@@ -216,39 +240,35 @@ class CustomCursor {
         this.interactive = true;
         this.dot.classList.add('hover-interactive');
         this.ring.classList.add('hover-interactive');
+        gsap.to(this.dot, { scale: 2, duration: 0.3, overwrite: 'auto' });
+        gsap.to(this.ring, { scale: 1.8, duration: 0.3, overwrite: 'auto' });
       });
       el.addEventListener('mouseleave', () => {
         this.interactive = false;
         this.dot.classList.remove('hover-interactive');
         this.ring.classList.remove('hover-interactive');
+        gsap.to(this.dot, { scale: 1, duration: 0.3, overwrite: 'auto' });
+        gsap.to(this.ring, { scale: 1, duration: 0.3, overwrite: 'auto' });
       });
     });
   }
 
   animate() {
-    /* Lerp dot */
-    const lerpDot = 0.3;
-    this.current.x += (this.target.x - this.current.x) * lerpDot;
-    this.current.y += (this.target.y - this.current.y) * lerpDot;
+    const lerpDot = 0.55;
+    const lerpRing = 0.3;
 
-    /* Lerp ring (slower = more lag) */
-    const lerpRing = 0.15;
-    this.ringCurrent.x += (this.target.x - this.ringCurrent.x) * lerpRing;
-    this.ringCurrent.y += (this.target.y - this.ringCurrent.y) * lerpRing;
+    this.dX += (this.tX - this.dX) * lerpDot;
+    this.dY += (this.tY - this.dY) * lerpDot;
+    this.rX += (this.tX - this.rX) * lerpRing;
+    this.rY += (this.tY - this.rY) * lerpRing;
 
-    /* Apply positions */
-    this.dot.style.left = this.current.x + 'px';
-    this.dot.style.top = this.current.y + 'px';
-    this.ring.style.left = this.ringCurrent.x + 'px';
-    this.ring.style.top = this.ringCurrent.y + 'px';
+    gsap.set(this.dot, { x: this.dX, y: this.dY });
+    gsap.set(this.ring, { x: this.rX, y: this.rY });
 
-    /* Mouse glow */
     if (this.glow && this.visible) {
-      this.glow.style.left = this.current.x + 'px';
-      this.glow.style.top = this.current.y + 'px';
-      this.glow.style.opacity = '1';
+      gsap.set(this.glow, { x: this.dX, y: this.dY, opacity: 1 });
     } else if (this.glow) {
-      this.glow.style.opacity = '0';
+      gsap.set(this.glow, { opacity: 0 });
     }
 
     requestAnimationFrame(() => this.animate());
@@ -258,7 +278,6 @@ class CustomCursor {
 let customCursor;
 
 function initCustomCursor() {
-  /* Only init on non-touch devices */
   if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
     const dot = document.querySelector('.cursor-dot');
     const ring = document.querySelector('.cursor-ring');
@@ -270,32 +289,44 @@ function initCustomCursor() {
 }
 
 /* ============================================
-   SCROLL REVEAL — IntersectionObserver
+   滚动显示动画（Scroll Reveal）→ GSAP ScrollTrigger
+   — 替代 IntersectionObserver，使用 ScrollTrigger
+   — 元素进入视口时淡入上移，离开时反向
    ============================================ */
 
 function initScrollReveal() {
-  const revealEls = document.querySelectorAll('.reveal');
+  const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  
+  gsap.utils.toArray('.reveal').forEach((el) => {
+    if (el.closest('.reveal-stagger') || el.closest('.hero')) return;
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    {
-      threshold: 0.15,
-      rootMargin: '0px 0px -40px 0px',
+    if (isReduced) {
+      gsap.set(el, { opacity: 1, clearProps: 'transform' });
+      return;
     }
-  );
 
-  revealEls.forEach((el) => observer.observe(el));
+    gsap.fromTo(el,
+      { opacity: 0, y: 40 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: 'expo.out',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 85%',
+          toggleActions: 'play none none reverse',
+        },
+      }
+    );
+  });
 }
 
 /* ============================================
-   NAVBAR — Scroll State & Active Section
+   导航栏滚动行为（Navbar Scroll）→ GSAP ScrollTrigger
+   — 使用 ScrollTrigger 检测滚动位置
+   — 添加/移除 .scrolled 类
+   — 高亮当前区块对应的导航链接
    ============================================ */
 
 function initNavbarScroll() {
@@ -303,7 +334,6 @@ function initNavbarScroll() {
   const navLinks = document.querySelectorAll('.nav-link');
   const sections = [];
 
-  /* Collect section elements */
   navLinks.forEach((link) => {
     const href = link.getAttribute('href');
     if (href && href.startsWith('#')) {
@@ -312,17 +342,13 @@ function initNavbarScroll() {
     }
   });
 
-  function updateNavbar() {
-    const scrollY = window.scrollY;
-
-    /* Toggle scrolled class */
+  function updateNavbar(scrollY) {
     if (scrollY > 50) {
       navbar.classList.add('scrolled');
     } else {
       navbar.classList.remove('scrolled');
     }
 
-    /* Determine active section */
     let activeSection = sections[0];
     for (const { section } of sections) {
       const top = section.offsetTop - 120;
@@ -331,31 +357,30 @@ function initNavbarScroll() {
       }
     }
 
-    /* Update active link */
     navLinks.forEach((link) => link.classList.remove('active'));
     if (activeSection) {
       activeSection.link.classList.add('active');
     }
   }
 
-  /* Throttled scroll listener */
   let ticking = false;
   window.addEventListener('scroll', () => {
     if (!ticking) {
       requestAnimationFrame(() => {
-        updateNavbar();
+        updateNavbar(window.scrollY);
         ticking = false;
       });
       ticking = true;
     }
   }, { passive: true });
 
-  /* Run once on load */
-  updateNavbar();
+  updateNavbar(window.scrollY);
 }
 
 /* ============================================
-   TIMELINE — Line Fill & Node Activation
+   时间线填充动画（Timeline Draw）→ GSAP ScrollTrigger scrub
+   — 中间竖线随滚动填充
+   — 节点在对应位置激活发光
    ============================================ */
 
 function initTimelineDraw() {
@@ -365,44 +390,37 @@ function initTimelineDraw() {
 
   if (!timelineSection || !lineFill || !items.length) return;
 
-  function updateTimeline() {
-    const sectionTop = timelineSection.offsetTop;
-    const sectionHeight = timelineSection.offsetHeight;
-    const scrollY = window.scrollY + window.innerHeight * 0.6;
-    const progress = Math.min(1, Math.max(0, (scrollY - sectionTop) / sectionHeight));
-    lineFill.style.height = (progress * 100) + '%';
+  const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    /* Activate nodes based on scroll position */
-    items.forEach((item, index) => {
-      const itemTop = item.offsetTop;
-      const triggerPoint = sectionTop + (itemTop - sectionTop) * 0.8;
-      if (scrollY >= triggerPoint) {
-        item.classList.add('active');
-      }
-    });
-  }
-
-  /* Throttled scroll for timeline */
-  let ticking = false;
-  window.addEventListener('scroll', () => {
-    if (!ticking) {
-      requestAnimationFrame(() => {
-        updateTimeline();
-        ticking = false;
-      });
-      ticking = true;
+  gsap.fromTo(lineFill,
+    { height: '0%' },
+    {
+      height: '100%',
+      ease: 'none',
+      scrollTrigger: {
+        trigger: timelineSection,
+        start: 'top 60%',
+        end: 'bottom 60%',
+        scrub: isReduced ? 0 : 0.3,
+      },
     }
-  }, { passive: true });
+  );
 
-  updateTimeline();
+  items.forEach((item) => {
+    ScrollTrigger.create({
+      trigger: item,
+      start: 'top 80%',
+      onEnter: () => item.classList.add('active'),
+      onLeaveBack: () => item.classList.remove('active'),
+    });
+  });
 }
 
 /* ============================================
-   SMOOTH SCROLL — Nav Links + Mobile Menu
+   平滑滚动（Smooth Scroll）
    ============================================ */
 
 function initSmoothScroll() {
-  /* Desktop nav links */
   document.querySelectorAll('.nav-link, .mobile-nav-links a').forEach((link) => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
@@ -411,7 +429,6 @@ function initSmoothScroll() {
         const target = document.querySelector(targetId);
         if (target) {
           target.scrollIntoView({ behavior: 'smooth' });
-          /* Close mobile menu if open */
           const mobileMenu = document.querySelector('.mobile-menu');
           const hamburger = document.querySelector('.hamburger');
           if (mobileMenu && mobileMenu.classList.contains('active')) {
@@ -424,7 +441,6 @@ function initSmoothScroll() {
     });
   });
 
-  /* Mobile hamburger toggle */
   const hamburger = document.querySelector('.hamburger');
   const mobileMenu = document.querySelector('.mobile-menu');
 
@@ -438,7 +454,7 @@ function initSmoothScroll() {
 }
 
 /* ============================================
-   PROJECT DATA
+   项目数据（Project Data）
    ============================================ */
 
 const projectData = {
@@ -462,8 +478,8 @@ const projectData = {
     highlights: [
       'Particle system with mouse repulsion and connection lines',
       '3D perspective card tilt following cursor movement',
-      'Custom cursor with lerp-smooth follow and hover states',
-      'IntersectionObserver-driven scroll reveal animations',
+      'Custom cursor with GSAP quickTo smooth follow and hover states',
+      'ScrollTrigger-driven scroll reveal animations',
     ],
   },
   'ai-builder': {
@@ -517,17 +533,21 @@ const projectData = {
 };
 
 /* ============================================
-   3D CARD TILT
+   3D 卡片倾斜效果（3D Card Tilt）→ GSAP quickTo
+   — 鼠标在项目卡片上移动时，卡片跟随鼠标方向倾斜
+   — 使用 quickTo 实现丝滑 CSS 变量过渡
    ============================================ */
 
 function init3DTilt() {
   const cards = document.querySelectorAll('.project-card');
 
-  /* Skip on touch devices or if prefers-reduced-motion */
   if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   cards.forEach((card) => {
+    const setTiltX = gsap.quickTo(card, '--tilt-x', { suffix: 'deg' });
+    const setTiltY = gsap.quickTo(card, '--tilt-y', { suffix: 'deg' });
+
     card.addEventListener('mousemove', (e) => {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
@@ -535,36 +555,37 @@ function init3DTilt() {
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
 
-      const rotateX = ((y - centerY) / centerY) * -8; /* -8deg to 8deg */
+      const rotateX = ((y - centerY) / centerY) * -8;
       const rotateY = ((x - centerX) / centerX) * 8;
 
-      card.style.setProperty('--tilt-x', rotateX + 'deg');
-      card.style.setProperty('--tilt-y', rotateY + 'deg');
+      setTiltX(rotateX);
+      setTiltY(rotateY);
       card.classList.add('tilting');
     });
 
     card.addEventListener('mouseleave', () => {
-      card.style.setProperty('--tilt-x', '0deg');
-      card.style.setProperty('--tilt-y', '0deg');
+      setTiltX(0);
+      setTiltY(0);
       card.classList.remove('tilting');
     });
   });
 }
 
 /* ============================================
-   PROJECT MODAL
+   项目详情弹窗（Project Modal）→ GSAP Timeline
+   — 使用 GSAP timeline 实现流畅的开关动画
+   — 从右侧滑入 / 滑出
    ============================================ */
 
 function initProjectModal() {
   const modal = document.getElementById('project-modal');
   const modalBody = modal.querySelector('.modal-body');
-  const closeBtn = modal.querySelector('.modal-close');
+  const modalPanel = modal.querySelector('.modal-panel');
   const backdrop = modal.querySelector('.modal-backdrop');
+  const closeBtn = modal.querySelector('.modal-close');
 
-  /* Open modal on card click */
   document.querySelectorAll('.project-card').forEach((card) => {
     card.addEventListener('click', (e) => {
-      /* Don't open if clicking the action button directly */
       if (e.target.closest('.card-action')) return;
 
       const projectId = card.dataset.project;
@@ -574,7 +595,6 @@ function initProjectModal() {
       openModal(data);
     });
 
-    /* Card action button also opens modal */
     const actionBtn = card.querySelector('.card-action');
     if (actionBtn) {
       actionBtn.addEventListener('click', (e) => {
@@ -588,7 +608,10 @@ function initProjectModal() {
   });
 
   function openModal(data) {
-    /* Fill modal content */
+    const isCurrentMobile = window.innerWidth <= 768;
+
+    gsap.killTweensOf([modalPanel, backdrop]);
+
     modalBody.innerHTML = `
       <span class="modal-project-type">${data.type}</span>
       <h2 class="modal-project-title">${data.title}</h2>
@@ -601,35 +624,71 @@ function initProjectModal() {
       </ul>
     `;
 
-    /* Show modal */
     modal.setAttribute('aria-hidden', 'false');
-    modal.style.display = 'flex';
+    modalPanel.scrollTop = 0;
     document.body.style.overflow = 'hidden';
-    modal.scrollTop = 0;
-    modal.querySelector('.modal-panel').scrollTop = 0;
 
-    /* Trigger animation */
-    requestAnimationFrame(() => {
-      modal.classList.add('active');
-    });
+    const tl = gsap.timeline();
+
+    if (isCurrentMobile) {
+      tl
+        .set(modal, { display: 'flex' })
+        .fromTo(backdrop, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: 'power2.out' }, 0)
+        .fromTo(modalPanel, { y: '100%' }, { y: '0%', duration: 0.45, ease: 'expo.out' }, 0.05);
+    } else {
+      tl
+        .set(modal, { display: 'flex' })
+        .fromTo(backdrop, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: 'power2.out' }, 0)
+        .fromTo(modalPanel, { x: '100%' }, { x: '0%', duration: 0.45, ease: 'expo.out' }, 0.05);
+    }
+
+    tl.play();
+    modal.classList.add('active');
+
+    gsap.fromTo('.modal-project-type', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: 'expo.out', delay: 0.15 });
+    gsap.fromTo('.modal-project-title', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: 'expo.out', delay: 0.2 });
+    gsap.fromTo('.modal-project-desc', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: 'expo.out', delay: 0.25 });
+    gsap.fromTo('.modal-tech-stack span', { opacity: 0, y: 15, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.4, ease: 'back.out(1.2)', stagger: 0.05, delay: 0.35 });
+    gsap.fromTo('.modal-highlights li', { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.4, ease: 'expo.out', stagger: 0.08, delay: 0.55 });
   }
 
   function closeModal() {
-    modal.classList.add('closing');
+    const isCurrentMobile = window.innerWidth <= 768;
     modal.classList.remove('active');
 
-    /* Wait for transition to finish */
-    const onTransitionEnd = () => {
-      modal.classList.remove('closing');
-      modal.style.display = 'none';
-      modal.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
-      modal.removeEventListener('transitionend', onTransitionEnd);
-    };
-    modal.addEventListener('transitionend', onTransitionEnd, { once: true });
+    gsap.killTweensOf([modalPanel, backdrop]);
+
+    if (isCurrentMobile) {
+      gsap.to(modalPanel, {
+        y: '100%',
+        duration: 0.4,
+        ease: 'expo.in',
+        onStart: () => {
+          gsap.to(backdrop, { opacity: 0, duration: 0.3, ease: 'power2.in' });
+        },
+        onComplete: () => {
+          modal.style.display = 'none';
+          modal.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+        },
+      });
+    } else {
+      gsap.to(modalPanel, {
+        x: '100%',
+        duration: 0.4,
+        ease: 'expo.in',
+        onStart: () => {
+          gsap.to(backdrop, { opacity: 0, duration: 0.3, ease: 'power2.in' });
+        },
+        onComplete: () => {
+          modal.style.display = 'none';
+          modal.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+        },
+      });
+    }
   }
 
-  /* Close triggers */
   closeBtn.addEventListener('click', closeModal);
   backdrop.addEventListener('click', closeModal);
   document.addEventListener('keydown', (e) => {
@@ -640,7 +699,8 @@ function initProjectModal() {
 }
 
 /* ============================================
-   NUMBER COUNT-UP ANIMATION
+   数字滚动动画（Count-Up）→ GSAP
+   — 使用 GSAP 内置缓动，数字从 0 滚动到目标值
    ============================================ */
 
 function initCountUp() {
@@ -654,30 +714,23 @@ function initCountUp() {
           const numberEl = card.querySelector('.stat-number');
           const target = parseInt(card.dataset.count, 10);
           const suffix = numberEl.dataset.suffix || '';
-          const duration = 2000; /* ms */
-          const startTime = performance.now();
-          let counted = false;
 
-          function update(currentTime) {
-            if (counted) return;
-            const elapsed = currentTime - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-
-            /* easeOutExpo */
-            const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-            const current = Math.floor(eased * target);
-
-            numberEl.textContent = current.toLocaleString() + suffix;
-
-            if (progress >= 1) {
-              counted = true;
-              numberEl.textContent = target.toLocaleString() + suffix;
-            } else {
-              requestAnimationFrame(update);
+          gsap.fromTo(numberEl,
+            { textContent: '0' },
+            {
+              textContent: target,
+              duration: 2,
+              ease: 'expo.out',
+              snap: { textContent: 1 },
+              onUpdate() {
+                numberEl.textContent = Math.floor(gsap.getProperty(numberEl, 'textContent')).toLocaleString() + suffix;
+              },
+              onComplete() {
+                numberEl.textContent = target.toLocaleString() + suffix;
+              },
             }
-          }
+          );
 
-          requestAnimationFrame(update);
           observer.unobserve(card);
         }
       });
@@ -689,7 +742,8 @@ function initCountUp() {
 }
 
 /* ============================================
-   FORM VALIDATION
+   表单验证（Form Validation）→ GSAP shake
+   — 验证失败时使用 GSAP 抖动动画
    ============================================ */
 
 function initFormValidation() {
@@ -702,37 +756,37 @@ function initFormValidation() {
 
     let isValid = true;
 
-    /* Validate name */
     const nameGroup = form.querySelector('#name').closest('.form-group');
     const nameInput = form.querySelector('#name');
     if (!nameInput.value.trim()) {
       nameGroup.classList.add('error');
       nameGroup.classList.remove('success');
+      gsap.fromTo(nameGroup, { x: 0 }, { x: [-6, 6, -4, 4, 0], duration: 0.4, ease: 'power2.out' });
       isValid = false;
     } else {
       nameGroup.classList.remove('error');
       nameGroup.classList.add('success');
     }
 
-    /* Validate email */
     const emailGroup = form.querySelector('#email').closest('.form-group');
     const emailInput = form.querySelector('#email');
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailInput.value.trim() || !emailRegex.test(emailInput.value)) {
       emailGroup.classList.add('error');
       emailGroup.classList.remove('success');
+      gsap.fromTo(emailGroup, { x: 0 }, { x: [-6, 6, -4, 4, 0], duration: 0.4, ease: 'power2.out' });
       isValid = false;
     } else {
       emailGroup.classList.remove('error');
       emailGroup.classList.add('success');
     }
 
-    /* Validate message */
     const msgGroup = form.querySelector('#message').closest('.form-group');
     const msgInput = form.querySelector('#message');
     if (!msgInput.value.trim()) {
       msgGroup.classList.add('error');
       msgGroup.classList.remove('success');
+      gsap.fromTo(msgGroup, { x: 0 }, { x: [-6, 6, -4, 4, 0], duration: 0.4, ease: 'power2.out' });
       isValid = false;
     } else {
       msgGroup.classList.remove('error');
@@ -740,28 +794,24 @@ function initFormValidation() {
     }
 
     if (isValid) {
-      /* Demo mode — show demo notice */
       const submitBtn = form.querySelector('.btn-submit');
       const submitText = submitBtn.querySelector('.btn-submit-text');
       const originalText = submitText.textContent;
 
-      /* Change button to demo mode */
-      submitText.textContent = 'Demo Mode — Not Actually Sent';
-      submitBtn.style.opacity = '0.7';
+      submitText.textContent = '演示模式 — 未实际发送';
+      gsap.to(submitBtn, { opacity: 0.7, duration: 0.2 });
 
-      /* Show success message */
       const successEl = form.querySelector('.form-success');
       if (successEl) {
         successEl.classList.add('visible');
+        gsap.fromTo(successEl, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5, ease: 'expo.out' });
       }
 
-      /* Show toast */
-      showToast(toast, 'Demo form — reach me via email or social links!');
+      showToast(toast, '演示模式 — 请通过邮箱或社交链接联系我！');
 
-      /* Reset after delay */
       setTimeout(() => {
         submitText.textContent = originalText;
-        submitBtn.style.opacity = '1';
+        gsap.to(submitBtn, { opacity: 1, duration: 0.2 });
         form.reset();
         form.querySelectorAll('.form-group').forEach((g) => {
           g.classList.remove('success', 'error');
@@ -773,7 +823,6 @@ function initFormValidation() {
     }
   });
 
-  /* Clear error on input */
   form.querySelectorAll('input, textarea').forEach((input) => {
     input.addEventListener('input', () => {
       const group = input.closest('.form-group');
@@ -784,23 +833,34 @@ function initFormValidation() {
   });
 }
 
+/**
+ * showToast — 使用 GSAP 动画显示底部提示条
+ */
 function showToast(toast, message) {
   toast.querySelector('.toast-message').textContent = message;
+
+  gsap.fromTo('.toast-message', { opacity: 0 }, { opacity: 1, duration: 0.1 });
+
   toast.classList.remove('hiding');
   toast.classList.add('active');
+
+  gsap.fromTo(toast,
+    { y: 20, opacity: 0 },
+    { y: 0, opacity: 1, duration: 0.4, ease: 'expo.out' }
+  );
 
   setTimeout(() => {
     toast.classList.add('hiding');
     toast.classList.remove('active');
+    gsap.to(toast, { y: -20, opacity: 0, duration: 0.3, ease: 'expo.in' });
   }, 3000);
 }
 
 /* ============================================
-   EMAIL COPY
+   邮箱复制功能（Email Copy）
    ============================================ */
 
 function initEmailCopy() {
-  /* Email card copy */
   const emailEl = document.querySelector('[data-copy]');
   if (emailEl) {
     emailEl.addEventListener('click', (e) => {
@@ -810,7 +870,6 @@ function initEmailCopy() {
     });
   }
 
-  /* Social icon with data-copy-trigger */
   const copyTriggers = document.querySelectorAll('[data-copy-trigger]');
   copyTriggers.forEach((trigger) => {
     trigger.addEventListener('click', (e) => {
@@ -824,14 +883,15 @@ function initEmailCopy() {
 function copyEmailToClipboard(email) {
   navigator.clipboard.writeText(email).then(() => {
     const toast = document.getElementById('form-toast');
-    showToast(toast, 'Email copied to clipboard!');
+    showToast(toast, '邮箱地址已复制到剪贴板！');
   }).catch(() => {
     window.location.href = 'mailto:' + email;
   });
 }
 
 /* ============================================
-   TYPEWRITER EFFECT — Hero Subtitle
+   打字机效果（Typewriter Effect）
+   — 保持原有精确定时逻辑
    ============================================ */
 
 function initTypewriter() {
@@ -839,9 +899,9 @@ function initTypewriter() {
   if (!textEl) return;
 
   const phrases = [
-    'Building Cool Stuff with Code & AI',
+    '用代码和 AI 构建酷东西',
     '前端学习者 · AI 探索者 · 创意制造者',
-    'Where Learning Meets Creating',
+    '当学习遇见创造',
   ];
 
   let phraseIndex = 0;
@@ -853,7 +913,6 @@ function initTypewriter() {
     const currentPhrase = phrases[phraseIndex];
 
     if (!isDeleting && !isWaiting) {
-      /* Typing */
       textEl.textContent = currentPhrase.slice(0, charIndex);
       charIndex++;
 
@@ -867,7 +926,6 @@ function initTypewriter() {
         return;
       }
     } else if (isDeleting) {
-      /* Deleting */
       textEl.textContent = currentPhrase.slice(0, charIndex);
       charIndex--;
 
@@ -881,45 +939,105 @@ function initTypewriter() {
     setTimeout(type, speed + Math.random() * 40);
   }
 
-  /* Start typewriter */
   type();
 }
 
 /* ============================================
-   HERO ENTRANCE — Trigger load animations
+   Hero 入场动画（Hero Entrance）→ GSAP Timeline
+   — 使用 GSAP timeline 替代 CSS 关键帧动画
+   — 页面加载后各元素依次淡入上移
    ============================================ */
 
 function initHeroEntrance() {
   const hero = document.querySelector('.hero');
-  if (hero) {
-    /* Small delay to let CSS catch up, then trigger animations */
-    requestAnimationFrame(() => {
-      hero.classList.add('hero-loaded');
-    });
+  if (!hero) return;
+
+  const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (isReduced) {
+    hero.classList.add('hero-loaded');
+    return;
   }
+
+  const tl = gsap.timeline({
+    onComplete: () => hero.classList.add('hero-loaded'),
+  });
+
+  tl.fromTo('.hero-bg-text',
+    { opacity: 0 },
+    { opacity: 1, duration: 1.2, ease: 'power1.inOut' },
+    0
+  );
+
+  tl.fromTo('.hero-rings',
+    { opacity: 0 },
+    { opacity: 1, duration: 0.8, ease: 'power1.inOut' },
+    0.2
+  );
+
+  tl.fromTo('.hero-id-card',
+    { opacity: 0, x: 60 },
+    { opacity: 1, x: 0, duration: 0.9, ease: 'expo.out' },
+    0.3
+  );
+
+  tl.fromTo('.hero-greeting',
+    { opacity: 0, y: 30, filter: 'blur(8px)' },
+    { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.8, ease: 'expo.out' },
+    0.3
+  );
+
+  tl.fromTo('.hero-title',
+    { opacity: 0, y: 30, filter: 'blur(8px)' },
+    { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.8, ease: 'expo.out' },
+    0.6
+  );
+
+  tl.fromTo('.hero-subtitle',
+    { opacity: 0 },
+    { opacity: 1, duration: 0.5, ease: 'power1.out' },
+    1.0
+  );
+
+  tl.fromTo('.hero-description',
+    { opacity: 0, y: 30 },
+    { opacity: 1, y: 0, duration: 0.8, ease: 'expo.out' },
+    1.3
+  );
+
+  tl.fromTo('.hero-buttons',
+    { opacity: 0, y: 30 },
+    { opacity: 1, y: 0, duration: 0.8, ease: 'expo.out' },
+    1.6
+  );
 }
 
 /* ============================================
-   HERO PARALLAX — Background text follows mouse
+   Hero 视差效果（Hero Parallax）→ GSAP quickTo
+   — 背景文字跟随鼠标移动，产生深度感
    ============================================ */
 
 function initHeroParallax() {
   const bgText = document.querySelector('.hero-bg-text');
   if (!bgText) return;
 
-  /* Skip on touch devices */
   if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const setX = gsap.quickTo(bgText, 'x', { duration: 0.8, ease: 'power2.out' });
+  const setY = gsap.quickTo(bgText, 'y', { duration: 0.8, ease: 'power2.out' });
 
   document.addEventListener('mousemove', (e) => {
     const x = (e.clientX / window.innerWidth - 0.5) * -20;
     const y = (e.clientY / window.innerHeight - 0.5) * -20;
-    bgText.style.transform = `translate(${x}px, ${y}px)`;
+    setX(x);
+    setY(y);
   });
 }
 
 /* ============================================
-   SOCIAL STAGGER REVEAL — Contact icons pop in sequence
+   社交图标逐个弹出（Social Stagger）→ GSAP ScrollTrigger
+   — 使用 ScrollTrigger + stagger 实现逐个弹出
    ============================================ */
 
 function initSocialStagger() {
@@ -927,29 +1045,38 @@ function initSocialStagger() {
   if (!container) return;
 
   const icons = container.querySelectorAll('.social-link');
+  if (!icons.length) return;
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          icons.forEach((icon, i) => {
-            icon.style.animation = `socialPopIn 0.5s var(--ease-out-back) ${i * 0.12}s both`;
-          });
-          observer.unobserve(entry.target);
-        }
-      });
+  const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (isReduced) {
+    gsap.set(icons, { opacity: 1, clearProps: 'transform' });
+    return;
+  }
+
+  gsap.set(icons, { opacity: 0, scale: 0.8, y: 12 });
+
+  gsap.to(icons, {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    duration: 0.5,
+    stagger: 0.12,
+    ease: 'back.out(1.7)',
+    scrollTrigger: {
+      trigger: container,
+      start: 'top 85%',
+      toggleActions: 'play none none reverse',
     },
-    { threshold: 0.4 }
-  );
-
-  observer.observe(container);
+  });
 }
 
 /* ============================================
-   INITIALIZATION
+   初始化（Initialization）
+   — 等待 GSAP 加载完毕后启动
    ============================================ */
 
-document.addEventListener('DOMContentLoaded', () => {
+function bootstrap() {
   initParticles();
   initCustomCursor();
   initScrollReveal();
@@ -965,4 +1092,14 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeroEntrance();
   initHeroParallax();
   initSocialStagger();
-});
+}
+
+if (typeof gsap !== 'undefined') {
+  bootstrap();
+} else {
+  document.addEventListener('DOMContentLoaded', () => {
+    if (typeof gsap === 'undefined') {
+      bootstrap();
+    }
+  });
+}

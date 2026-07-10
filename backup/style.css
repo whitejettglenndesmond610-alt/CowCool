@@ -1,81 +1,96 @@
+/**
+ * =============================================
+ * STYLE.CSS — Shawn Niu 个人作品集 样式表
+ * 这是网站的"皮肤"，控制所有视觉效果：
+ *   设计系统（颜色/字体/间距）
+ *   各个区块的布局和样式
+ *   动画和过渡效果
+ *   响应式（手机/平板适配）
+ * =============================================
+ */
+
 /* ============================================
-   CSS DESIGN SYSTEM — Shawn Niu Portfolio
-   ============================================ */
+   CSS 自定义属性（设计令牌）
+   :root 是 CSS 根元素，这里定义的变量全局可用
+   修改变量值可以快速改变整个网站的主题
+============================================ */
 
-/* ----- CSS Custom Properties ----- */
 :root {
-  /* Background */
-  --bg-primary: #06080d;
-  --bg-secondary: #0c0e14;
-  --bg-card: rgba(255, 255, 255, 0.025);
+  /* ----- 背景色 ----- */
+  --bg-primary: #06080d;          /* 主背景色（深黑） */
+  --bg-secondary: #0c0e14;        /* 二级背景（稍亮） */
+  --bg-card: rgba(255, 255, 255, 0.025);  /* 卡片背景（极透明） */
 
-  /* Accent Colors — cyan-led hierarchy */
-  --accent-cyan: #00c8e8;
-  --accent-purple: #7c3aed;
-  --accent-rose: #f472b6;
-  --accent-cyan-rgb: 0, 200, 232;
-  --accent-purple-rgb: 124, 58, 237;
-  --accent-rose-rgb: 244, 114, 182;
+  /* ----- 强调色（青色主导的层次结构） ----- */
+  --accent-cyan: #00c8e8;         /* 青色 - 主要强调色 */
+  --accent-purple: #7c3aed;       /* 紫色 - 次要强调色 */
+  --accent-rose: #f472b6;         /* 粉色 - 第三强调色 */
+  --accent-cyan-rgb: 0, 200, 232;    /* 青色的 RGB 分量（用于 rgba） */
+  --accent-purple-rgb: 124, 58, 237;  /* 紫色的 RGB 分量 */
+  --accent-rose-rgb: 244, 114, 182;   /* 粉色的 RGB 分量 */
 
-  /* Gradients — updated with new colors */
+  /* ----- 渐变 ----- */
   --gradient-hero: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-cyan));
   --gradient-card-border: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-rose));
   --gradient-button: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
   --gradient-text: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-rose));
 
-  /* Text */
-  --text-primary: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --text-muted: rgba(255, 255, 255, 0.4);
+  /* ----- 文字颜色 ----- */
+  --text-primary: #ffffff;                    /* 主文字（白色） */
+  --text-secondary: rgba(255, 255, 255, 0.7); /* 次要文字 */
+  --text-muted: rgba(255, 255, 255, 0.4);     /* 弱化文字 */
 
-  /* Glassmorphism */
-  --glass-bg: rgba(255, 255, 255, 0.025);
-  --glass-border: rgba(255, 255, 255, 0.06);
-  --glass-bg-hover: rgba(255, 255, 255, 0.05);
-  --glass-border-hover: rgba(255, 255, 255, 0.12);
-  --glass-blur: blur(20px);
+  /* ----- 毛玻璃效果（Glassmorphism） ----- */
+  --glass-bg: rgba(255, 255, 255, 0.025);           /* 毛玻璃背景 */
+  --glass-border: rgba(255, 255, 255, 0.06);         /* 毛玻璃边框 */
+  --glass-bg-hover: rgba(255, 255, 255, 0.05);       /* 悬停时背景 */
+  --glass-border-hover: rgba(255, 255, 255, 0.12);   /* 悬停时边框 */
+  --glass-blur: blur(20px);                           /* 模糊程度 */
 
-  /* Shadows & Glows — updated for new colors */
-  --glow-cyan: 0 0 30px rgba(0, 200, 232, 0.3);
-  --glow-purple: 0 0 40px rgba(124, 58, 237, 0.25);
-  --glow-rose: 0 0 30px rgba(244, 114, 182, 0.15);
-  --shadow-card: 0 4px 30px rgba(0, 0, 0, 0.4);
-  --shadow-card-hover: 0 8px 50px rgba(0, 200, 232, 0.15);
+  /* ----- 阴影和发光 ----- */
+  --glow-cyan: 0 0 30px rgba(0, 200, 232, 0.3);    /* 青色发光 */
+  --glow-purple: 0 0 40px rgba(124, 58, 237, 0.25); /* 紫色发光 */
+  --glow-rose: 0 0 30px rgba(244, 114, 182, 0.15);  /* 粉色发光 */
+  --shadow-card: 0 4px 30px rgba(0, 0, 0, 0.4);     /* 卡片阴影 */
+  --shadow-card-hover: 0 8px 50px rgba(0, 200, 232, 0.15); /* 悬停时阴影 */
 
-  /* Spacing & Sizing */
-  --radius-sm: 8px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
-  --radius-full: 9999px;
-  --section-gap: 120px;
-  --content-width: 1200px;
+  /* ----- 尺寸和间距 ----- */
+  --radius-sm: 8px;      /* 小圆角 */
+  --radius-md: 16px;     /* 中圆角 */
+  --radius-lg: 24px;     /* 大圆角 */
+  --radius-full: 9999px; /* 完全圆角（胶囊形状） */
+  --section-gap: 120px;  /* 区块之间的间距 */
+  --content-width: 1200px; /* 内容最大宽度 */
 
-  /* Animation */
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-  --duration-fast: 0.2s;
-  --duration-normal: 0.4s;
-  --duration-slow: 0.8s;
+  /* ----- 动画缓动函数 ----- */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);   /* 缓出指数 */
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1); /* 回弹效果 */
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);      /* 缓入缓出 */
+  --duration-fast: 0.2s;    /* 快速过渡 */
+  --duration-normal: 0.4s;  /* 正常过渡 */
+  --duration-slow: 0.8s;    /* 慢速过渡 */
 
-  /* Typography */
+  /* ----- 字体 ----- */
   --font-display: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
 }
 
-/* ----- Reset & Base ----- */
-*,
-*::before,
-*::after {
+/* ============================================
+   全局重置 & 基础样式
+   - 清除浏览器默认的 margin/padding
+   - 设置盒模型（border-box 让 padding 不撑大元素）
+============================================ */
+
+*, *::before, *::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
 html {
-  scroll-behavior: smooth;
-  scrollbar-width: thin;
+  scroll-behavior: smooth;        /* 原生平滑滚动 */
+  scrollbar-width: thin;          /* Firefox 细滚动条 */
   scrollbar-color: var(--accent-purple) var(--bg-primary);
 }
 
@@ -84,13 +99,13 @@ body {
   background: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.7;
-  overflow-x: hidden;
-  cursor: none;
-  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;    /* 防止水平滚动 */
+  cursor: none;          /* 隐藏默认鼠标（用自定义鼠标） */
+  -webkit-font-smoothing: antialiased;   /* 字体抗锯齿 */
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom scrollbar for Webkit */
+/* Chrome/Safari 自定义滚动条样式 */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -105,21 +120,24 @@ body {
   background: var(--accent-cyan);
 }
 
-/* Selection */
+/* 文字选中颜色 */
 ::selection {
   background: rgba(108, 92, 231, 0.4);
   color: var(--text-primary);
 }
 
+/* 链接默认无下划线 */
 a {
   color: inherit;
   text-decoration: none;
 }
 
+/* 列表无默认样式 */
 ul, ol {
   list-style: none;
 }
 
+/* 按钮无默认样式 */
 button {
   background: none;
   border: none;
@@ -128,24 +146,31 @@ button {
   cursor: pointer;
 }
 
+/* 图片和 SVG 显示为块级元素 */
 img, svg {
   display: block;
 }
 
+/* 输入框继承字体 */
 input, textarea {
   font: inherit;
   color: inherit;
 }
 
-/* ----- Utility Classes ----- */
+/* ============================================
+   工具类（可复用的通用样式）
+============================================ */
+
+/* 每个区块的通用样式 */
 .section {
   padding: var(--section-gap) 0;
   position: relative;
 }
 
+/* 毛玻璃卡片 */
 .glass-card {
   background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);           /* 背景模糊（毛玻璃效果） */
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
@@ -162,29 +187,27 @@ input, textarea {
   box-shadow: var(--shadow-card-hover);
 }
 
-/* ----- Reveal Animation Base ----- */
+/* ============================================
+   滚动显示动画（Scroll Reveal）→ GSAP ScrollTrigger 控制
+   - .reveal: 初始透明，GSAP 在滚动时动画进入
+   ============================================ */
+
 .reveal {
   opacity: 0;
-  transform: translateY(40px);
-  transition:
-    opacity 0.8s var(--ease-out-expo),
-    transform 0.8s var(--ease-out-expo);
+}
+.reveal-stagger > *:nth-child(1),
+.reveal-stagger > *:nth-child(2),
+.reveal-stagger > *:nth-child(3),
+.reveal-stagger > *:nth-child(4),
+.reveal-stagger > *:nth-child(5),
+.reveal-stagger > *:nth-child(6) {
+  opacity: 0;
 }
 
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+/* ============================================
+   按钮基础样式
+============================================ */
 
-/* Stagger children */
-.reveal-stagger > *:nth-child(1) { transition-delay: 0s; }
-.reveal-stagger > *:nth-child(2) { transition-delay: 0.1s; }
-.reveal-stagger > *:nth-child(3) { transition-delay: 0.2s; }
-.reveal-stagger > *:nth-child(4) { transition-delay: 0.3s; }
-.reveal-stagger > *:nth-child(5) { transition-delay: 0.4s; }
-.reveal-stagger > *:nth-child(6) { transition-delay: 0.5s; }
-
-/* ----- Buttons Base ----- */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -203,9 +226,10 @@ input, textarea {
 }
 
 .btn:active {
-  transform: scale(0.97);
+  transform: scale(0.97);  /* 按下时略微缩小 */
 }
 
+/* 主按钮（渐变背景） */
 .btn-primary {
   background: var(--gradient-button);
   color: var(--text-primary);
@@ -214,7 +238,7 @@ input, textarea {
 
 .btn-primary:hover {
   box-shadow: 0 6px 30px rgba(108, 92, 231, 0.5);
-  transform: translateY(-2px);
+  transform: translateY(-2px);  /* 悬停时上移 */
 }
 
 .btn-primary .btn-arrow {
@@ -222,9 +246,10 @@ input, textarea {
 }
 
 .btn-primary:hover .btn-arrow {
-  transform: translateX(4px);
+  transform: translateX(4px);  /* 箭头右移 */
 }
 
+/* 描边按钮（透明背景 + 边框） */
 .btn-outline {
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: var(--text-primary);
@@ -239,7 +264,10 @@ input, textarea {
   transform: translateY(-2px);
 }
 
-/* ----- Section Headers ----- */
+/* ============================================
+   区块头部（每个区域的标题 + 副标题）
+============================================ */
+
 .section-header {
   text-align: center;
   margin-bottom: 64px;
@@ -247,17 +275,17 @@ input, textarea {
 
 .section-title {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(2rem, 4vw, 3rem);  /* 响应式字号：最小2rem，最大3rem */
   font-weight: 800;
   letter-spacing: 0.03em;
   background: var(--gradient-text);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-text-fill-color: transparent;  /* 渐变文字 */
   display: inline-block;
   margin-bottom: 12px;
-  animation: shimmer 4s ease infinite;
+  animation: shimmer 4s ease infinite;  /* 渐变流光动画 */
 }
 
 .section-subtitle {
@@ -266,7 +294,11 @@ input, textarea {
   font-weight: 400;
 }
 
-/* ----- Container ----- */
+/* ============================================
+   内容容器
+   各个区块的主要内容最大宽度为 1200px，居中显示
+============================================ */
+
 .section-header,
 .about-grid,
 .skills-categories,
@@ -282,10 +314,11 @@ input, textarea {
 }
 
 /* ============================================
-   KEYFRAME ANIMATIONS
-   ============================================ */
+   关键帧动画（Keyframe Animations）
+   定义各种动画效果，供其他元素引用
+============================================ */
 
-/* Float for glow orbs */
+/* 光球漂浮动画 1 */
 @keyframes floatOrb1 {
   0%, 100% { transform: translate(0, 0) scale(1); }
   33% { transform: translate(30px, -40px) scale(1.1); }
@@ -304,27 +337,32 @@ input, textarea {
   66% { transform: translate(-30px, -30px) scale(0.95); }
 }
 
+/* 旋转动画 */
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
 
+/* 慢速旋转 */
 @keyframes spinSlow {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
 
+/* 渐变流光（shimmer）：让渐变色左右移动 */
 @keyframes shimmer {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
+/* 脉冲动画（放大 + 透明度变化） */
 @keyframes pulse {
   0%, 100% { transform: scale(1); opacity: 0.6; }
   50% { transform: scale(1.15); opacity: 1; }
 }
 
+/* 渐入 + 上移 + 模糊消除 */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -338,11 +376,13 @@ input, textarea {
   }
 }
 
+/* 纯渐入 */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
+/* 抖动（表单验证失败时用） */
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
   20% { transform: translateX(-6px); }
@@ -351,27 +391,31 @@ input, textarea {
   80% { transform: translateX(4px); }
 }
 
+/* 光标闪烁 */
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
 }
 
+/* 竖线从无到有 */
 @keyframes drawLine {
   from { height: 0; }
   to { height: 40px; }
 }
 
+/* Toast 弹出 */
 @keyframes toastIn {
   from { transform: translate(-50%, 20px); opacity: 0; }
   to { transform: translate(-50%, 0); opacity: 1; }
 }
 
+/* Toast 收起 */
 @keyframes toastOut {
   from { transform: translate(-50%, 0); opacity: 1; }
   to { transform: translate(-50%, -20px); opacity: 0; }
 }
 
-/* Hero ID card float */
+/* Hero 区浮动名片上下浮动 */
 @keyframes floatCard {
   0%, 100% { transform: translateY(0) rotateX(0deg) rotateY(0deg); }
   25% { transform: translateY(-8px) rotateX(2deg) rotateY(-3deg); }
@@ -379,45 +423,46 @@ input, textarea {
   75% { transform: translateY(-10px) rotateX(1deg) rotateY(-1deg); }
 }
 
-/* Energy ring pulse */
+/* 能量环脉冲 */
 @keyframes ringPulse {
   0%, 100% { opacity: 0.06; }
   50% { opacity: 0.12; }
 }
 
-/* Address bar shimmer for browser mockup hover */
+/* 浏览器地址栏流光 */
 @keyframes addressShimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
 
-/* Node pulse for AI builder preview */
+/* AI 节点脉冲 */
 @keyframes nodePulse {
   0%, 100% { transform: scale(1); box-shadow: 0 0 4px rgba(0, 200, 232, 0.4); }
   50% { transform: scale(1.3); box-shadow: 0 0 12px rgba(0, 200, 232, 0.8); }
 }
 
-/* Bar grow for dataviz preview */
+/* 柱状图生长 */
 @keyframes barGrow {
   from { height: 0; }
 }
 
-/* Social icon stagger reveal */
+/* 社交图标逐个弹出 */
 @keyframes socialPopIn {
   from { opacity: 0; transform: translateY(12px) scale(0.8); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 /* ============================================
-   NAVIGATION BAR
-   ============================================ */
+   导航栏（Navigation Bar）
+   固定在页面顶部，滚动后变为不透明
+============================================ */
 
 .navbar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: 1000;          /* 确保导航栏在最上层 */
   padding: 0 24px;
   height: 70px;
   transition:
@@ -425,12 +470,13 @@ input, textarea {
     backdrop-filter var(--duration-normal) var(--ease-out-expo),
     box-shadow var(--duration-normal) var(--ease-out-expo),
     border-color var(--duration-normal) var(--ease-out-expo);
-  background: rgba(10, 10, 15, 0.6);
+  background: rgba(10, 10, 15, 0.6);         /* 半透明背景 */
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid transparent;
 }
 
+/* 滚动后的导航栏（更不透明 + 底部边框 + 阴影） */
 .navbar.scrolled {
   background: rgba(10, 10, 15, 0.85);
   backdrop-filter: blur(20px);
@@ -448,7 +494,7 @@ input, textarea {
   justify-content: space-between;
 }
 
-/* Logo */
+/* Logo 样式 */
 .nav-logo {
   font-family: var(--font-display);
   font-size: 1.5rem;
@@ -466,7 +512,7 @@ input, textarea {
   opacity: 0.8;
 }
 
-/* Nav Links */
+/* 导航链接列表 */
 .nav-links {
   display: flex;
   align-items: center;
@@ -483,12 +529,13 @@ input, textarea {
   letter-spacing: 0.02em;
 }
 
+/* 导航链接底部的下划线 */
 .nav-link::after {
   content: '';
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 0;
+  width: 0;               /* 初始宽度为 0 */
   height: 2px;
   background: var(--gradient-hero);
   border-radius: var(--radius-full);
@@ -502,14 +549,14 @@ input, textarea {
 
 .nav-link:hover::after,
 .nav-link.active::after {
-  width: 100%;
+  width: 100%;            /* 悬停/激活时展开下划线 */
 }
 
 .nav-link.active {
   text-shadow: 0 0 20px rgba(108, 92, 231, 0.4);
 }
 
-/* Nav CTA Button */
+/* 导航栏右侧的 "Let's Talk" 按钮 */
 .nav-cta {
   font-family: var(--font-display);
   font-size: 0.85rem;
@@ -533,9 +580,13 @@ input, textarea {
   background: var(--glass-bg-hover);
 }
 
-/* Hamburger */
+/* ============================================
+   汉堡菜单按钮（移动端使用）
+   三条横线，点击后变成 ✕
+============================================ */
+
 .hamburger {
-  display: none;
+  display: none;              /* 桌面端隐藏 */
   flex-direction: column;
   gap: 6px;
   padding: 8px;
@@ -553,6 +604,7 @@ input, textarea {
     opacity var(--duration-fast);
 }
 
+/* 打开菜单时：第一条斜向下，第二条消失，第三条斜向上 */
 .hamburger.active span:nth-child(1) {
   transform: rotate(45deg) translate(5px, 6px);
 }
@@ -565,9 +617,12 @@ input, textarea {
   transform: rotate(-45deg) translate(5px, -6px);
 }
 
-/* Mobile Menu */
+/* ============================================
+   移动端菜单（覆盖全屏）
+============================================ */
+
 .mobile-menu {
-  display: none;
+  display: none;              /* 桌面端隐藏 */
   position: fixed;
   inset: 0;
   background: rgba(10, 10, 15, 0.95);
@@ -577,13 +632,13 @@ input, textarea {
   align-items: center;
   justify-content: center;
   opacity: 0;
-  pointer-events: none;
+  pointer-events: none;       /* 不可点击 */
   transition: opacity var(--duration-normal) var(--ease-out-expo);
 }
 
 .mobile-menu.active {
   opacity: 1;
-  pointer-events: all;
+  pointer-events: all;        /* 打开后可点击 */
 }
 
 .mobile-nav-links {
@@ -606,8 +661,9 @@ input, textarea {
 }
 
 /* ============================================
-   HERO SECTION
-   ============================================ */
+   HERO 区域（首屏横幅）
+   全屏高度，内容居中，4 层叠加效果
+============================================ */
 
 .hero {
   position: relative;
@@ -619,13 +675,17 @@ input, textarea {
   padding: 120px 24px 60px;
 }
 
-/* Glow Orbs */
+/* ============================================
+   背景发光球体（装饰元素）
+   固定在背景中，缓慢漂移
+============================================ */
+
 .glow-orb {
   position: fixed;
   border-radius: 50%;
   pointer-events: none;
   z-index: 0;
-  filter: blur(80px);
+  filter: blur(80px);       /* 大范围模糊，制造发光效果 */
   opacity: 0.3;
 }
 
@@ -656,7 +716,7 @@ input, textarea {
   animation: floatOrb3 10s ease-in-out infinite;
 }
 
-/* Hero Content */
+/* Hero 前景内容 */
 .hero-content {
   position: relative;
   z-index: 1;
@@ -675,7 +735,7 @@ input, textarea {
 
 .hero-title {
   font-family: var(--font-display);
-  font-size: clamp(3.5rem, 8vw, 8rem);
+  font-size: clamp(3.5rem, 8vw, 8rem);  /* 响应式：最小3.5rem，最大8rem */
   font-weight: 900;
   line-height: 1;
   letter-spacing: 0.04em;
@@ -686,7 +746,7 @@ input, textarea {
   -webkit-text-fill-color: transparent;
   animation: shimmer 4s ease infinite;
   margin-bottom: 20px;
-  filter: drop-shadow(0 0 30px rgba(108, 92, 231, 0.3));
+  filter: drop-shadow(0 0 30px rgba(108, 92, 231, 0.3));  /* 文字发光 */
 }
 
 .hero-subtitle {
@@ -698,6 +758,7 @@ input, textarea {
   font-weight: 500;
 }
 
+/* 打字机光标闪烁 */
 .typewriter-cursor {
   animation: blink 0.8s step-end infinite;
   font-weight: 300;
@@ -718,7 +779,7 @@ input, textarea {
   justify-content: center;
 }
 
-/* Scroll Indicator */
+/* 底部的 "Scroll" 指示器 */
 .scroll-indicator {
   position: absolute;
   bottom: 40px;
@@ -746,51 +807,36 @@ input, textarea {
   animation: drawLine 2s ease-in-out infinite alternate;
 }
 
-/* Hero entrance animation */
-.hero-loaded .hero-greeting {
-  animation: fadeInUp 0.8s var(--ease-out-expo) 0.3s both;
-}
-.hero-loaded .hero-title {
-  animation: fadeInUp 0.8s var(--ease-out-expo) 0.6s both;
-}
-.hero-loaded .hero-subtitle {
-  animation: fadeIn 0.5s var(--ease-out-expo) 1.0s both;
-}
-.hero-loaded .hero-description {
-  animation: fadeInUp 0.8s var(--ease-out-expo) 1.3s both;
-}
-.hero-loaded .hero-buttons {
-  animation: fadeInUp 0.8s var(--ease-out-expo) 1.6s both;
-}
+/* ============================================
+   Hero 入场动画
+   页面加载后，各元素依次淡入上移
+============================================ */
+
+/* Hero 入场动画由 GSAP Timeline 控制 */
 
 /* ============================================
-   HERO LAYER 1 — Giant Background Text
-   ============================================ */
+   Hero 第1层 — 巨大的背景文字
+   显示多行 "SHAWN NIU" 作为装饰纹理
+============================================ */
 
 .hero-bg-text {
   position: absolute;
   inset: 0;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr);  /* 3 列网格 */
   align-content: center;
   justify-items: center;
   gap: 8px 40px;
   pointer-events: none;
   z-index: 0;
   opacity: 0;
-  transition: opacity 1s var(--ease-out-expo);
-}
-
-.hero-loaded .hero-bg-text {
-  opacity: 1;
-  transition-delay: 0s;
 }
 
 .hero-bg-text span {
   font-family: var(--font-display);
   font-size: clamp(3rem, 6vw, 5rem);
   font-weight: 900;
-  color: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.03);   /* 极透明，仅作为纹理 */
   letter-spacing: 0.25em;
   white-space: nowrap;
   user-select: none;
@@ -798,8 +844,9 @@ input, textarea {
 }
 
 /* ============================================
-   HERO LAYER 2 — Energy Rings
-   ============================================ */
+   Hero 第2层 — 能量环
+   三个旋转的椭圆环，不同颜色和速度
+============================================ */
 
 .hero-rings {
   position: absolute;
@@ -811,11 +858,6 @@ input, textarea {
   width: 600px;
   height: 600px;
   opacity: 0;
-  transition: opacity 0.8s var(--ease-out-expo) 0.2s;
-}
-
-.hero-loaded .hero-rings {
-  opacity: 1;
 }
 
 .hero-ring {
@@ -829,7 +871,7 @@ input, textarea {
 
 .hero-ring--1 {
   width: 380px;
-  height: 200px;
+  height: 200px;           /* 扁椭圆 */
   animation: spinSlow 18s linear infinite, ringPulse 3s ease-in-out infinite;
   opacity: 0.08;
 }
@@ -851,8 +893,9 @@ input, textarea {
 }
 
 /* ============================================
-   HERO LAYER 3 — Floating ID Card
-   ============================================ */
+   Hero 第3层 — 浮动 ID 卡片
+   类似一个小名片，悬浮在 Hero 右上侧
+============================================ */
 
 .hero-id-card {
   position: absolute;
@@ -867,12 +910,12 @@ input, textarea {
   gap: 12px;
   text-align: center;
   opacity: 0;
-  transform: translateX(60px);
-  transition:
-    opacity 0.8s var(--ease-out-expo) 0.3s,
-    transform 0.8s var(--ease-out-expo) 0.3s;
   animation: floatCard 5s ease-in-out infinite;
   animation-play-state: paused;
+}
+
+.hero-loaded .hero-id-card {
+  animation-play-state: running;
 }
 
 .hero-loaded .hero-id-card {
@@ -935,23 +978,25 @@ input, textarea {
 }
 
 /* ============================================
-   ABOUT SECTION
-   ============================================ */
+   ABOUT 区域（关于我）
+   左：个人介绍卡片 | 右：统计数字网格
+============================================ */
 
 .about-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr;  /* 左右两列 */
   gap: 40px;
   align-items: start;
 }
 
-/* About Card (Left) */
+/* 左侧：介绍卡片 */
 .about-card {
   padding: 40px;
   position: relative;
   overflow: hidden;
 }
 
+/* 卡片悬停时的渐变边框 */
 .about-card::before {
   content: '';
   position: absolute;
@@ -972,6 +1017,7 @@ input, textarea {
   box-shadow: var(--shadow-card-hover), var(--glow-purple);
 }
 
+/* 头像容器 */
 .avatar-wrapper {
   position: relative;
   width: 100px;
@@ -993,6 +1039,7 @@ input, textarea {
   z-index: 1;
 }
 
+/* 头像周围的旋转光环 */
 .avatar-ring {
   position: absolute;
   inset: -6px;
@@ -1006,6 +1053,7 @@ input, textarea {
   animation: spin 6s linear infinite;
 }
 
+/* 身份标签组 */
 .identity-tags {
   display: flex;
   flex-wrap: wrap;
@@ -1047,10 +1095,10 @@ input, textarea {
   margin-bottom: 0;
 }
 
-/* Stats Grid (Right) */
+/* 右侧：统计数字网格 */
 .stats-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr;  /* 2×2 网格 */
   gap: 20px;
 }
 
@@ -1092,8 +1140,9 @@ input, textarea {
 }
 
 /* ============================================
-   SKILLS SECTION
-   ============================================ */
+   SKILLS 区域（技能）
+   三列展示：前端 / 后端 / 工具
+============================================ */
 
 .skills {
   position: relative;
@@ -1102,7 +1151,7 @@ input, textarea {
 
 .skills-categories {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr);  /* 三列 */
   gap: 40px;
   position: relative;
   z-index: 1;
@@ -1129,6 +1178,7 @@ input, textarea {
   font-size: 0.8rem;
 }
 
+/* 技能标签组 */
 .skill-tags {
   display: flex;
   flex-wrap: wrap;
@@ -1136,7 +1186,7 @@ input, textarea {
   justify-content: center;
 }
 
-/* Individual Skill Tag */
+/* 单个技能标签 */
 .skill-tag {
   font-family: var(--font-mono);
   font-size: 0.82rem;
@@ -1159,7 +1209,7 @@ input, textarea {
 }
 
 .skill-tag:hover {
-  transform: scale(1.1) translateY(-4px);
+  transform: scale(1.1) translateY(-4px);  /* 放大 + 上移 */
   background: var(--glass-bg-hover);
   border-color: var(--accent-purple);
   box-shadow: var(--glow-purple);
@@ -1167,7 +1217,7 @@ input, textarea {
   z-index: 2;
 }
 
-/* Orbital Decoration */
+/* 背景装饰：三个旋转的同心轨道环 */
 .skills-orbital {
   position: absolute;
   top: 50%;
@@ -1207,8 +1257,9 @@ input, textarea {
 }
 
 /* ============================================
-   PROJECTS SECTION
-   ============================================ */
+   PROJECTS 区域（项目作品）
+   2 列网格展示项目卡片
+============================================ */
 
 .projects-grid {
   display: grid;
@@ -1216,9 +1267,9 @@ input, textarea {
   gap: 32px;
 }
 
-/* Project Card */
+/* 项目卡片容器（用于 3D 透视） */
 .project-card {
-  perspective: 1000px;
+  perspective: 1000px;     /* 3D 透视距离 */
 }
 
 .project-card-inner {
@@ -1235,6 +1286,7 @@ input, textarea {
     border-color 0.5s var(--ease-out-expo);
 }
 
+/* 卡片的渐变边框 */
 .project-card-inner::before {
   content: '';
   position: absolute;
@@ -1253,31 +1305,21 @@ input, textarea {
 }
 
 .project-card-inner:hover::before {
-  opacity: 1;
+  opacity: 1;             /* 悬停时显示渐变边框 */
 }
 
-/* Card Image */
+/* ============================================
+   卡片图片区域（项目预览图）
+============================================ */
+
 .card-image {
   position: relative;
   height: 220px;
   overflow: hidden;
+  background: var(--bg-secondary);
 }
 
-.card-image-placeholder {
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, var(--bg-secondary), rgba(108, 92, 231, 0.1));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-muted);
-  transition: transform 0.6s var(--ease-out-expo);
-}
-
-.project-card-inner:hover .card-image-placeholder {
-  transform: scale(1.05);
-}
-
+/* 悬停时发光层 */
 .card-image-glow {
   position: absolute;
   inset: 0;
@@ -1290,7 +1332,10 @@ input, textarea {
   opacity: 1;
 }
 
-/* Card Content */
+/* ============================================
+   卡片内容区
+============================================ */
+
 .card-content {
   padding: 24px;
 }
@@ -1338,7 +1383,7 @@ input, textarea {
   border: 1px solid rgba(108, 92, 231, 0.2);
 }
 
-/* Card Action Button */
+/* "View Detail" 按钮（悬停时显示） */
 .card-action {
   position: absolute;
   bottom: 24px;
@@ -1353,8 +1398,8 @@ input, textarea {
   font-family: var(--font-display);
   font-size: 0.85rem;
   font-weight: 600;
-  opacity: 0;
-  transform: translateY(10px);
+  opacity: 0;                    /* 默认隐藏 */
+  transform: translateY(10px);   /* 默认下移 */
   transition:
     opacity 0.3s var(--ease-out-expo),
     transform 0.3s var(--ease-out-expo),
@@ -1364,7 +1409,7 @@ input, textarea {
 
 .project-card-inner:hover .card-action {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0);     /* 悬停时显示 */
 }
 
 .card-action:hover {
@@ -1379,7 +1424,11 @@ input, textarea {
   transform: translateX(3px);
 }
 
-/* 3D Tilt — applied by JS via CSS custom properties */
+/* ============================================
+   3D 倾斜效果
+   JS 通过 CSS 自定义属性控制旋转角度
+============================================ */
+
 .project-card.tilting .project-card-inner {
   transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translateY(-12px);
   box-shadow: var(--shadow-card-hover), var(--glow-purple);
@@ -1388,10 +1437,6 @@ input, textarea {
 
 .project-card.tilting .project-card-inner::before {
   opacity: 1;
-}
-
-.project-card.tilting .card-image-placeholder {
-  transform: scale(1.05);
 }
 
 .project-card.tilting .card-image-glow {
@@ -1404,10 +1449,11 @@ input, textarea {
 }
 
 /* ============================================
-   PROJECT CARD PREVIEWS — V2 CSS Mockups
-   ============================================ */
+   项目卡片预览图（CSS 绘制的 Mockup）
+   用纯 CSS 模拟浏览器窗口、手机屏幕、抽象图形
+============================================ */
 
-/* Reset card-image for new preview system */
+/* 重置卡片图片区域以适配新的预览系统 */
 .card-image {
   position: relative;
   height: 220px;
@@ -1415,10 +1461,9 @@ input, textarea {
   background: var(--bg-secondary);
 }
 
-/* Hide old placeholder */
+/* 隐藏旧的占位图 */
 .card-image-placeholder { display: none; }
 
-/* ----- Base Card Preview Wrapper ----- */
 .card-preview {
   width: 100%;
   height: 100%;
@@ -1426,8 +1471,9 @@ input, textarea {
 }
 
 /* ============================================
-   BROWSER WINDOW MOCKUP
-   ============================================ */
+   浏览器窗口 Mockup
+   模拟 macOS 风格的红黄绿窗口按钮 + 地址栏 + 内容
+============================================ */
 
 .card-preview--browser {
   display: flex;
@@ -1449,9 +1495,9 @@ input, textarea {
   border-radius: 50%;
 }
 
-.browser-dot:nth-child(1) { background: #ff5f57; }
-.browser-dot:nth-child(2) { background: #febc2e; }
-.browser-dot:nth-child(3) { background: #28c840; }
+.browser-dot:nth-child(1) { background: #ff5f57; }  /* 红 */
+.browser-dot:nth-child(2) { background: #febc2e; }  /* 黄 */
+.browser-dot:nth-child(3) { background: #28c840; }  /* 绿 */
 
 .browser-address {
   margin: 8px 14px;
@@ -1487,7 +1533,7 @@ input, textarea {
   overflow: hidden;
 }
 
-/* Booking table mockup */
+/* 预约系统表格 Mockup */
 .booking-table {
   width: 100%;
   padding: 8px;
@@ -1520,7 +1566,7 @@ input, textarea {
   background: rgba(0, 200, 232, 0.18);
 }
 
-/* Portfolio mini-hero mockup */
+/* 作品集网站 Mini Hero Mockup */
 .mini-hero {
   display: flex;
   flex-direction: column;
@@ -1574,8 +1620,9 @@ input, textarea {
 }
 
 /* ============================================
-   MOBILE SCREEN MOCKUP
-   ============================================ */
+   手机屏幕 Mockup
+   模拟手机外形：刘海、状态栏、表单
+============================================ */
 
 .card-preview--mobile {
   display: flex;
@@ -1661,8 +1708,9 @@ input, textarea {
 }
 
 /* ============================================
-   ABSTRACT GEOMETRIC MOCKUPS
-   ============================================ */
+   抽象几何 Mockup
+   用纯 CSS 形状表示 AI 节点、图表、UI 形状
+============================================ */
 
 .card-preview--abstract {
   display: flex;
@@ -1671,7 +1719,7 @@ input, textarea {
   overflow: hidden;
 }
 
-/* AI Nodes */
+/* AI 节点连线图 */
 .ai-nodes {
   position: relative;
   width: 100%;
@@ -1694,7 +1742,7 @@ input, textarea {
 
 .project-card-inner:hover .ai-node--2,
 .project-card-inner:hover .ai-node--3 {
-  animation-duration: 1.2s;
+  animation-duration: 1.2s;  /* 悬停时脉冲加快 */
 }
 
 .ai-line {
@@ -1730,7 +1778,7 @@ input, textarea {
   background: rgba(0, 200, 232, 0.25);
 }
 
-/* DataViz Chart */
+/* 数据可视化图表（柱状图） */
 .dataviz-chart {
   width: 80%;
   height: 70%;
@@ -1767,7 +1815,7 @@ input, textarea {
 
 .chart-bar {
   width: 12%;
-  height: var(--h, 50%);
+  height: var(--h, 50%);     /* 高度由 CSS 自定义属性控制 */
   background: rgba(0, 200, 232, 0.2);
   border-radius: 3px 3px 0 0;
   transition: background 0.4s, height 0.6s var(--ease-out-expo);
@@ -1785,7 +1833,7 @@ input, textarea {
   background: rgba(0, 200, 232, 0.55);
 }
 
-/* Interactive UI Shapes */
+/* 交互 UI 形状（圆形、三角形、方形、环） */
 .ui-shapes {
   position: relative;
   width: 80%;
@@ -1857,31 +1905,33 @@ input, textarea {
 }
 
 /* ============================================
-   PROJECT MODAL
-   ============================================ */
+   项目详情弹窗（Project Modal）
+   从右侧滑入的半屏面板
+============================================ */
 
 .modal-overlay {
   position: fixed;
   inset: 0;
   z-index: 2000;
-  display: none;
+  display: none;                      /* 默认隐藏 */
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-end;          /* 面板靠右 */
 }
 
 .modal-overlay.active {
   display: flex;
 }
 
+/* 遮罩背景 */
 .modal-backdrop {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  animation: fadeIn 0.3s var(--ease-out-expo) both;
 }
 
+/* 弹窗面板 */
 .modal-panel {
   position: relative;
   width: 100%;
@@ -1891,16 +1941,6 @@ input, textarea {
   border-left: 1px solid rgba(255, 255, 255, 0.08);
   padding: 60px 40px 40px;
   overflow-y: auto;
-  transform: translateX(100%);
-  transition: transform 0.4s var(--ease-out-expo);
-}
-
-.modal-overlay.active .modal-panel {
-  transform: translateX(0);
-}
-
-.modal-overlay.closing .modal-panel {
-  transform: translateX(100%);
 }
 
 .modal-close {
@@ -1922,7 +1962,7 @@ input, textarea {
   background: var(--glass-bg);
 }
 
-/* Modal Content */
+/* 弹窗内部内容 */
 .modal-body .modal-project-type {
   font-family: var(--font-mono);
   font-size: 0.75rem;
@@ -1989,14 +2029,15 @@ input, textarea {
 }
 
 /* ============================================
-   TIMELINE SECTION
-   ============================================ */
+   时间线（Timeline）
+   垂直时间线，左右交替显示项目
+============================================ */
 
 .timeline-wrapper {
   position: relative;
 }
 
-/* Central line */
+/* 中央竖线 */
 .timeline-line {
   position: absolute;
   top: 0;
@@ -2008,14 +2049,15 @@ input, textarea {
   overflow: hidden;
 }
 
+/* 竖线中的填充条（由 JS 控制高度） */
 .timeline-line-fill {
   width: 100%;
   height: 0;
   background: var(--gradient-hero);
-  transition: height 0.1s linear;
+  will-change: height;
 }
 
-/* Timeline Items */
+/* 时间线项目列表 */
 .timeline-items {
   position: relative;
 }
@@ -2031,7 +2073,7 @@ input, textarea {
   margin-bottom: 0;
 }
 
-/* Dot */
+/* 时间线上的圆点 */
 .timeline-dot {
   position: absolute;
   top: 28px;
@@ -2049,6 +2091,7 @@ input, textarea {
     box-shadow var(--duration-normal);
 }
 
+/* 激活的节点（进入可视区域后） */
 .timeline-item.active .timeline-dot {
   background: var(--accent-cyan);
   border-color: var(--accent-cyan);
@@ -2071,18 +2114,18 @@ input, textarea {
   animation: pulse 2s ease-in-out infinite;
 }
 
-/* Content cards */
+/* 时间线内容卡片 */
 .timeline-content {
-  width: calc(50% - 50px);
+  width: calc(50% - 50px);    /* 每项占一半宽度减间距 */
   padding: 28px;
 }
 
 .timeline-item:nth-child(odd) .timeline-content {
-  margin-right: auto;
+  margin-right: auto;          /* 奇数项在左侧 */
 }
 
 .timeline-item:nth-child(even) .timeline-content {
-  margin-left: auto;
+  margin-left: auto;           /* 偶数项在右侧 */
 }
 
 .timeline-content:hover {
@@ -2115,14 +2158,16 @@ input, textarea {
 }
 
 /* ============================================
-   CONTACT SECTION
-   ============================================ */
+   CONTACT 区域（联系我）
+   左：表单 | 右：联系信息
+============================================ */
 
 .contact {
   position: relative;
   overflow: hidden;
 }
 
+/* 背景紫光 */
 .contact-glow {
   position: absolute;
   top: 50%;
@@ -2136,7 +2181,7 @@ input, textarea {
 }
 
 .section-title--large {
-  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-size: clamp(2rem, 5vw, 3.5rem);  /* 更大的标题字号 */
 }
 
 .contact-grid {
@@ -2147,7 +2192,10 @@ input, textarea {
   z-index: 1;
 }
 
-/* Form */
+/* ============================================
+   联系表单
+============================================ */
+
 .contact-form {
   padding: 40px;
 }
@@ -2157,6 +2205,7 @@ input, textarea {
   margin-bottom: 28px;
 }
 
+/* 输入框和文本框 */
 .form-group input,
 .form-group textarea {
   width: 100%;
@@ -2180,6 +2229,7 @@ input, textarea {
   background: var(--glass-bg-hover);
 }
 
+/* 浮动标签（输入时标签上移） */
 .form-group label {
   position: absolute;
   left: 16px;
@@ -2199,6 +2249,7 @@ input, textarea {
   transform: none;
 }
 
+/* 输入框聚焦或有内容时，标签上移缩小 */
 .form-group input:focus ~ label,
 .form-group input:not(:placeholder-shown) ~ label,
 .form-group textarea:focus ~ label,
@@ -2207,11 +2258,13 @@ input, textarea {
   color: var(--accent-cyan);
 }
 
+/* 隐藏 placeholder 文字（用浮动标签代替） */
 .form-group input::placeholder,
 .form-group textarea::placeholder {
   color: transparent;
 }
 
+/* 验证错误提示文字 */
 .form-error {
   display: none;
   font-size: 0.8rem;
@@ -2224,13 +2277,14 @@ input, textarea {
   display: block;
 }
 
+/* 验证失败时：红色边框 + 抖动 */
 .form-group.error input,
 .form-group.error textarea {
   border-color: var(--accent-rose);
   box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.15);
-  animation: shake 0.4s var(--ease-out-expo);
 }
 
+/* 验证成功时：青色边框 */
 .form-group.success input,
 .form-group.success textarea {
   border-color: var(--accent-cyan);
@@ -2243,7 +2297,11 @@ input, textarea {
   margin-top: 8px;
 }
 
-/* Contact Info (Right) */
+/* ============================================
+   联系信息（右侧）
+   邮箱卡片、社交图标、位置信息
+============================================ */
+
 .contact-info {
   display: flex;
   flex-direction: column;
@@ -2316,8 +2374,8 @@ input, textarea {
 }
 
 /* ============================================
-   FOOTER
-   ============================================ */
+   页脚（Footer）
+============================================ */
 
 .footer {
   padding: 32px 24px;
@@ -2360,8 +2418,9 @@ input, textarea {
 }
 
 /* ============================================
-   CUSTOM CURSOR
-   ============================================ */
+   自定义鼠标指针
+   两个圆叠加，小圆点 + 大圆环
+============================================ */
 
 .cursor-dot,
 .cursor-ring {
@@ -2372,7 +2431,6 @@ input, textarea {
   z-index: 9999;
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  transition: opacity 0.15s;
 }
 
 .cursor-dot {
@@ -2380,29 +2438,29 @@ input, textarea {
   height: 8px;
   background: var(--accent-cyan);
   box-shadow: 0 0 12px var(--accent-cyan);
+  will-change: transform;
 }
 
 .cursor-ring {
   width: 28px;
   height: 28px;
   border: 1.5px solid rgba(255, 255, 255, 0.3);
+  will-change: transform;
 }
 
-/* Cursor states */
 .cursor-dot.hover-interactive {
-  transform: translate(-50%, -50%) scale(2);
   background: var(--text-primary);
   mix-blend-mode: difference;
 }
 
 .cursor-ring.hover-interactive {
-  transform: translate(-50%, -50%) scale(1.8);
   border-color: var(--accent-cyan);
 }
 
 /* ============================================
-   PARTICLE CANVAS
-   ============================================ */
+   粒子 Canvas（画布）
+   固定在背景，不接受鼠标事件
+============================================ */
 
 #particles {
   position: fixed;
@@ -2412,8 +2470,9 @@ input, textarea {
 }
 
 /* ============================================
-   MOUSE GLOW
-   ============================================ */
+   鼠标发光效果
+   跟随鼠标的大范围半透明光晕
+============================================ */
 
 .mouse-glow {
   position: fixed;
@@ -2429,8 +2488,9 @@ input, textarea {
 }
 
 /* ============================================
-   TOAST
-   ============================================ */
+   底部提示条（Toast）
+   表单提交成功后，在底部弹出的消息条
+============================================ */
 
 .toast {
   position: fixed;
@@ -2452,30 +2512,23 @@ input, textarea {
   color: var(--text-primary);
 }
 
-.toast.active {
-  animation: toastIn 0.4s var(--ease-out-expo) forwards;
-}
-
-.toast.hiding {
-  animation: toastOut 0.3s var(--ease-out-expo) forwards;
-}
-
 .toast-icon {
   color: var(--accent-cyan);
   font-size: 1.1rem;
 }
 
 /* ============================================
-   CONTACT SOCIAL STAGGER
-   ============================================ */
+   社交图标逐个弹出
+   进入可视区域前隐藏，之后逐个显示
+============================================ */
 
 .contact-socials.reveal-stagger .social-link {
   opacity: 0;
 }
 
 /* ============================================
-   FORM DEMO MODE STYLES
-   ============================================ */
+   表单演示模式样式
+============================================ */
 
 .btn-submit {
   transition: opacity var(--duration-normal);
@@ -2499,16 +2552,16 @@ input, textarea {
 }
 
 /* ============================================
-   RESPONSIVE — Tablet (768px–1024px)
-   ============================================ */
+   响应式设计 — 平板（768px–1024px）
+============================================ */
 
 @media (max-width: 1024px) {
   :root {
-    --section-gap: 80px;
+    --section-gap: 80px;  /* 缩小区块间距 */
   }
 
   .about-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr;   /* 改为单列 */
     gap: 32px;
   }
 
@@ -2534,7 +2587,7 @@ input, textarea {
     grid-template-columns: 1fr;
   }
 
-  /* Remove 3D tilt on tablet for performance */
+  /* 平板取消 3D 倾斜（提升性能） */
   .project-card {
     perspective: none;
   }
@@ -2544,15 +2597,15 @@ input, textarea {
 }
 
 /* ============================================
-   RESPONSIVE — Mobile (< 768px)
-   ============================================ */
+   响应式设计 — 手机（< 768px）
+============================================ */
 
 @media (max-width: 768px) {
   :root {
     --section-gap: 60px;
   }
 
-  /* Navigation */
+  /* 导航栏：隐藏桌面连接和按钮，显示汉堡菜单 */
   .nav-links,
   .nav-cta {
     display: none;
@@ -2566,7 +2619,7 @@ input, textarea {
     display: flex;
   }
 
-  /* Hero */
+  /* Hero 区缩小光球 */
   .glow-orb--1 { width: 300px; height: 300px; }
   .glow-orb--2 { width: 250px; height: 250px; }
   .glow-orb--3 { width: 200px; height: 200px; }
@@ -2628,14 +2681,13 @@ input, textarea {
     height: 200px;
   }
 
-  /* Modal — full screen on mobile */
+  /* 弹窗：改为从底部滑入（全屏） */
   .modal-panel {
     max-width: 100%;
     border-left: none;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
     height: 90vh;
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    transform: translateY(100%);
     top: auto;
     bottom: 0;
   }
@@ -2644,15 +2696,7 @@ input, textarea {
     align-items: flex-end;
   }
 
-  .modal-overlay.active .modal-panel {
-    transform: translateY(0);
-  }
-
-  .modal-overlay.closing .modal-panel {
-    transform: translateY(100%);
-  }
-
-  /* Timeline */
+  /* 时间线：竖线移到左侧 */
   .timeline-line {
     left: 20px;
   }
@@ -2688,7 +2732,7 @@ input, textarea {
     gap: 16px;
   }
 
-  /* Hero layers — mobile */
+  /* Hero 层移动端调整 */
   .hero-bg-text {
     grid-template-columns: repeat(2, 1fr);
     gap: 4px 20px;
@@ -2704,20 +2748,20 @@ input, textarea {
   .hero-ring--2 { width: 320px; height: 180px; }
   .hero-ring--3 { width: 380px; height: 220px; }
   .hero-id-card {
-    position: relative;
+    position: relative;        /* 取消绝对定位，变成普通流式布局 */
     top: auto;
     right: auto;
     width: 220px;
     margin: 0 auto 32px;
   }
 
-  /* Card preview — maintain visibility on mobile */
+  /* 卡片预览在手机上的大小适配 */
   .card-image { height: 180px; }
   .card-preview--browser .browser-content { margin: 0 8px 8px; }
   .booking-row { height: 10px; }
   .mobile-frame { width: 120px; }
 
-  /* Hide custom cursor on touch */
+  /* 触摸设备隐藏自定义鼠标 */
   .cursor-dot,
   .cursor-ring,
   .mouse-glow {
@@ -2725,13 +2769,15 @@ input, textarea {
   }
 
   body {
-    cursor: auto;
+    cursor: auto;  /* 恢复默认鼠标 */
   }
 }
 
 /* ============================================
-   REDUCED MOTION
-   ============================================ */
+   无障碍 — 减少动画
+   如果用户在系统设置中开启了"减少动画"，
+   则禁用所有动画和过渡，改为瞬间完成
+============================================ */
 
 @media (prefers-reduced-motion: reduce) {
   *,

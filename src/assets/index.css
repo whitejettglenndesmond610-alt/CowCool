@@ -1,0 +1,308 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --radius: 0.625rem;
+  /* dark theme (default) */
+  --bg-page: #06080d;
+  --bg-card: rgba(255, 255, 255, 0.025);
+  --bg-card-hover: rgba(255, 255, 255, 0.05);
+  --bg-input: rgba(255, 255, 255, 0.025);
+  --color-text: #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.6);
+  --color-text-muted: rgba(255, 255, 255, 0.4);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-hover: rgba(255, 255, 255, 0.12);
+  --shadow-card: 0 4px 30px rgba(0, 0, 0, 0.4);
+  --shadow-card-hover: 0 8px 50px rgba(0, 200, 232, 0.15);
+}
+
+[data-theme="light"] {
+  --bg-page: #f5f5f7;
+  --bg-card: rgba(0, 0, 0, 0.03);
+  --bg-card-hover: rgba(0, 0, 0, 0.06);
+  --bg-input: rgba(0, 0, 0, 0.04);
+  --color-text: #1a1a2e;
+  --color-text-secondary: rgba(0, 0, 0, 0.6);
+  --color-text-muted: rgba(0, 0, 0, 0.4);
+  --border-subtle: rgba(0, 0, 0, 0.08);
+  --border-hover: rgba(0, 0, 0, 0.15);
+  --shadow-card: 0 4px 30px rgba(0, 0, 0, 0.08);
+  --shadow-card-hover: 0 8px 50px rgba(0, 200, 232, 0.1);
+}
+
+/* ============================================
+   Base layer — custom resets & defaults
+   ============================================ */
+
+@layer base {
+  * {
+    border-color: var(--border-subtle);
+  }
+
+  body {
+    background: var(--bg-page);
+    color: var(--color-text);
+    font-family: 'Inter', system-ui, sans-serif;
+    cursor: none;
+    overflow-x: hidden;
+  }
+
+  .cursor-auto {
+    cursor: auto;
+  }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg-page); }
+  ::-webkit-scrollbar-thumb { background: #7c3aed; border-radius: 9999px; }
+  ::-webkit-scrollbar-thumb:hover { background: #00c8e8; }
+
+  ::selection { background: rgba(108, 92, 231, 0.4); color: #fff; }
+  a { color: inherit; text-decoration: none; }
+  button { cursor: none; }
+}
+
+/* ============================================
+   Components layer — reusable styles
+   ============================================ */
+
+@layer components {
+  /* Glass card */
+  .glass-card {
+    @apply rounded-2xl backdrop-blur-xl;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                background 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .glass-card:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border-hover);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  /* Section title with gradient text */
+  .section-title {
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    background: linear-gradient(135deg, #00c8e8, #7c3aed, #f472b6);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+    animation: shimmer 4s ease infinite;
+  }
+
+  /* Gradient border on hover */
+  .gradient-border {
+    position: relative;
+  }
+
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: linear-gradient(135deg, #00c8e8, #7c3aed, #f472b6);
+    opacity: 0;
+    transition: opacity 0.4s;
+    z-index: -1;
+  }
+
+  .gradient-border:hover::before {
+    opacity: 0.3;
+  }
+
+  /* Glow orbs */
+  .glow-orb {
+    @apply fixed rounded-full pointer-events-none;
+    filter: blur(80px);
+    opacity: 0.3;
+  }
+}
+
+/* ============================================
+   Utilities layer
+   ============================================ */
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, #00c8e8, #7c3aed);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+/* ============================================
+   CSS-only animations (not handled by GSAP)
+   ============================================ */
+
+@keyframes shimmer {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes floatCard {
+  0%, 100% { transform: translateY(0) rotateX(0deg) rotateY(0deg); }
+  25%  { transform: translateY(-8px) rotateX(2deg) rotateY(-3deg); }
+  50%  { transform: translateY(-2px) rotateX(-1deg) rotateY(2deg); }
+  75%  { transform: translateY(-10px) rotateX(1deg) rotateY(-1deg); }
+}
+
+@keyframes drawLine {
+  from { height: 0; }
+  to   { height: 40px; }
+}
+
+/* ============================================
+   Form validation styles
+   ============================================ */
+
+.form-group.error input,
+.form-group.error textarea {
+  border-color: #f472b6 !important;
+}
+
+.form-group.success input,
+.form-group.success textarea {
+  border-color: #00c8e8 !important;
+}
+
+.form-group .form-error {
+  display: none;
+}
+
+.form-group.error .form-error {
+  display: block;
+}
+
+/* ============================================
+   Light theme overrides
+   ============================================ */
+
+[data-theme="light"] body {
+  background: #f5f5f7;
+  color: #1a1a2e;
+}
+
+[data-theme="light"] .glass-card {
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .glass-card:hover {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .page-loader { background: #f5f5f7; }
+
+[data-theme="light"] .project-card-inner {
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .card-image { background: #e8e8ed; }
+
+@keyframes floatCard {
+  0%, 100% { transform: translateY(0) rotateX(0deg) rotateY(0deg); }
+  25%  { transform: translateY(-8px) rotateX(2deg) rotateY(-3deg); }
+  50%  { transform: translateY(-2px) rotateX(-1deg) rotateY(2deg); }
+  75%  { transform: translateY(-10px) rotateX(1deg) rotateY(-1deg); }
+}
+
+/* ============================================
+   Custom cursor styles
+   ============================================ */
+
+.cursor-dot,
+.cursor-ring {
+  @apply fixed top-0 left-0 pointer-events-none rounded-full;
+  z-index: 9999;
+  will-change: transform;
+}
+
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  background: #00c8e8;
+  box-shadow: 0 0 12px #00c8e8;
+}
+
+.cursor-ring {
+  width: 28px;
+  height: 28px;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+}
+
+/* ============================================
+   Particle canvas
+   ============================================ */
+
+#particles {
+  @apply fixed inset-0 pointer-events-none;
+  z-index: 0;
+}
+
+/* ============================================
+   Project cards
+   ============================================ */
+
+.project-card {
+  perspective: 1000px;
+}
+
+/* ============================================
+   Scroll reveal initial state
+   ============================================ */
+
+.reveal {
+  opacity: 0;
+}
+
+.toast {
+  @apply fixed bottom-8 left-1/2 z-[3000] flex items-center gap-2.5
+         px-7 py-3.5 rounded-full border border-[#00c8e8]
+         text-white text-sm pointer-events-none;
+  background: #0c0e14;
+  box-shadow: 0 0 30px rgba(0, 200, 232, 0.3);
+  opacity: 0;
+  transform: translate(-50%, 20px);
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+
+@media (max-width: 768px) {
+  body {
+    cursor: auto;
+  }
+
+  .cursor-dot,
+  .cursor-ring,
+  .mouse-glow {
+    display: none !important;
+  }
+
+  button {
+    cursor: pointer;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
