@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -12,9 +12,13 @@ const stats = [
   { target: 1, suffix: '+', label: 'AI 项目经验', icon: 'heart' },
 ]
 
+const avatarRef = ref(null)
+const bioRef = ref(null)
+
 onMounted(() => {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
+  // ===== Stat count-up =====
   document.querySelectorAll('.stat-number').forEach(el => {
     const target = parseInt(el.dataset.target, 10)
     const suffix = el.dataset.suffix || ''
@@ -39,6 +43,80 @@ onMounted(() => {
       }
     )
   })
+
+  // ===== Character-by-character reveal wave =====
+  nextTick(() => {
+    if (!bioRef.value) return
+    const paragraphs = bioRef.value.querySelectorAll('p')
+    paragraphs.forEach(p => {
+      const text = p.textContent || ''
+      p.innerHTML = ''
+      const chars = text.split('').map((char) => {
+        const span = document.createElement('span')
+        span.textContent = char === ' ' ? '\u00A0' : char
+        span.style.opacity = '0.15'
+        span.style.display = 'inline'
+        span.style.willChange = 'opacity'
+        return span
+      })
+      chars.forEach(c => p.appendChild(c))
+
+      ScrollTrigger.create({
+        trigger: p,
+        start: 'top bottom',
+        end: 'bottom top+=40%',
+        scrub: 0.4,
+        onUpdate(self) {
+          const total = chars.length
+          const progress = Math.min(self.progress * 1.2, 1)
+          const waveCenter = progress * total
+          const waveWidth = total * 0.2
+          for (let i = 0; i < total; i++) {
+            const dist = i - waveCenter
+            if (dist > 0) {
+              const t = 1 - Math.min(dist / waveWidth, 1)
+              const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t
+              chars[i].style.opacity = String(0.15 + eased * 0.85)
+            } else {
+              chars[i].style.opacity = '1'
+            }
+          }
+        },
+      })
+    })
+  })
+
+  // ===== Magnetic hover on avatar =====
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return
+  const avatar = avatarRef.value
+  if (!avatar) return
+  const avatarEl = avatar.querySelector('.avatar-inner')
+  if (!avatarEl) return
+
+  const magnetStrength = 3
+  const magnetPadding = 150
+  const setX = gsap.quickTo(avatarEl, 'x', { duration: 0.6, ease: 'power3.out' })
+  const setY = gsap.quickTo(avatarEl, 'y', { duration: 0.6, ease: 'power3.out' })
+
+  function onMove(e) {
+    const rect = avatar.getBoundingClientRect()
+    const cx = rect.left + rect.width / 2
+    const cy = rect.top + rect.height / 2
+    const dx = e.clientX - cx
+    const dy = e.clientY - cy
+    const dist = Math.sqrt(dx * dx + dy * dy)
+
+    if (dist < magnetPadding) {
+      setX(dx / magnetStrength)
+      setY(dy / magnetStrength)
+    } else {
+      setX(0)
+      setY(0)
+    }
+  }
+
+  document.addEventListener('mousemove', onMove)
+  onUnmounted(() => document.removeEventListener('mousemove', onMove))
 })
 </script>
 
@@ -52,8 +130,8 @@ onMounted(() => {
 
       <div class="grid grid-cols-2 gap-10 max-lg:grid-cols-1 max-lg:gap-8">
         <div class="glass-card gradient-border p-10 max-md:p-7 relative overflow-hidden reveal">
-          <div class="relative w-[100px] h-[100px] mx-auto mb-6">
-            <div class="w-full h-full rounded-full bg-surface border-2 border-white/10 flex items-center justify-center text-muted relative z-[1]">
+          <div ref="avatarRef" class="relative w-[100px] h-[100px] mx-auto mb-6" style="will-change: transform;">
+            <div class="avatar-inner w-full h-full rounded-full bg-surface border-2 border-white/10 flex items-center justify-center text-muted relative z-[1]">
               <svg viewBox="0 0 100 100" fill="none" class="w-3/5"><circle cx="50" cy="38" r="16" stroke="currentColor" stroke-width="2"/><path d="M20 85c0-16.569 13.431-30 30-30s30 13.431 30 30" stroke="currentColor" stroke-width="2"/></svg>
             </div>
             <div class="absolute -inset-1.5 rounded-full animate-[spin_6s_linear_infinite]" style="border:2px solid transparent; background: linear-gradient(135deg,#89AACC,#4E85BF,#89AACC) border-box; mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); mask-composite: exclude;" />
@@ -65,7 +143,7 @@ onMounted(() => {
             <span class="text-xs font-medium px-4 py-1.5 rounded-full border border-white/10 text-[#89AACC] bg-white/[0.025] font-mono">计算机科学</span>
           </div>
 
-          <div class="text-muted text-sm leading-relaxed space-y-4">
+          <div ref="bioRef" class="text-muted text-sm leading-relaxed space-y-4">
             <p>我是 牛帅 (Shawn)，郑州工商学院计算机科学与技术专业在读学生（2025.09 – 2027.06 预计毕业）。</p>
             <p>相信「动手实践 + 技术理解」是最好的学习方式。从课程中掌握操作系统、数据库、计算机网络等核心基础，同时主动尝试新技术：用 LangChain + FAISS 构建本地知识库 RAG 问答系统，用 Gradio 搭建 AI 应用界面。</p>
             <p>目前的学习路线：夯实计算机基础 → 掌握 Python/JavaScript 开发 → 深入 AI 应用实践。目标是成为能将 AI 技术落地为实际应用的工程师。</p>
