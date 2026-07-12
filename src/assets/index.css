@@ -3,93 +3,52 @@
 @tailwind utilities;
 
 :root {
+  --bg: 0 0% 4%;
+  --surface: 0 0% 8%;
+  --text: 0 0% 96%;
+  --muted: 0 0% 53%;
+  --stroke: 0 0% 12%;
+  --accent: 0 0% 96%;
   --radius: 0.625rem;
-  /* dark theme (default) */
-  --bg-page: #06080d;
-  --bg-card: rgba(255, 255, 255, 0.025);
-  --bg-card-hover: rgba(255, 255, 255, 0.05);
-  --bg-input: rgba(255, 255, 255, 0.025);
-  --color-text: #ffffff;
-  --color-text-secondary: rgba(255, 255, 255, 0.6);
-  --color-text-muted: rgba(255, 255, 255, 0.4);
-  --border-subtle: rgba(255, 255, 255, 0.06);
-  --border-hover: rgba(255, 255, 255, 0.12);
-  --shadow-card: 0 4px 30px rgba(0, 0, 0, 0.4);
-  --shadow-card-hover: 0 8px 50px rgba(0, 200, 232, 0.15);
 }
 
-[data-theme="light"] {
-  --bg-page: #f5f5f7;
-  --bg-card: rgba(0, 0, 0, 0.03);
-  --bg-card-hover: rgba(0, 0, 0, 0.06);
-  --bg-input: rgba(0, 0, 0, 0.04);
-  --color-text: #1a1a2e;
-  --color-text-secondary: rgba(0, 0, 0, 0.6);
-  --color-text-muted: rgba(0, 0, 0, 0.4);
-  --border-subtle: rgba(0, 0, 0, 0.08);
-  --border-hover: rgba(0, 0, 0, 0.15);
-  --shadow-card: 0 4px 30px rgba(0, 0, 0, 0.08);
-  --shadow-card-hover: 0 8px 50px rgba(0, 200, 232, 0.1);
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-/* ============================================
-   Base layer — custom resets & defaults
-   ============================================ */
-
-@layer base {
-  * {
-    border-color: var(--border-subtle);
-  }
-
-  body {
-    background: var(--bg-page);
-    color: var(--color-text);
-    font-family: 'Inter', system-ui, sans-serif;
-    cursor: none;
-    overflow-x: hidden;
-  }
-
-  .cursor-auto {
-    cursor: auto;
-  }
-
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: var(--bg-page); }
-  ::-webkit-scrollbar-thumb { background: #7c3aed; border-radius: 9999px; }
-  ::-webkit-scrollbar-thumb:hover { background: #00c8e8; }
-
-  ::selection { background: rgba(108, 92, 231, 0.4); color: #fff; }
-  a { color: inherit; text-decoration: none; }
-  button { cursor: none; }
+html {
+  scroll-behavior: smooth;
 }
 
-/* ============================================
-   Components layer — reusable styles
-   ============================================ */
+body {
+  background: hsl(var(--bg));
+  color: hsl(var(--text));
+  font-family: 'Inter', sans-serif;
+  cursor: none;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: hsl(var(--bg)); }
+::-webkit-scrollbar-thumb { background: hsl(var(--stroke)); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: hsl(var(--muted)); }
+
+::selection { background: rgba(137, 170, 204, 0.4); color: #fff; }
+
+a { color: inherit; text-decoration: none; }
+button { cursor: none; }
+
+.accent-gradient {
+  background: linear-gradient(90deg, #89AACC 0%, #4E85BF 100%);
+}
 
 @layer components {
-  /* Glass card */
-  .glass-card {
-    @apply rounded-2xl backdrop-blur-xl;
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-                box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-                border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-                background 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .glass-card:hover {
-    background: var(--bg-card-hover);
-    border-color: var(--border-hover);
-    box-shadow: var(--shadow-card-hover);
-  }
-
-  /* Section title with gradient text */
   .section-title {
     font-weight: 800;
     letter-spacing: 0.03em;
-    background: linear-gradient(135deg, #00c8e8, #7c3aed, #f472b6);
+    background: linear-gradient(135deg, #89AACC, #4E85BF);
     background-size: 200% auto;
     -webkit-background-clip: text;
     background-clip: text;
@@ -98,7 +57,6 @@
     animation: shimmer 4s ease infinite;
   }
 
-  /* Gradient border on hover */
   .gradient-border {
     position: relative;
   }
@@ -108,7 +66,7 @@
     position: absolute;
     inset: -1px;
     border-radius: inherit;
-    background: linear-gradient(135deg, #00c8e8, #7c3aed, #f472b6);
+    background: linear-gradient(135deg, #89AACC, #4E85BF);
     opacity: 0;
     transition: opacity 0.4s;
     z-index: -1;
@@ -118,21 +76,18 @@
     opacity: 0.3;
   }
 
-  /* Glow orbs */
   .glow-orb {
-    @apply fixed rounded-full pointer-events-none;
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
     filter: blur(80px);
     opacity: 0.3;
   }
 }
 
-/* ============================================
-   Utilities layer
-   ============================================ */
-
 @layer utilities {
   .text-gradient {
-    background: linear-gradient(135deg, #00c8e8, #7c3aed);
+    background: linear-gradient(135deg, #89AACC, #4E85BF);
     background-size: 200% 200%;
     -webkit-background-clip: text;
     background-clip: text;
@@ -140,163 +95,91 @@
   }
 }
 
-/* ============================================
-   CSS-only animations (not handled by GSAP)
-   ============================================ */
-
 @keyframes shimmer {
   0%   { background-position: 0% 50%; }
   50%  { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-@keyframes floatCard {
-  0%, 100% { transform: translateY(0) rotateX(0deg) rotateY(0deg); }
-  25%  { transform: translateY(-8px) rotateX(2deg) rotateY(-3deg); }
-  50%  { transform: translateY(-2px) rotateX(-1deg) rotateY(2deg); }
-  75%  { transform: translateY(-10px) rotateX(1deg) rotateY(-1deg); }
+/* Cursor */
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  background: #89AACC;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  box-shadow: 0 0 12px rgba(137, 170, 204, 0.5);
+  will-change: transform;
 }
 
-@keyframes drawLine {
-  from { height: 0; }
-  to   { height: 40px; }
-}
-
-/* ============================================
-   Form validation styles
-   ============================================ */
-
-.form-group.error input,
-.form-group.error textarea {
-  border-color: #f472b6 !important;
-}
-
-.form-group.success input,
-.form-group.success textarea {
-  border-color: #00c8e8 !important;
-}
-
-.form-group .form-error {
-  display: none;
-}
-
-.form-group.error .form-error {
-  display: block;
-}
-
-/* ============================================
-   Light theme overrides
-   ============================================ */
-
-[data-theme="light"] body {
-  background: #f5f5f7;
-  color: #1a1a2e;
-}
-
-[data-theme="light"] .glass-card {
-  background: rgba(255, 255, 255, 0.6);
-  border-color: rgba(0, 0, 0, 0.08);
-}
-
-[data-theme="light"] .glass-card:hover {
-  background: rgba(255, 255, 255, 0.85);
-  border-color: rgba(0, 0, 0, 0.12);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-}
-
-[data-theme="light"] .page-loader { background: #f5f5f7; }
-
-[data-theme="light"] .project-card-inner {
-  background: rgba(255, 255, 255, 0.6);
-  border-color: rgba(0, 0, 0, 0.08);
-}
-
-[data-theme="light"] .card-image { background: #e8e8ed; }
-
-@keyframes floatCard {
-  0%, 100% { transform: translateY(0) rotateX(0deg) rotateY(0deg); }
-  25%  { transform: translateY(-8px) rotateX(2deg) rotateY(-3deg); }
-  50%  { transform: translateY(-2px) rotateX(-1deg) rotateY(2deg); }
-  75%  { transform: translateY(-10px) rotateX(1deg) rotateY(-1deg); }
-}
-
-/* ============================================
-   Custom cursor styles
-   ============================================ */
-
-.cursor-dot,
 .cursor-ring {
-  @apply fixed top-0 left-0 pointer-events-none rounded-full;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 28px;
+  height: 28px;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  pointer-events: none;
   z-index: 9999;
   will-change: transform;
 }
 
-.cursor-dot {
-  width: 8px;
-  height: 8px;
-  background: #00c8e8;
-  box-shadow: 0 0 12px #00c8e8;
-}
-
-.cursor-ring {
-  width: 28px;
-  height: 28px;
-  border: 1.5px solid rgba(255, 255, 255, 0.3);
-}
-
-/* ============================================
-   Particle canvas
-   ============================================ */
-
 #particles {
-  @apply fixed inset-0 pointer-events-none;
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
   z-index: 0;
 }
 
-/* ============================================
-   Project cards
-   ============================================ */
-
-.project-card {
-  perspective: 1000px;
+/* Glass card */
+.glass-card {
+  border-radius: 1rem;
+  backdrop-filter: blur(20px);
+  background: hsl(var(--surface) / 0.5);
+  border: 1px solid hsl(var(--stroke));
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ============================================
-   Scroll reveal initial state
-   ============================================ */
+.glass-card:hover {
+  background: hsl(var(--surface) / 0.8);
+  border-color: hsl(var(--stroke) / 0.8);
+}
 
+/* Reveal */
 .reveal {
   opacity: 0;
 }
 
+/* Toast */
 .toast {
-  @apply fixed bottom-8 left-1/2 z-[3000] flex items-center gap-2.5
-         px-7 py-3.5 rounded-full border border-[#00c8e8]
-         text-white text-sm pointer-events-none;
-  background: #0c0e14;
-  box-shadow: 0 0 30px rgba(0, 200, 232, 0.3);
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.875rem 1.75rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(137, 170, 204, 0.3);
+  color: hsl(var(--text));
+  font-size: 0.875rem;
+  pointer-events: none;
+  background: hsl(var(--surface));
+  box-shadow: 0 0 30px rgba(137, 170, 204, 0.2);
   opacity: 0;
   transform: translate(-50%, 20px);
 }
 
-/* ============================================
-   Responsive
-   ============================================ */
-
 @media (max-width: 768px) {
-  body {
-    cursor: auto;
-  }
-
-  .cursor-dot,
-  .cursor-ring,
-  .mouse-glow {
-    display: none !important;
-  }
-
-  button {
-    cursor: pointer;
-  }
+  body { cursor: auto; }
+  .cursor-dot, .cursor-ring, .mouse-glow { display: none !important; }
+  button { cursor: pointer; }
 }
 
 @media (prefers-reduced-motion: reduce) {

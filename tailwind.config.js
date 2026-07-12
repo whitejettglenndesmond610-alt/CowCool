@@ -2,7 +2,6 @@ import animate from 'tailwindcss-animate'
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  darkMode: 'class',
   content: [
     './index.html',
     './src/**/*.{vue,js,ts,jsx,tsx}',
@@ -10,21 +9,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        bg: {
-          primary: '#06080d',
-          secondary: '#0c0e14',
-          card: 'rgba(255, 255, 255, 0.025)',
-        },
-        accent: {
-          cyan: '#00c8e8',
-          purple: '#7c3aed',
-          rose: '#f472b6',
-        },
+        bg: 'hsl(var(--bg))',
+        surface: 'hsl(var(--surface))',
+        'text-primary': 'hsl(var(--text))',
+        muted: 'hsl(var(--muted))',
+        stroke: 'hsl(var(--stroke))',
       },
       fontFamily: {
-        display: ['Inter', 'SF Pro Display', 'system-ui', 'sans-serif'],
-        body: ['Inter', 'system-ui', 'sans-serif'],
-        mono: ['JetBrains Mono', 'SF Mono', 'Fira Code', 'monospace'],
+        body: ['Inter', 'sans-serif'],
+        display: ['Instrument Serif', 'serif'],
+        mono: ['JetBrains Mono', 'monospace'],
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -32,20 +26,24 @@ export default {
         sm: 'calc(var(--radius) - 4px)',
       },
       animation: {
-        shimmer: 'shimmer 4s ease infinite',
-        'float-card': 'floatCard 5s ease-in-out infinite',
+        'scroll-down': 'scroll-down 1.5s ease-in-out infinite',
+        'role-fade-in': 'role-fade-in 0.4s ease-out',
+        'gradient-shift': 'gradient-shift 6s ease infinite',
       },
       keyframes: {
-        shimmer: {
+        'scroll-down': {
+          '0%': { transform: 'translateY(-100%)', opacity: '0' },
+          '50%': { opacity: '1' },
+          '100%': { transform: 'translateY(200%)', opacity: '0' },
+        },
+        'role-fade-in': {
+          '0%': { opacity: '0', transform: 'translateY(8px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        'gradient-shift': {
           '0%': { backgroundPosition: '0% 50%' },
           '50%': { backgroundPosition: '100% 50%' },
           '100%': { backgroundPosition: '0% 50%' },
-        },
-        floatCard: {
-          '0%, 100%': { transform: 'translateY(0) rotateX(0deg) rotateY(0deg)' },
-          '25%': { transform: 'translateY(-8px) rotateX(2deg) rotateY(-3deg)' },
-          '50%': { transform: 'translateY(-2px) rotateX(-1deg) rotateY(2deg)' },
-          '75%': { transform: 'translateY(-10px) rotateX(1deg) rotateY(-1deg)' },
         },
       },
     },

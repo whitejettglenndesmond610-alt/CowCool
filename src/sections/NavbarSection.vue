@@ -1,7 +1,5 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-import { Button } from '@/components/ui/button'
-import gsap from 'gsap'
 import { useTheme } from '@/composables/useTheme.js'
 import { Sun, Moon } from '@lucide/vue'
 
@@ -21,12 +19,12 @@ const links = [
 ]
 
 function onScroll() {
-  const y = window.scrollY
-  scrolled.value = y > 50
+  scrolled.value = window.scrollY > 100
+  const y = window.scrollY + 100
 
   const offsets = links.map(l => {
     const el = document.getElementById(l.id)
-    return { id: l.id, top: el ? el.offsetTop - 120 : 0 }
+    return { id: l.id, top: el ? el.offsetTop : 0 }
   })
 
   let current = 'home'
@@ -48,8 +46,7 @@ function scrollTo(id) {
   mobileOpen.value = false
   document.body.style.overflow = ''
   const el = document.getElementById(id)
-  if (!el) return
-  window.scrollTo({ top: el.offsetTop - 70, behavior: 'smooth' })
+  if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' })
 }
 
 function toggleMobile() {
@@ -66,68 +63,61 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
 </script>
 
 <template>
-  <nav
-    class="fixed top-0 left-0 right-0 z-[1000] px-6 h-[70px] border-b transition-all duration-400"
-    :class="scrolled
-      ? 'bg-[#0a0a0f]/85 backdrop-blur-xl border-white/[0.06] shadow-[0_4px_30px_rgba(0,0,0,0.3)]'
-      : 'bg-[#0a0a0f]/60 backdrop-blur-md border-transparent'"
-  >
-    <div class="max-w-[1200px] mx-auto h-full flex items-center justify-between">
+  <nav class="fixed top-0 left-0 right-0 z-50 flex justify-center pt-4 md:pt-6 px-4 transition-all"
+    :class="scrolled ? 'bg-bg/80 backdrop-blur-md shadow-md shadow-black/10' : ''">
+    <div class="inline-flex items-center rounded-full backdrop-blur-md border border-white/10 bg-surface/80 px-2 py-2">
       <a href="#home" @click.prevent="scrollTo('home')"
-        class="text-2xl font-extrabold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-[#00c8e8] to-[#7c3aed] z-[1001] hover:opacity-80 transition-opacity">
-        SN
+        class="w-9 h-9 rounded-full relative group flex-shrink-0">
+        <span class="absolute inset-0 rounded-full accent-gradient group-hover:[animation:gradient-shift_6s_ease_infinite] transition-all" />
+        <span class="absolute inset-[2px] rounded-full bg-bg flex items-center justify-center">
+          <span class="font-display italic text-[13px] text-text-primary">SN</span>
+        </span>
       </a>
 
-      <ul class="hidden md:flex items-center gap-8">
-        <li v-for="l in links" :key="l.id">
-          <a :href="'#' + l.id" @click.prevent="scrollTo(l.id)"
-            class="text-sm font-medium relative py-2 transition-colors"
-            :class="activeSection === l.id ? 'text-white' : 'text-white/60 hover:text-white'">
-            {{ l.label }}
-            <span class="absolute bottom-0 left-0 h-0.5 rounded-full bg-gradient-to-r from-[#00c8e8] to-[#7c3aed] transition-all duration-300"
-              :class="activeSection === l.id ? 'w-full' : 'w-0'" />
-          </a>
-        </li>
-      </ul>
+      <span class="w-px h-5 bg-stroke mx-1 hidden sm:block" />
 
-      <div class="hidden md:flex items-center gap-3">
-        <button @click="toggleTheme"
-          class="w-9 h-9 rounded-full flex items-center justify-center border border-white/10 text-white/60 hover:text-white hover:border-[#7c3aed] transition-all"
-          :title="theme === 'dark' ? '切换到亮色模式' : '切换到暗色模式'">
-          <Sun v-if="theme === 'dark'" class="size-4" />
-          <Moon v-else class="size-4" />
-        </button>
+      <button v-for="(link, i) in links" :key="link.id"
+        @click="scrollTo(link.id)"
+        :class="[
+          'text-xs sm:text-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 transition-colors',
+          activeSection === link.id
+            ? 'text-text-primary bg-stroke/50'
+            : 'text-muted hover:text-text-primary hover:bg-stroke/50',
+        ]">
+        {{ link.label }}
+      </button>
 
-        <Button class="text-xs font-semibold rounded-full border-white/10 bg-white/[0.025] backdrop-blur-md
-          hover:border-[#7c3aed] hover:shadow-[0_0_40px_rgba(124,58,237,0.25)]" variant="outline" size="sm"
-          @click="scrollTo('contact')">
+      <span class="w-px h-5 bg-stroke mx-1 hidden sm:block" />
+
+      <button @click="toggleTheme"
+        class="w-9 h-9 rounded-full flex items-center justify-center text-muted hover:text-text-primary hover:bg-stroke/50 transition-colors">
+        <Sun v-if="theme === 'dark'" class="size-3.5" />
+        <Moon v-else class="size-3.5" />
+      </button>
+
+      <span class="w-px h-5 bg-stroke mx-1 hidden sm:block" />
+
+      <button @click="scrollTo('contact')"
+        class="text-xs sm:text-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-muted hover:text-text-primary relative group">
+        <span class="absolute inset-[-2px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity accent-gradient" />
+        <span class="relative z-10 flex items-center gap-1 bg-surface rounded-full px-3 sm:px-4 py-1.5 sm:py-2">
           联系我
-        </Button>
-      </div>
-
-      <button class="hidden max-md:flex flex-col gap-1.5 p-2 z-[1001]" @click="toggleMobile"
-        aria-label="Toggle menu">
-        <span class="block w-6 h-0.5 bg-white rounded-full transition-all duration-300"
-          :class="mobileOpen ? 'rotate-45 translate-y-[7px]' : ''" />
-        <span class="block w-6 h-0.5 bg-white rounded-full transition-opacity"
-          :class="mobileOpen ? 'opacity-0' : ''" />
-        <span class="block w-6 h-0.5 bg-white rounded-full transition-all duration-300"
-          :class="mobileOpen ? '-rotate-45 -translate-y-[7px]' : ''" />
+          <span class="text-xs ml-0.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform inline-block">↗</span>
+        </span>
       </button>
     </div>
   </nav>
 
   <Teleport to="body">
     <div
-      class="fixed inset-0 z-[999] bg-[#0a0a0f]/95 backdrop-blur-3xl flex items-center justify-center transition-all duration-300 hidden max-md:flex"
-      :class="mobileOpen ? 'opacity-100 pointer-events-auto scale-100' : 'opacity-0 pointer-events-none scale-95'">
+      class="fixed inset-0 z-[999] bg-bg/95 backdrop-blur-3xl flex items-center justify-center transition-all duration-300 hidden max-md:flex"
+      :class="mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'">
       <ul class="flex flex-col items-center gap-8">
-        <li v-for="l in links" :key="l.id">
-          <a :href="'#' + l.id" @click.prevent="scrollTo(l.id)"
-            class="text-3xl font-bold text-white/60 hover:text-[#00c8e8] transition-colors"
-            style="font-family: Inter, sans-serif;">
-            {{ l.label }}
-          </a>
+        <li v-for="link in links" :key="link.id">
+          <button @click="scrollTo(link.id)"
+            class="text-3xl font-bold text-muted hover:text-text-primary transition-colors font-display">
+            {{ link.label }}
+          </button>
         </li>
       </ul>
     </div>

@@ -63,7 +63,7 @@ function drawConnections() {
         ctx.beginPath()
         ctx.moveTo(a.x, a.y)
         ctx.lineTo(b.x, b.y)
-        ctx.strokeStyle = `rgba(108,92,231,${0.08 * (1 - dist / 130)})`
+        ctx.strokeStyle = `rgba(78,133,191,${0.08 * (1 - dist / 130)})`
         ctx.lineWidth = 0.5
         ctx.stroke()
       }

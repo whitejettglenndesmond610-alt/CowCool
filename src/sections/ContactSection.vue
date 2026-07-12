@@ -57,10 +57,10 @@ function handleSubmit() {
 }
 
 function copyEmail() {
-  navigator.clipboard.writeText('whitejettglenndesmond610@gmail.com').then(() => {
+  navigator.clipboard.writeText('1186806617@qq.com').then(() => {
     showToast('邮箱地址已复制到剪贴板！')
   }).catch(() => {
-    window.location.href = 'mailto:whitejettglenndesmond610@gmail.com'
+    window.location.href = 'mailto:1186806617@qq.com'
   })
 }
 
@@ -84,12 +84,12 @@ onMounted(() => {
 
 <template>
   <section id="contact" class="relative py-[120px] max-md:py-[60px] overflow-hidden">
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-[radial-gradient(circle,rgba(108,92,231,0.08),transparent_70%)] pointer-events-none" />
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-[radial-gradient(circle,rgba(78,133,191,0.08),transparent_70%)] pointer-events-none" />
 
     <div class="max-w-[1200px] mx-auto px-6 relative z-[1]">
       <div class="text-center mb-16 reveal">
         <h2 class="section-title text-[clamp(2rem,5vw,3.5rem)] mb-3">联系我</h2>
-        <p class="text-white/40 text-base">有问题或只是想打个招呼？</p>
+        <p class="text-muted text-base">有问题或只是想打个招呼？</p>
       </div>
 
       <div class="grid grid-cols-2 gap-10 max-lg:grid-cols-1 max-lg:gap-6">
@@ -104,14 +104,14 @@ onMounted(() => {
               :class="[
                 'w-full px-4 py-3.5 rounded-lg text-white text-sm outline-none transition-all duration-200',
                 'bg-white/[0.025] border',
-                errors.name ? 'border-[#f472b6]' : 'border-white/[0.06] focus:border-[#7c3aed]',
+                errors.name ? 'border-[#89AACC]' : 'border-stroke focus:border-[#4E85BF]',
               ]"
             />
-            <label class="absolute left-4 transition-all duration-200 pointer-events-none text-white/40 text-sm"
-              :class="form.name ? '-top-2.5 text-xs text-[#00c8e8] bg-[#06080d] px-1' : 'top-1/2 -translate-y-1/2'">
+            <label class="absolute left-4 transition-all duration-200 pointer-events-none text-muted text-sm"
+              :class="form.name ? '-top-2.5 text-xs text-[#89AACC] bg-bg px-1' : 'top-1/2 -translate-y-1/2'">
               你的姓名
             </label>
-            <p v-if="errors.name" class="text-xs text-[#f472b6] mt-1.5 pl-1">{{ errors.name }}</p>
+            <p v-if="errors.name" class="text-xs text-[#89AACC] mt-1.5 pl-1">{{ errors.name }}</p>
           </div>
 
           <!-- Email -->
@@ -124,14 +124,14 @@ onMounted(() => {
               :class="[
                 'w-full px-4 py-3.5 rounded-lg text-white text-sm outline-none transition-all duration-200',
                 'bg-white/[0.025] border',
-                errors.email ? 'border-[#f472b6]' : 'border-white/[0.06] focus:border-[#7c3aed]',
+                errors.email ? 'border-[#89AACC]' : 'border-stroke focus:border-[#4E85BF]',
               ]"
             />
-            <label class="absolute left-4 transition-all duration-200 pointer-events-none text-white/40 text-sm"
-              :class="form.email ? '-top-2.5 text-xs text-[#00c8e8] bg-[#06080d] px-1' : 'top-1/2 -translate-y-1/2'">
+            <label class="absolute left-4 transition-all duration-200 pointer-events-none text-muted text-sm"
+              :class="form.email ? '-top-2.5 text-xs text-[#89AACC] bg-bg px-1' : 'top-1/2 -translate-y-1/2'">
               你的邮箱
             </label>
-            <p v-if="errors.email" class="text-xs text-[#f472b6] mt-1.5 pl-1">{{ errors.email }}</p>
+            <p v-if="errors.email" class="text-xs text-[#89AACC] mt-1.5 pl-1">{{ errors.email }}</p>
           </div>
 
           <!-- Message -->
@@ -143,24 +143,24 @@ onMounted(() => {
               :class="[
                 'w-full px-4 py-3.5 rounded-lg text-white text-sm outline-none transition-all duration-200 resize-none',
                 'bg-white/[0.025] border',
-                errors.message ? 'border-[#f472b6]' : 'border-white/[0.06] focus:border-[#7c3aed]',
+                errors.message ? 'border-[#89AACC]' : 'border-stroke focus:border-[#4E85BF]',
               ]"
             />
-            <label class="absolute left-4 top-[18px] transition-all duration-200 pointer-events-none text-white/40 text-sm"
-              :class="form.message ? '-top-2.5 text-xs text-[#00c8e8] bg-[#06080d] px-1' : ''">
+            <label class="absolute left-4 top-[18px] transition-all duration-200 pointer-events-none text-muted text-sm"
+              :class="form.message ? '-top-2.5 text-xs text-[#89AACC] bg-bg px-1' : ''">
               你的留言
             </label>
-            <p v-if="errors.message" class="text-xs text-[#f472b6] mt-1.5 pl-1">{{ errors.message }}</p>
+            <p v-if="errors.message" class="text-xs text-[#89AACC] mt-1.5 pl-1">{{ errors.message }}</p>
           </div>
 
           <Button type="submit" :disabled="submitted"
-            class="w-full justify-center bg-gradient-to-r from-[#00c8e8] to-[#7c3aed] text-white font-semibold rounded-full h-12 hover:shadow-[0_0_30px_rgba(108,92,231,0.3)] transition-shadow">
+            class="w-full justify-center bg-gradient-to-r from-[#89AACC] to-[#4E85BF] text-white font-semibold rounded-full h-12 hover:shadow-[0_0_30px_rgba(78,133,191,0.3)] transition-shadow">
             <Send class="size-4 mr-2" />
             <template v-if="submitted">演示模式 — 未实际发送</template>
             <template v-else>发送消息</template>
           </Button>
 
-          <p v-if="submitted" class="text-center text-[#00c8e8] font-medium text-sm mt-4 p-3 rounded-lg border border-[rgba(0,200,232,0.12)] bg-[rgba(0,200,232,0.05)]">
+          <p v-if="submitted" class="text-center text-[#89AACC] font-medium text-sm mt-4 p-3 rounded-lg border border-[rgba(137,170,204,0.12)] bg-[rgba(137,170,204,0.05)]">
             这是演示模式。请通过邮箱或下方的社交链接联系我！
           </p>
         </form>
@@ -168,12 +168,12 @@ onMounted(() => {
         <!-- Contact info -->
         <div class="flex flex-col gap-5">
           <div class="glass-card p-6 flex flex-col items-center gap-2 text-center">
-            <Mail class="size-6 text-[#00c8e8] mb-1" />
-            <span class="text-xs uppercase tracking-[0.1em] text-white/40">邮箱</span>
-            <a href="mailto:whitejettglenndesmond610@gmail.com"
-              class="text-sm text-white font-mono cursor-pointer hover:text-[#00c8e8] transition-colors"
+            <Mail class="size-6 text-[#89AACC] mb-1" />
+            <span class="text-xs uppercase tracking-[0.1em] text-muted">邮箱</span>
+            <a href="mailto:1186806617@qq.com"
+              class="text-sm text-white font-mono cursor-pointer hover:text-[#89AACC] transition-colors"
               @click.prevent="copyEmail">
-              whitejettglenndesmond610@gmail.com
+              1186806617@qq.com
             </a>
           </div>
 
@@ -184,7 +184,7 @@ onMounted(() => {
               :rel="s.name === 'email' ? undefined : 'noopener noreferrer'"
               :aria-label="s.label"
               @click="s.name === 'email' ? ($event.preventDefault(), copyEmail()) : null"
-              class="social-link glass-card !w-[50px] !h-[50px] !rounded-full !flex !items-center !justify-center !p-0 text-white/60 hover:!text-[#00c8e8] hover:!border-[#00c8e8] hover:!-translate-y-1 hover:!shadow-[0_0_30px_rgba(0,200,232,0.3)]"
+              class="social-link glass-card !w-[50px] !h-[50px] !rounded-full !flex !items-center !justify-center !p-0 text-muted hover:!text-[#89AACC] hover:!border-[#89AACC] hover:!-translate-y-1 hover:!shadow-[0_0_30px_rgba(137,170,204,0.3)]"
             >
               <template v-if="s.icon === 'github'">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
@@ -201,7 +201,7 @@ onMounted(() => {
             </a>
           </div>
 
-          <p class="flex items-center justify-center gap-2 text-sm text-white/40">
+          <p class="flex items-center justify-center gap-2 text-sm text-muted">
             <MapPin class="size-4" /> 中国 — 学生开发者
           </p>
         </div>

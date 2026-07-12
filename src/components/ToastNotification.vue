@@ -18,7 +18,7 @@ watch(() => props.toast.visible, (val) => {
 
 <template>
   <div class="toast" aria-hidden="true">
-    <span class="text-[#00c8e8] text-lg">✔</span>
+    <span class="text-[#89AACC] text-lg">✔</span>
     <span>{{ toast.message }}</span>
   </div>
 </template>

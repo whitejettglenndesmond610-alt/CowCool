@@ -26,5 +26,5 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
 </script>
 
 <template>
-  <div class="scroll-progress-bar fixed top-0 left-0 h-0.5 bg-gradient-to-r from-[#00c8e8] to-[#7c3aed] z-[2000] transition-width duration-100" style="width: 0%; border-radius: 0 2px 2px 0;" />
+  <div class="scroll-progress-bar fixed top-0 left-0 h-0.5 bg-gradient-to-r from-[#89AACC] to-[#4E85BF] z-[2000] transition-width duration-100" style="width: 0%; border-radius: 0 2px 2px 0;" />
 </template>

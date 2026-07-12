@@ -3,3 +3,5 @@ dist/
 .vite/
 .vercel
 *.log
+简历.docx
+tsconfig.*.json

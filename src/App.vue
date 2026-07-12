@@ -71,9 +71,9 @@ onMounted(() => {
     <CustomCursor />
     <ToastNotification :toast="toast" />
 
-    <div class="glow-orb" style="width:500px;height:500px;background:radial-gradient(circle,#7c3aed,transparent 70%);top:10%;left:-10%;animation:floatOrb1 12s ease-in-out infinite" aria-hidden="true" />
-    <div class="glow-orb" style="width:400px;height:400px;background:radial-gradient(circle,#00c8e8,transparent 70%);top:50%;right:-8%;animation:floatOrb2 15s ease-in-out infinite" aria-hidden="true" />
-    <div class="glow-orb" style="width:350px;height:350px;background:radial-gradient(circle,#f472b6,transparent 70%);bottom:-5%;left:30%;animation:floatOrb3 10s ease-in-out infinite" aria-hidden="true" />
+    <div class="glow-orb" style="width:500px;height:500px;background:radial-gradient(circle,#4E85BF,transparent 70%);top:10%;left:-10%;animation:floatOrb1 12s ease-in-out infinite" aria-hidden="true" />
+    <div class="glow-orb" style="width:400px;height:400px;background:radial-gradient(circle,#89AACC,transparent 70%);top:50%;right:-8%;animation:floatOrb2 15s ease-in-out infinite" aria-hidden="true" />
+    <div class="glow-orb" style="width:350px;height:350px;background:radial-gradient(circle,#89AACC,transparent 70%);bottom:-5%;left:30%;animation:floatOrb3 10s ease-in-out infinite" aria-hidden="true" />
 
     <NavbarSection />
     <main>
@@ -88,6 +88,6 @@ onMounted(() => {
 
     <ProjectModal :data="modalData" @close="closeModal" />
 
-    <div class="mouse-glow" style="position:fixed;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(108,92,231,0.08),transparent 70%);pointer-events:none;z-index:0;transform:translate(-50%,-50%);opacity:0" aria-hidden="true" />
+    <div class="mouse-glow" style="position:fixed;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(78,133,191,0.08),transparent 70%);pointer-events:none;z-index:0;transform:translate(-50%,-50%);opacity:0" aria-hidden="true" />
   </div>
 </template>
