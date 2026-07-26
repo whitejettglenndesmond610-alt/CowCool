@@ -1,149 +1,131 @@
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { ArrowUpRight, ChevronLeft, ChevronRight } from '@lucide/vue'
+import ProjectFlow from '@/components/ProjectFlow.vue'
+import { projects } from '@/data/portfolio.js'
+import { reducedMotion } from '@/lib/animations.js'
 
-gsap.registerPlugin(ScrollTrigger)
+const emit = defineEmits(['openProject'])
+const rootRef = ref(null)
+const activeIndex = ref(0)
+const direction = ref(1)
+const activeProject = computed(() => projects[activeIndex.value])
+const selectorOffsets = ['lg:translate-x-1 lg:-rotate-2', 'lg:translate-x-8 lg:rotate-2']
+const techRotations = ['-rotate-2', 'rotate-1', 'rotate-2', '-rotate-1', 'rotate-1']
+let ctx = null
+let onPointerMove = null
 
-const emit = defineEmits(['openModal'])
+function select(index) {
+  if (index === activeIndex.value) return
+  direction.value = index > activeIndex.value ? 1 : -1
+  activeIndex.value = index
+}
 
-const projects = [
-  {
-    id: 'rag-system',
-    type: 'AI 应用 · RAG',
-    title: '多知识库本地 AI 问答系统',
-    desc: '基于 LangChain + FAISS 构建的本地部署 RAG 系统，支持多格式文档导入、语义检索与多轮对话，集成 Ollama 本地大模型。',
-    tags: ['Python', 'LangChain', 'FAISS', 'Ollama', 'Gradio'],
-    demo: 'https://github.com/whitejettglenndesmond610-alt',
-    github: 'https://github.com/whitejettglenndesmond610-alt',
-  },
-  {
-    id: 'portfolio-website',
-    type: '前端 · 作品集',
-    title: '个人作品集网站',
-    desc: '从零构建的个人展示网站，包含自我介绍、技能、项目等模块，集成 Swiper.js 轮播与 ScrollReveal 滚动动画。',
-    tags: ['HTML5', 'CSS3', 'JavaScript', 'Swiper.js'],
-    demo: 'https://github.com/whitejettglenndesmond610-alt',
-    github: 'https://github.com/whitejettglenndesmond610-alt',
-  },
-  {
-    id: 'dance-booking',
-    type: '全栈 · 课程项目',
-    title: '舞蹈室课堂预约系统',
-    desc: '带前端界面、后端 API 和数据库的完整预约平台，实现课程管理、学生注册和实时可用性追踪。',
-    tags: ['HTML', 'CSS', 'JS', 'Node.js', 'MySQL'],
-    demo: 'https://github.com/whitejettglenndesmond610-alt/dance-booking',
-    github: 'https://github.com/whitejettglenndesmond610-alt/dance-booking',
-  },
-  {
-    id: 'dataviz-tool',
-    type: '数据可视化',
-    title: '数据可视化小工具',
-    desc: '用 Chart.js 和 Canvas 构建的交互式数据看板，支持多种图表类型与实时数据获取。',
-    tags: ['Chart.js', 'Canvas', 'JavaScript', 'API'],
-    demo: 'https://github.com/whitejettglenndesmond610-alt/dataviz',
-    github: 'https://github.com/whitejettglenndesmond610-alt/dataviz',
-  },
-]
+function previous() { select((activeIndex.value - 1 + projects.length) % projects.length) }
+function next() { select((activeIndex.value + 1) % projects.length) }
 
-const totalCards = projects.length
-const sectionRef = ref(null)
+function enterCard(el, done) {
+  gsap.fromTo(el, { autoAlpha: 0, x: reducedMotion() ? 0 : direction.value * 40 }, { autoAlpha: 1, x: 0, duration: reducedMotion() ? 0 : 0.5, ease: 'power3.out', onComplete: done })
+  const number = el.querySelector('.project-number')
+  if (number && !reducedMotion()) {
+    gsap.fromTo(number, { yPercent: direction.value * 55, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.65, ease: 'power3.out' })
+  }
+}
 
-function handleCardClick(project) {
-  emit('openModal', project)
+function leaveCard(el, done) {
+  gsap.to(el, { autoAlpha: 0, x: reducedMotion() ? 0 : direction.value * -22, duration: reducedMotion() ? 0 : 0.2, ease: 'power2.in', onComplete: done })
 }
 
 onMounted(() => {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-  const triggers = []
+  ctx = gsap.context(() => {
+    if (reducedMotion()) {
+      gsap.set('.project-enter', { autoAlpha: 1 })
+      return
+    }
+    gsap.fromTo('.project-enter', { autoAlpha: 0, y: 22 }, { autoAlpha: 1, y: 0, duration: 0.65, stagger: 0.08, ease: 'power3.out', delay: 0.2 })
+  }, rootRef.value)
 
-  nextTick(() => {
-    const cards = document.querySelectorAll('.stacking-card')
-    if (!cards.length) return
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches || reducedMotion()) return
+  onPointerMove = (event) => {
+    const preview = rootRef.value?.querySelector('.product-window')
+    if (!preview) return
+    const rect = preview.getBoundingClientRect()
+    const inside = event.clientX >= rect.left && event.clientX <= rect.right && event.clientY >= rect.top && event.clientY <= rect.bottom
+    const x = inside ? (event.clientX - rect.left) / rect.width - 0.5 : 0
+    const y = inside ? (event.clientY - rect.top) / rect.height - 0.5 : 0
+    gsap.to(preview, { rotationY: x * 4, rotationX: -y * 4, duration: 0.5, ease: 'power3.out', transformPerspective: 1200, overwrite: 'auto' })
+  }
+  document.addEventListener('mousemove', onPointerMove)
+})
 
-    cards.forEach((card, index) => {
-      const targetScale = 1 - (totalCards - 1 - index) * 0.04
-      gsap.set(card, { scale: targetScale, transformOrigin: 'center top' })
-
-      const trigger = ScrollTrigger.create({
-        trigger: card.parentElement,
-        start: 'top top',
-        end: 'bottom top+=100',
-        scrub: 1,
-        onUpdate(self) {
-          const fromScale = targetScale
-          const toScale = 0.96 - (totalCards - 1 - index) * 0.02
-          const scale = fromScale + (toScale - fromScale) * self.progress
-          const y = self.progress * 16
-          gsap.set(card, { scale, y, overwrite: 'auto' })
-        },
-      })
-      triggers.push(trigger)
-    })
-  })
-
-  onUnmounted(() => triggers.forEach(t => t.kill()))
+onUnmounted(() => {
+  ctx?.revert()
+  if (onPointerMove) document.removeEventListener('mousemove', onPointerMove)
 })
 </script>
 
 <template>
-  <section ref="sectionRef" id="projects" class="bg-bg py-12 md:py-16">
-    <div class="max-w-[1200px] mx-auto px-6 md:px-10 lg:px-16 mb-10 md:mb-14 reveal">
-      <div class="flex items-center gap-3 mb-4">
-        <span class="w-8 h-px bg-stroke" />
-        <span class="text-xs text-muted uppercase tracking-[0.3em]">精选作品</span>
-      </div>
-      <div class="flex items-end justify-between">
+  <section ref="rootRef" id="projects" class="relative flex h-full items-center overflow-hidden bg-[#edf6ff] px-5 pb-5 pt-24 md:px-8 md:pb-7 md:pt-24">
+    <div class="absolute -right-20 top-[5%] h-[82vh] w-[56vw] rotate-[-5deg] border border-white/80 bg-white/40" style="clip-path: polygon(12% 0, 100% 7%, 94% 88%, 62% 100%, 7% 93%, 0 18%)" />
+    <div class="absolute left-[17%] top-[18%] h-24 w-32 rotate-12 bg-[#c9f3e5]/40" style="clip-path: polygon(12% 0, 100% 22%, 83% 100%, 0 71%)" />
+    <span class="absolute -bottom-12 left-[35%] text-[20vw] font-extrabold leading-none tracking-[-0.1em] text-[#5da9ff]/[0.045]">WORK</span>
+
+    <div class="relative z-10 mx-auto grid w-full max-w-[1360px] gap-5 lg:grid-cols-[0.2fr_1.8fr] lg:gap-5">
+      <aside class="project-enter flex items-center justify-between lg:flex-col lg:items-start lg:justify-center">
         <div>
-          <h2 class="text-3xl md:text-5xl lg:text-6xl text-text-primary mb-3 font-display">
-            我的<span class="italic">项目</span>
-          </h2>
-          <p class="text-sm md:text-base text-muted max-w-md">
-            从课程作业到独立开发，每个项目都是学习路上的里程碑。
-          </p>
+          <span class="metadata text-[#3975b9]">Selected work</span>
+          <p class="mt-1 text-xs font-bold text-[#15201d]">真实项目</p>
         </div>
-      </div>
-    </div>
+        <div class="flex gap-2 lg:mt-12 lg:grid lg:w-full lg:gap-5">
+          <button v-for="(project, index) in projects" :key="project.id" class="group relative flex items-center gap-2 rounded-full border px-3 py-2 transition-all lg:w-[115%] lg:rounded-none lg:border-0 lg:bg-transparent lg:px-4 lg:py-3" :class="[selectorOffsets[index], index === activeIndex ? 'border-[#15201d] bg-[#15201d] text-white lg:text-[#15201d]' : 'border-white bg-white/60 text-muted lg:hover:text-[#3975b9]']" @click="select(index)">
+            <i class="absolute bottom-0 left-0 right-[14%] hidden h-px origin-left transition-transform duration-300 lg:block" :class="index === activeIndex ? 'scale-x-100 bg-[#15201d]' : 'scale-x-50 bg-[#bcd2e8] group-hover:scale-x-100'" />
+            <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-[45%_55%_42%_58%] font-mono text-[8px]" :class="index === activeIndex ? 'bg-[#15201d] text-[#59d6b3]' : 'bg-white text-[#3975b9]'">{{ project.number }}</span>
+            <span class="hidden text-xs font-bold lg:inline">{{ project.title }}</span>
+          </button>
+        </div>
+        <div class="hidden gap-2 lg:flex">
+          <button class="icon-button" aria-label="上一个项目" @click="previous"><ChevronLeft class="size-4" /></button>
+          <button class="icon-button" aria-label="下一个项目" @click="next"><ChevronRight class="size-4" /></button>
+        </div>
+      </aside>
 
-    <div class="max-w-[1200px] mx-auto px-6 md:px-10 lg:px-16">
-      <div v-for="(p, i) in projects" :key="p.id" class="h-[90vh] w-full pb-6">
-        <div
-          class="stacking-card sticky w-full rounded-[2rem] bg-surface border border-stroke overflow-hidden cursor-pointer group shadow-2xl shadow-black/40"
-          :style="{ top: `${80 + i * 32}px`, zIndex: totalCards - i, willChange: 'transform, scale' }"
-          @click="handleCardClick(p)"
-        >
-          <div class="grid grid-cols-12 gap-6 p-8 md:p-14 min-h-[520px]">
-            <div class="col-span-7 flex flex-col justify-center">
-              <span class="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#89AACC] mb-4">{{ p.type }}</span>
-              <h3 class="text-3xl md:text-5xl font-display italic text-text-primary mb-5 leading-[1.1]">{{ p.title }}</h3>
-              <p class="text-sm md:text-base text-muted leading-relaxed mb-8 max-w-lg">{{ p.desc }}</p>
-              <div class="flex flex-wrap gap-2">
-                <span
-                  v-for="t in p.tags"
-                  :key="t"
-                  class="text-[11px] font-medium px-3 py-1 rounded-full border border-white/10 text-[#89AACC] bg-white/[0.025] font-mono"
-                >{{ t }}</span>
+      <Transition mode="out-in" :css="false" @enter="enterCard" @leave="leaveCard">
+        <article :key="activeProject.id" class="project-enter grid min-h-[520px] overflow-visible md:min-h-[610px] lg:grid-cols-[0.84fr_1.16fr]">
+          <div class="relative z-20 flex flex-col justify-center p-5 md:p-8 lg:p-10 lg:pr-0">
+            <span class="project-number absolute right-4 top-0 rotate-6 text-[8rem] font-extrabold leading-none text-[#5da9ff]/[0.08] md:text-[12rem] lg:-right-20 lg:text-[16rem]">{{ activeProject.number }}</span>
+            <div class="relative z-10">
+              <div class="flex items-center gap-3"><span class="flex -rotate-3 items-center gap-2 bg-[#dff7ef] px-3 py-1 font-mono text-[8px] text-[#267f68]" style="clip-path: polygon(6% 0, 100% 14%, 94% 100%, 0 82%)"><i class="h-1.5 w-1.5 rounded-full bg-[#59d6b3]" />{{ activeProject.status }}</span><span class="metadata rotate-2 text-muted">Project {{ activeProject.number }}</span></div>
+              <p class="mt-6 inline-block -rotate-1 metadata text-[#3975b9]">{{ activeProject.subtitle }}</p>
+              <h2 class="relative mt-3 max-w-2xl text-3xl font-extrabold leading-tight tracking-[-0.05em] text-[#15201d] md:text-5xl lg:-mr-24 lg:-rotate-1"><template v-if="activeProject.id === 'local-rag'">多知识库本地 AI <span class="whitespace-nowrap">问答系统</span></template><template v-else>{{ activeProject.title }}</template></h2>
+              <p class="mt-5 max-w-xl text-xs leading-6 text-muted md:text-sm md:leading-7">{{ activeProject.description }}</p>
+              <div class="mt-5 flex flex-wrap gap-x-3 gap-y-2">
+                <span v-for="(tech,index) in activeProject.tech.slice(0, 5)" :key="tech" class="inline-block font-mono text-[8px] text-muted" :class="techRotations[index]">{{ tech }}</span>
               </div>
-            </div>
-
-            <div class="col-span-5 relative flex items-center justify-center rounded-3xl overflow-hidden">
-              <div
-                class="absolute inset-0"
-                style="background-image: radial-gradient(circle, rgba(137,170,204,0.12) 1px, transparent 1px); background-size: 5px 5px;"
-              />
-              <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(137,170,204,0.04),transparent_70%)]" />
-              <div class="relative z-10 flex flex-col items-center justify-center gap-3">
-                <span class="text-[8rem] md:text-[11rem] font-display italic text-text-primary/[0.04] select-none leading-none">{{ i + 1 }}</span>
-                <span class="text-xs text-muted font-mono tracking-[0.2em] uppercase">{{ p.type.split('·')[0] }}</span>
+              <div class="mt-6 hidden h-40 max-w-xl overflow-hidden border border-[#bfd7ef] bg-white/55 px-4 md:block lg:hidden" style="clip-path: polygon(3% 0, 97% 5%, 100% 82%, 90% 100%, 0 92%)">
+                <ProjectFlow :key="`compact-${activeProject.id}`" :project-id="activeProject.id" />
               </div>
+              <button v-magnetic="{ strength: 0.14, radius: 110 }" class="studio-button-primary mt-7 -rotate-1" @click="emit('openProject', activeProject)">项目详情 <ArrowUpRight class="size-4" /></button>
             </div>
           </div>
 
-          <div class="absolute bottom-8 right-10 flex items-center gap-2 px-6 py-3 rounded-full bg-white/[0.03] border border-stroke text-sm text-muted group-hover:text-[#89AACC] group-hover:border-[#89AACC]/40 group-hover:bg-[#89AACC]/5 transition-all duration-300">
-            查看详情
-            <span class="text-base group-hover:translate-x-1 transition-transform duration-300">&rarr;</span>
+          <div class="project-stage relative hidden overflow-hidden bg-[#dcecff] lg:block" style="clip-path: polygon(9% 0, 100% 4%, 96% 88%, 74% 100%, 4% 94%, 0 16%)">
+            <div class="absolute inset-0" style="background-image:radial-gradient(circle,rgba(57,117,185,.2) 1px,transparent 1px);background-size:20px 20px" />
+            <span class="absolute right-[4%] top-[8%] z-20 rotate-6 bg-[#ffc964] px-3 py-1 font-mono text-[8px] text-[#72500f]">BUILD / TEST / SHIP</span>
+            <div class="product-window absolute left-[9%] top-[11%] h-[78%] w-[84%] rotate-[-3deg] overflow-hidden rounded-[2.5rem_1rem_3rem_1.5rem] border-4 border-white bg-white shadow-[0_35px_80px_rgba(57,117,185,.2)] will-change-transform">
+              <div class="flex h-12 items-center justify-between border-b border-stroke px-5"><div class="flex gap-1.5"><i class="h-2 w-2 rounded-full bg-[#ff8d82]"/><i class="h-2 w-2 rounded-full bg-[#ffd56a]"/><i class="h-2 w-2 rounded-full bg-[#59d6b3]"/></div><span class="metadata text-muted">{{ activeProject.id }}.studio</span></div>
+              <div class="grid h-[calc(100%-3rem)] grid-cols-[0.3fr_0.7fr]">
+                <div class="border-r border-stroke bg-[#f8fbfa] p-4"><p class="metadata text-[#3975b9]">System</p><div class="mt-5 grid gap-2"><span v-for="(item,index) in activeProject.highlights" :key="item" class="h-8 rounded-lg" :class="index === activeIndex ? 'bg-[#dff7ef]' : 'border border-stroke bg-white'"/></div></div>
+                <div class="p-6"><div class="flex justify-between"><span class="h-3 w-28 rounded-full bg-[#15201d]"/><span class="h-7 w-16 rounded-full bg-[#5da9ff]"/></div><div class="mt-7 h-[64%] rounded-3xl bg-[#f5f8f7] px-3"><ProjectFlow :key="activeProject.id" :project-id="activeProject.id" /></div></div>
+              </div>
+            </div>
           </div>
-        </div>
+        </article>
+      </Transition>
+
+      <div class="project-enter flex items-center justify-between lg:hidden">
+        <span class="metadata text-muted">{{ activeProject.number }} / {{ String(projects.length).padStart(2,'0') }}</span>
+        <div class="flex gap-2"><button class="icon-button" @click="previous"><ChevronLeft class="size-4"/></button><button class="icon-button" @click="next"><ChevronRight class="size-4"/></button></div>
       </div>
     </div>
   </section>

@@ -1,89 +1,132 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import gsap from 'gsap'
+import { ArrowRight, Mail } from '@lucide/vue'
+import KnowledgeCore from '@/components/KnowledgeCore.vue'
+import { profile } from '@/data/portfolio.js'
+import { reducedMotion } from '@/lib/animations.js'
 
-const roles = ['AI 应用开发者', 'Python', '知识库构建', 'RAG 实践']
-const roleIndex = ref(0)
-const videoRef = ref(null)
-let roleTimer = null
+const emit = defineEmits(['navigate'])
+const rootRef = ref(null)
+let ctx = null
+
+const nodes = [
+  { label: 'Python', position: 'left-[5%] top-[21%]', tone: 'sky' },
+  { label: 'RAG', position: 'right-[7%] top-[18%]', tone: 'mint' },
+  { label: 'LangChain', position: 'right-[1%] top-[52%]', tone: 'sky' },
+  { label: 'FAISS', position: 'left-[3%] bottom-[23%]', tone: 'mint' },
+  { label: 'Vue', position: 'right-[16%] bottom-[12%]', tone: 'sky' },
+  { label: 'Engineering', position: 'left-[37%] top-[8%]', tone: 'mint' },
+]
 
 onMounted(() => {
-  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+  ctx = gsap.context(() => {
+    if (reducedMotion()) {
+      gsap.set('.hero-enter, .knowledge-stage, .ability-node', { autoAlpha: 1 })
+      gsap.set('.hero-link', { strokeDashoffset: 0 })
+      return
+    }
+    const timeline = gsap.timeline({ defaults: { ease: 'power3.out' }, delay: 0.52 })
+    timeline
+      .fromTo('.hero-enter', { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: 0.72, stagger: 0.085 })
+      .fromTo('.knowledge-stage', { autoAlpha: 0, scale: 0.94 }, { autoAlpha: 1, scale: 1, duration: 0.9 }, '-=0.65')
+      .fromTo('.ability-node', { autoAlpha: 0, scale: 0.8 }, { autoAlpha: 1, scale: 1, duration: 0.45, stagger: 0.06 }, '-=0.45')
 
-  tl.fromTo('.name-reveal',
-    { opacity: 0, y: 50 },
-    { opacity: 1, y: 0, duration: 1.2, delay: 0.1 },
-  )
-    .fromTo('.blur-in',
-      { opacity: 0, filter: 'blur(10px)', y: 20 },
-      { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1, stagger: 0.1 },
-      '-=0.8',
-    )
-
-  roleTimer = setInterval(() => {
-    roleIndex.value = (roleIndex.value + 1) % roles.length
-  }, 2000)
-
-  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-
-  const bgText = document.querySelector('.hero-bg-text')
-  if (!bgText) return
-  const setX = gsap.quickTo(bgText, 'x', { duration: 0.8, ease: 'power2.out' })
-  const setY = gsap.quickTo(bgText, 'y', { duration: 0.8, ease: 'power2.out' })
-
-  function onMove(e) {
-    setX((e.clientX / window.innerWidth - 0.5) * -20)
-    setY((e.clientY / window.innerHeight - 0.5) * -20)
-  }
-  document.addEventListener('mousemove', onMove)
-  onUnmounted(() => document.removeEventListener('mousemove', onMove))
+    gsap.utils.toArray('.hero-link').forEach((path, index) => {
+      const length = path.getTotalLength()
+      gsap.set(path, { strokeDasharray: length, strokeDashoffset: length })
+      timeline.to(path, { strokeDashoffset: 0, duration: 0.55, ease: 'power2.out' }, 1 + index * 0.045)
+    })
+    gsap.to('.ability-node i', { scale: 1.65, repeat: -1, yoyo: true, duration: 1.5, stagger: 0.18, ease: 'sine.inOut' })
+    gsap.to('.hero-scan-dot', { rotation: 360, transformOrigin: '400px 300px', repeat: -1, duration: 9, ease: 'none' })
+    gsap.to('.hero-shard', { y: -10, rotation: '+=3', repeat: -1, yoyo: true, duration: 3.6, stagger: 0.45, ease: 'sine.inOut' })
+  }, rootRef.value)
 })
 
-onUnmounted(() => { if (roleTimer) clearInterval(roleTimer) })
+onUnmounted(() => ctx?.revert())
 </script>
 
 <template>
-  <section id="home" class="relative h-screen w-full overflow-hidden">
-    <div class="hero-bg-text absolute inset-0 grid grid-cols-3 content-center justify-items-center gap-2 lg:gap-x-10 pointer-events-none z-0">
-      <span v-for="n in 9" :key="n" class="text-[clamp(3rem,6vw,5rem)] font-black text-white/[0.02] tracking-[0.25em] whitespace-nowrap select-none leading-none font-body">SHAWN NIU</span>
-    </div>
+  <section ref="rootRef" id="home" class="studio-grid relative flex h-full items-center overflow-hidden bg-[#f5f8f7] px-5 pb-8 pt-24 md:px-8 md:pb-8 md:pt-24">
+    <div class="hero-shard pointer-events-none absolute -left-12 top-[24%] h-28 w-52 rotate-[-12deg] bg-[#dcecff]/55" style="clip-path: polygon(8% 12%, 100% 0, 87% 84%, 16% 100%, 0 58%)" />
+    <div class="hero-shard pointer-events-none absolute bottom-[10%] right-[5%] h-28 w-40 rotate-12 bg-[#c9f3e5]/60" style="clip-path: polygon(18% 0, 100% 24%, 72% 100%, 0 78%)" />
+    <div class="mx-auto grid w-full max-w-[1380px] items-center gap-4 lg:grid-cols-[0.94fr_1.06fr] lg:gap-0">
+      <div class="relative z-20 py-2 lg:py-8">
+        <div class="hero-enter inline-block -rotate-1 studio-kicker">AI application builder · Zhengzhou</div>
 
-    <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
-      <div class="blur-in text-xs text-muted uppercase tracking-[0.3em] mb-8">
-        计算机科学与技术 · 郑州工商学院
+        <h1 class="hero-enter relative mt-6 text-[clamp(3.5rem,8vw,8.6rem)] font-extrabold leading-[0.76] tracking-[-0.075em] text-[#15201d]">
+          <span class="relative inline-block -rotate-2">Shawn</span><br><span class="relative ml-[8%] inline-block rotate-1">Niu<span class="text-[#59d6b3]">.</span></span>
+        </h1>
+
+        <p class="hero-enter relative mt-6 max-w-xl rotate-[0.4deg] text-xl font-semibold leading-tight tracking-[-0.035em] text-[#15201d] md:text-3xl lg:-mr-10">
+          {{ profile.statement }}
+        </p>
+        <p class="hero-enter mt-4 max-w-lg text-xs leading-6 text-muted md:text-sm md:leading-7">
+          计算机科学与技术在读，关注本地知识库、RAG 和可交互 AI 产品。通过持续构建，把学习中的技术变成真实、可运行的作品。
+        </p>
+
+        <div class="hero-enter mt-7 flex flex-wrap gap-3">
+          <button v-magnetic="{ strength: 0.14, radius: 110 }" class="studio-button-primary" @click="emit('navigate', 'projects')">
+            查看项目 <ArrowRight class="size-4" />
+          </button>
+          <button v-magnetic="{ strength: 0.14, radius: 110 }" class="studio-button-secondary" @click="emit('navigate', 'contact')">
+            联系我 <Mail class="size-4" />
+          </button>
+        </div>
+
+        <div class="hero-enter relative mt-8 flex max-w-lg items-center justify-between pt-5">
+          <svg class="pointer-events-none absolute inset-x-0 top-0 h-4 w-full" viewBox="0 0 500 16" preserveAspectRatio="none" fill="none"><path d="M0 10 C105 1 204 17 310 7 S420 3 500 11" stroke="#cbdad5" /></svg>
+          <span class="metadata text-muted">Computer Science · {{ profile.school }}</span>
+          <span class="metadata flex items-center gap-2 text-[#267f68]"><i class="h-1.5 w-1.5 rounded-full bg-[#59d6b3]" /> Building now</span>
+        </div>
       </div>
 
-      <h1 class="name-reveal text-6xl md:text-8xl lg:text-9xl font-bold leading-[0.9] tracking-tight text-text-primary mb-6">
-        Shawn Niu
-      </h1>
+      <div class="knowledge-stage relative hidden h-[min(68vh,700px)] min-h-[500px] md:block lg:-ml-14 lg:w-[calc(100%+3.5rem)]">
+        <div class="absolute inset-[7%] rotate-3 bg-[#dff7ef]/45" style="clip-path: polygon(19% 0, 78% 4%, 100% 31%, 91% 83%, 61% 100%, 11% 91%, 0 45%)" />
+        <div class="absolute inset-0 studio-grid opacity-45" style="mask-image:radial-gradient(ellipse at center,#000 35%,transparent 74%)" />
+        <div class="absolute left-6 top-6 z-10">
+          <p class="metadata text-muted">Interactive knowledge core</p>
+          <p class="mt-1 text-xs font-semibold text-[#15201d]">能力节点 / 实时连接</p>
+        </div>
+        <div class="absolute right-6 top-6 z-10 text-right">
+          <p class="metadata text-[#5da9ff]">SYSTEM 01</p>
+          <p class="mt-1 font-mono text-[9px] text-muted">POINTER REACTIVE</p>
+        </div>
+        <span class="hero-shard absolute left-[13%] top-[12%] z-10 -rotate-6 bg-[#fff2c9] px-3 py-1 font-mono text-[8px] text-[#8a6316]">LEARN → CONNECT</span>
 
-      <div class="blur-in text-sm md:text-lg lg:text-xl text-muted mb-4">
-        一个<span :key="roleIndex" class="font-display italic text-text-primary animate-role-fade-in inline-block">&nbsp;{{ roles[roleIndex] }}&nbsp;</span>在郑州
+        <svg class="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 800 600" preserveAspectRatio="none" fill="none" aria-hidden="true">
+          <g stroke="rgba(64,139,116,.28)" stroke-width="1.1" stroke-dasharray="4 7">
+            <path class="hero-link" d="M400 300 C300 230 190 140 90 120" />
+            <path class="hero-link" d="M400 300 C520 210 650 150 735 120" />
+            <path class="hero-link" d="M400 300 C545 300 670 320 780 330" />
+            <path class="hero-link" d="M400 300 C265 350 175 430 70 465" />
+            <path class="hero-link" d="M400 300 C510 390 610 475 690 520" />
+            <path class="hero-link" d="M400 300 C395 205 380 125 350 76" />
+          </g>
+          <circle class="hero-scan-dot" cx="400" cy="82" r="4" fill="#5da9ff" />
+          <circle class="hero-scan-dot" cx="615" cy="300" r="3" fill="#59d6b3" opacity=".75" />
+        </svg>
+
+        <KnowledgeCore />
+
+        <span
+          v-for="node in nodes"
+          :key="node.label"
+          class="ability-node absolute z-10 flex items-center font-mono text-[9px] font-semibold"
+          :class="[node.position, node.tone === 'mint' ? 'text-[#267f68]' : 'text-[#3975b9]']">
+          <i class="mr-1.5 inline-block h-1.5 w-1.5 rounded-full" :class="node.tone === 'mint' ? 'bg-[#59d6b3]' : 'bg-[#5da9ff]'" />{{ node.label }}
+        </span>
+
+        <div class="absolute bottom-5 left-6 right-6 flex items-center justify-between border-t border-stroke/80 pt-3">
+          <span class="metadata text-muted">Move pointer to inspect</span>
+          <span class="metadata text-muted">06 connected nodes</span>
+        </div>
       </div>
 
-      <p class="blur-in text-sm md:text-base text-muted max-w-md mb-12">
-        热衷 Python 开发与 AI 应用实践，专注本地化 RAG 知识库系统构建。动手实践驱动学习，从课程项目到独立作品，持续探索技术边界。
-      </p>
-
-      <div class="blur-in inline-flex gap-4">
-        <a href="#projects" @click.prevent="document.getElementById('projects')?.scrollIntoView({behavior:'smooth'})"
-          class="relative rounded-full text-sm px-7 py-3.5 hover:scale-105 transition-transform group overflow-hidden inline-block">
-          <span class="absolute inset-0 rounded-full accent-gradient" />
-          <span class="relative z-10 text-bg font-medium text-white">查看项目</span>
-        </a>
-        <a href="#contact" @click.prevent="document.getElementById('contact')?.scrollIntoView({behavior:'smooth'})"
-          class="rounded-full border-2 border-stroke text-text-primary text-sm px-7 py-3.5 hover:scale-105 transition-transform relative group overflow-hidden inline-block">
-          <span class="relative z-10">联系我</span>
-          <span class="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity accent-gradient" />
-        </a>
-      </div>
-    </div>
-
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 max-md:hidden">
-      <span class="text-xs text-muted uppercase tracking-[0.2em]">滚动</span>
-      <div class="w-px h-10 bg-stroke relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-full bg-text-primary animate-scroll-down" />
+      <div class="knowledge-stage relative mx-auto h-[190px] w-full max-w-md md:hidden">
+        <div class="absolute inset-0 studio-grid opacity-40" style="mask-image:radial-gradient(ellipse at center,#000 35%,transparent 75%)" />
+        <KnowledgeCore />
+        <span class="absolute bottom-4 left-4 metadata text-muted">Knowledge core / touch view</span>
       </div>
     </div>
   </section>

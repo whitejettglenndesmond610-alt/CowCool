@@ -1,5 +1,5 @@
 <script setup>
-import { watch, ref } from 'vue'
+import { watch } from 'vue'
 import gsap from 'gsap'
 
 const props = defineProps({ toast: { type: Object, required: true } })
@@ -18,7 +18,7 @@ watch(() => props.toast.visible, (val) => {
 
 <template>
   <div class="toast" aria-hidden="true">
-    <span class="text-[#89AACC] text-lg">✔</span>
+    <span class="text-[#267f68] text-lg">✔</span>
     <span>{{ toast.message }}</span>
   </div>
 </template>

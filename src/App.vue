@@ -1,93 +1,127 @@
 <script setup>
-import { onMounted } from 'vue'
-import LoadingScreen from './components/LoadingScreen.vue'
-import ScrollProgress from './components/ScrollProgress.vue'
-import ClickRipple from './components/ClickRipple.vue'
-import ParticleCanvas from './components/ParticleCanvas.vue'
-import CustomCursor from './components/CustomCursor.vue'
-import ProjectModal from './components/ProjectModal.vue'
-import ToastNotification from './components/ToastNotification.vue'
-import NavbarSection from './sections/NavbarSection.vue'
-import HeroSection from './sections/HeroSection.vue'
-import AboutSection from './sections/AboutSection.vue'
-import SkillsSection from './sections/SkillsSection.vue'
-import ProjectsSection from './sections/ProjectsSection.vue'
-import TimelineSection from './sections/TimelineSection.vue'
-import ContactSection from './sections/ContactSection.vue'
-import FooterSection from './sections/FooterSection.vue'
-import { useToast } from './composables/useToast.js'
-import { provide, ref } from 'vue'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { computed, markRaw, onMounted, onUnmounted, provide, ref } from 'vue'
+import AppNavigation from '@/components/AppNavigation.vue'
+import BrandIntro from '@/components/BrandIntro.vue'
+import PageTransition from '@/components/PageTransition.vue'
+import ProjectDetail from '@/components/ProjectDetail.vue'
+import ToastNotification from '@/components/ToastNotification.vue'
+import HeroSection from '@/sections/HeroSection.vue'
+import AboutSection from '@/sections/AboutSection.vue'
+import SkillsSection from '@/sections/SkillsSection.vue'
+import ProjectsSection from '@/sections/ProjectsSection.vue'
+import TimelineSection from '@/sections/TimelineSection.vue'
+import ContactSection from '@/sections/ContactSection.vue'
+import { useToast } from '@/composables/useToast.js'
+import { reducedMotion } from '@/lib/animations.js'
 
-gsap.registerPlugin(ScrollTrigger)
+const pages = [
+  { id: 'home', number: '01', label: '首页', component: markRaw(HeroSection) },
+  { id: 'about', number: '02', label: '关于', component: markRaw(AboutSection) },
+  { id: 'skills', number: '03', label: '能力', component: markRaw(SkillsSection) },
+  { id: 'projects', number: '04', label: '项目', component: markRaw(ProjectsSection) },
+  { id: 'timeline', number: '05', label: '经历', component: markRaw(TimelineSection) },
+  { id: 'contact', number: '06', label: '联系', component: markRaw(ContactSection) },
+]
 
+const hashId = window.location.hash.slice(1)
+const hashIndex = pages.findIndex(page => page.id === hashId)
+const activeIndex = ref(hashIndex >= 0 ? hashIndex : 0)
+const transitioning = ref(false)
+const previewMode = new URLSearchParams(window.location.search).has('preview')
+const introVisible = ref(!previewMode && sessionStorage.getItem('studio-intro') !== 'seen')
+const transitionRef = ref(null)
+const selectedProject = ref(null)
+const touchStart = { x: 0, y: 0, blocked: false }
+
+const currentPage = computed(() => pages[activeIndex.value])
 const { toast, showToast } = useToast()
 provide('showToast', showToast)
 
-const modalData = ref(null)
-provide('modalData', modalData)
-
-function openModal(data) {
-  modalData.value = data
+function commitPage(targetIndex, updateHistory) {
+  activeIndex.value = targetIndex
+  if (updateHistory) {
+    window.history.pushState({ page: pages[targetIndex].id }, '', `#${pages[targetIndex].id}`)
+  }
 }
 
-function closeModal() {
-  modalData.value = null
+function completeIntro() {
+  introVisible.value = false
+  sessionStorage.setItem('studio-intro', 'seen')
 }
 
-provide('openModal', openModal)
-provide('closeModal', closeModal)
+function navigate(target, { updateHistory = true } = {}) {
+  const targetIndex = typeof target === 'number' ? target : pages.findIndex(page => page.id === target)
+  if (targetIndex < 0 || targetIndex >= pages.length || targetIndex === activeIndex.value || transitioning.value) return
+
+  if (reducedMotion()) {
+    commitPage(targetIndex, updateHistory)
+    return
+  }
+
+  transitioning.value = true
+  const direction = targetIndex > activeIndex.value ? 1 : -1
+  const player = transitionRef.value
+  if (!player) {
+    commitPage(targetIndex, updateHistory)
+    transitioning.value = false
+    return
+  }
+
+  player.play({
+    from: currentPage.value,
+    to: pages[targetIndex],
+    travelDirection: direction,
+    onCovered: () => commitPage(targetIndex, updateHistory),
+    onComplete: () => { transitioning.value = false },
+  })
+}
+
+function onTouchStart(event) {
+  const touch = event.changedTouches[0]
+  touchStart.x = touch.clientX
+  touchStart.y = touch.clientY
+  touchStart.blocked = Boolean(event.target.closest('button, a, [role="dialog"]'))
+}
+
+function onTouchEnd(event) {
+  if (touchStart.blocked || selectedProject.value) return
+  const touch = event.changedTouches[0]
+  const dx = touch.clientX - touchStart.x
+  const dy = touch.clientY - touchStart.y
+  if (Math.abs(dx) < 58 || Math.abs(dx) < Math.abs(dy) * 1.25) return
+  navigate(activeIndex.value + (dx < 0 ? 1 : -1))
+}
+
+function onPopState() {
+  navigate(window.location.hash.slice(1) || 'home', { updateHistory: false })
+}
 
 onMounted(() => {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-
-  gsap.utils.toArray('.reveal').forEach(el => {
-    if (el.closest('.hero')) return
-    if (el.closest('.no-reveal')) return
-
-    gsap.fromTo(el,
-      { opacity: 0, y: 40 },
-      {
-        opacity: 1, y: 0,
-        duration: 0.8, ease: 'expo.out',
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 85%',
-          toggleActions: 'play none none reverse',
-        },
-      }
-    )
-  })
+  if (hashIndex < 0) window.history.replaceState({ page: 'home' }, '', '#home')
+  window.addEventListener('popstate', onPopState)
 })
+
+onUnmounted(() => window.removeEventListener('popstate', onPopState))
 </script>
 
 <template>
-  <LoadingScreen />
-  <ScrollProgress />
-  <ClickRipple />
-  <div class="relative">
-    <ParticleCanvas />
-    <CustomCursor />
-    <ToastNotification :toast="toast" />
+  <div class="relative h-[100dvh] overflow-hidden bg-bg" @touchstart.passive="onTouchStart" @touchend.passive="onTouchEnd">
+    <BrandIntro v-if="introVisible" @complete="completeIntro" />
+    <AppNavigation :pages="pages" :active-id="currentPage.id" @navigate="navigate" />
+    <PageTransition ref="transitionRef" />
 
-    <div class="glow-orb" style="width:500px;height:500px;background:radial-gradient(circle,#4E85BF,transparent 70%);top:10%;left:-10%;animation:floatOrb1 12s ease-in-out infinite" aria-hidden="true" />
-    <div class="glow-orb" style="width:400px;height:400px;background:radial-gradient(circle,#89AACC,transparent 70%);top:50%;right:-8%;animation:floatOrb2 15s ease-in-out infinite" aria-hidden="true" />
-    <div class="glow-orb" style="width:350px;height:350px;background:radial-gradient(circle,#89AACC,transparent 70%);bottom:-5%;left:30%;animation:floatOrb3 10s ease-in-out infinite" aria-hidden="true" />
-
-    <NavbarSection />
-    <main>
-      <HeroSection />
-      <AboutSection />
-      <SkillsSection />
-      <ProjectsSection @open-modal="openModal" />
-      <TimelineSection />
-      <ContactSection />
+    <main class="absolute inset-0">
+      <component
+        :is="currentPage.component"
+        :key="`${currentPage.id}-${introVisible ? 'intro' : 'ready'}`"
+        class="page-panel"
+        @navigate="navigate"
+        @open-project="selectedProject = $event"
+      />
     </main>
-    <FooterSection />
 
-    <ProjectModal :data="modalData" @close="closeModal" />
-
-    <div class="mouse-glow" style="position:fixed;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(78,133,191,0.08),transparent 70%);pointer-events:none;z-index:0;transform:translate(-50%,-50%);opacity:0" aria-hidden="true" />
+    <div class="paper-noise" aria-hidden="true" />
+    <ToastNotification :toast="toast" />
+    <ProjectDetail v-if="selectedProject" :project="selectedProject" @close="selectedProject = null" />
   </div>
 </template>

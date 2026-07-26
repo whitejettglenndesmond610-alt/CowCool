@@ -1,167 +1,114 @@
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { BookOpen, Calendar, GraduationCap, User } from '@lucide/vue'
+import { profile } from '@/data/portfolio.js'
+import { reducedMotion } from '@/lib/animations.js'
 
-gsap.registerPlugin(ScrollTrigger)
+const rootRef = ref(null)
+let ctx = null
 
-const stats = [
-  { target: 5, suffix: '+', label: '完成项目', icon: 'project' },
-  { target: 10, suffix: '+', label: '掌握技术栈', icon: 'star' },
-  { target: 2025, suffix: '', label: '开始学习编程', icon: 'time' },
-  { target: 1, suffix: '+', label: 'AI 项目经验', icon: 'heart' },
+const principles = [
+  { number: '01', title: '先理解', text: '不仅让代码运行，也理解技术为什么这样工作。', color: '#5da9ff', offset: 'md:-translate-y-1 md:-rotate-1' },
+  { number: '02', title: '再构建', text: '把课程知识和新工具放进真实项目中验证。', color: '#59d6b3', offset: 'md:translate-y-3 md:rotate-1' },
+  { number: '03', title: '持续迭代', text: '认真完成，也保持开放并主动修正方向。', color: '#ffc964', offset: 'md:-translate-y-2 md:-rotate-1' },
 ]
 
-const avatarRef = ref(null)
-const bioRef = ref(null)
+const identityItems = [
+  { label: 'Name', value: profile.name, icon: User, color: '#5da9ff', offset: 'lg:-translate-x-2 lg:-rotate-2' },
+  { label: 'School', value: profile.school, icon: GraduationCap, color: '#59d6b3', offset: 'lg:translate-x-5 lg:translate-y-5 lg:rotate-2' },
+  { label: 'Major', value: profile.major, icon: BookOpen, color: '#ffc964', offset: 'lg:translate-x-8 lg:-translate-y-1 lg:rotate-1' },
+  { label: 'Period', value: profile.educationPeriod, icon: Calendar, color: '#5da9ff', offset: 'lg:-translate-x-1 lg:translate-y-5 lg:-rotate-2' },
+]
 
 onMounted(() => {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-
-  // ===== Stat count-up =====
-  document.querySelectorAll('.stat-number').forEach(el => {
-    const target = parseInt(el.dataset.target, 10)
-    const suffix = el.dataset.suffix || ''
-    gsap.fromTo(el,
-      { textContent: '0' },
-      {
-        textContent: target,
-        duration: 2,
-        ease: 'expo.out',
-        snap: { textContent: 1 },
-        scrollTrigger: {
-          trigger: el.closest('.stat-card'),
-          start: 'top 85%',
-          toggleActions: 'play none none none',
-        },
-        onUpdate() {
-          el.textContent = Math.floor(gsap.getProperty(el, 'textContent')).toLocaleString() + suffix
-        },
-        onComplete() {
-          el.textContent = target.toLocaleString() + suffix
-        },
-      }
-    )
-  })
-
-  // ===== Character-by-character reveal wave =====
-  nextTick(() => {
-    if (!bioRef.value) return
-    const paragraphs = bioRef.value.querySelectorAll('p')
-    paragraphs.forEach(p => {
-      const text = p.textContent || ''
-      p.innerHTML = ''
-      const chars = text.split('').map((char) => {
-        const span = document.createElement('span')
-        span.textContent = char === ' ' ? '\u00A0' : char
-        span.style.opacity = '0.15'
-        span.style.display = 'inline'
-        span.style.willChange = 'opacity'
-        return span
-      })
-      chars.forEach(c => p.appendChild(c))
-
-      ScrollTrigger.create({
-        trigger: p,
-        start: 'top bottom',
-        end: 'bottom top+=40%',
-        scrub: 0.4,
-        onUpdate(self) {
-          const total = chars.length
-          const progress = Math.min(self.progress * 1.2, 1)
-          const waveCenter = progress * total
-          const waveWidth = total * 0.2
-          for (let i = 0; i < total; i++) {
-            const dist = i - waveCenter
-            if (dist > 0) {
-              const t = 1 - Math.min(dist / waveWidth, 1)
-              const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t
-              chars[i].style.opacity = String(0.15 + eased * 0.85)
-            } else {
-              chars[i].style.opacity = '1'
-            }
-          }
-        },
-      })
-    })
-  })
-
-  // ===== Magnetic hover on avatar =====
-  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return
-  const avatar = avatarRef.value
-  if (!avatar) return
-  const avatarEl = avatar.querySelector('.avatar-inner')
-  if (!avatarEl) return
-
-  const magnetStrength = 3
-  const magnetPadding = 150
-  const setX = gsap.quickTo(avatarEl, 'x', { duration: 0.6, ease: 'power3.out' })
-  const setY = gsap.quickTo(avatarEl, 'y', { duration: 0.6, ease: 'power3.out' })
-
-  function onMove(e) {
-    const rect = avatar.getBoundingClientRect()
-    const cx = rect.left + rect.width / 2
-    const cy = rect.top + rect.height / 2
-    const dx = e.clientX - cx
-    const dy = e.clientY - cy
-    const dist = Math.sqrt(dx * dx + dy * dy)
-
-    if (dist < magnetPadding) {
-      setX(dx / magnetStrength)
-      setY(dy / magnetStrength)
-    } else {
-      setX(0)
-      setY(0)
+  ctx = gsap.context(() => {
+    if (reducedMotion()) {
+      gsap.set('.about-enter', { autoAlpha: 1 })
+      gsap.set('.growth-path', { strokeDashoffset: 0 })
+      return
     }
-  }
-
-  document.addEventListener('mousemove', onMove)
-  onUnmounted(() => document.removeEventListener('mousemove', onMove))
+    gsap.fromTo('.about-enter', { autoAlpha: 0, y: 22 }, { autoAlpha: 1, y: 0, duration: 0.65, stagger: 0.075, ease: 'power3.out', delay: 0.2 })
+    gsap.utils.toArray('.growth-path').forEach((path, index) => {
+      const length = path.getTotalLength()
+      gsap.set(path, { strokeDasharray: length, strokeDashoffset: length })
+      gsap.to(path, { strokeDashoffset: 0, duration: 0.8, delay: 0.45 + index * 0.1, ease: 'power2.out' })
+    })
+    gsap.fromTo('.growth-node', { scale: 0, transformOrigin: 'center' }, { scale: 1, duration: 0.4, stagger: 0.1, delay: 0.8, ease: 'back.out(1.8)' })
+    gsap.to('.growth-node', { scale: 1.25, repeat: -1, yoyo: true, duration: 1.8, stagger: 0.25, ease: 'sine.inOut' })
+  }, rootRef.value)
 })
+
+onUnmounted(() => ctx?.revert())
 </script>
 
 <template>
-  <section id="about" class="relative py-[120px] max-md:py-[60px]">
-    <div class="max-w-[1200px] mx-auto px-6">
-      <div class="text-center mb-16 reveal">
-        <h2 class="section-title text-[clamp(2rem,4vw,3rem)] mb-3">关于我</h2>
-        <p class="text-muted text-base">AI 应用开发者 · Python 学习者 · RAG 实践者</p>
+  <section ref="rootRef" id="about" class="relative flex h-full items-center overflow-hidden bg-white px-5 pb-5 pt-24 md:px-8 md:pb-7 md:pt-24">
+    <div class="absolute right-0 top-0 h-full w-[7px] bg-gradient-to-b from-[#5da9ff] via-[#59d6b3] to-[#ffc964]" />
+    <div class="absolute right-[8%] top-[17%] h-24 w-24 border-r border-t border-[#5da9ff]/20" />
+    <div class="absolute bottom-[13%] left-[4%] h-16 w-16 border-b border-l border-[#59d6b3]/25" />
+    <svg class="pointer-events-none absolute left-[53.5%] top-[31%] hidden h-[38%] w-24 -translate-x-1/2 lg:block" viewBox="0 0 96 360" fill="none" aria-hidden="true">
+      <path class="growth-path" d="M48 350 C48 280 42 230 48 170 C54 112 48 68 48 12" stroke="#89cdb8" stroke-width="1.5" />
+      <path class="growth-path" d="M48 255 C29 235 18 222 8 196" stroke="#5da9ff" stroke-width="1.2" />
+      <path class="growth-path" d="M48 205 C66 184 77 170 88 145" stroke="#59d6b3" stroke-width="1.2" />
+      <path class="growth-path" d="M48 135 C32 117 25 101 20 82" stroke="#ffc964" stroke-width="1.2" />
+      <circle class="growth-node" cx="48" cy="255" r="4" fill="#59d6b3" />
+      <circle class="growth-node" cx="48" cy="205" r="4" fill="#5da9ff" />
+      <circle class="growth-node" cx="48" cy="135" r="4" fill="#ffc964" />
+      <path d="M8 196c14-4 20 2 20 2s-4 11-18 8c-7-2-9-6-2-10zM88 145c-14-3-20 3-20 3s5 11 19 7c7-2 8-7 1-10zM20 82c12-2 17 4 17 4s-6 9-17 4c-6-3-6-7 0-8z" fill="#59d6b3" fill-opacity=".15" stroke="#59d6b3" stroke-width=".8" />
+    </svg>
+
+    <div class="relative z-10 mx-auto w-full max-w-[1280px]">
+      <div class="about-enter flex items-center justify-between border-b border-stroke pb-4">
+        <div class="flex items-center gap-4">
+          <span class="flex h-10 w-10 items-center justify-center rounded-full bg-[#15201d] font-mono text-[9px] text-white">02</span>
+          <span class="metadata text-muted">Personal profile / 个人档案</span>
+        </div>
+        <span class="hidden text-4xl font-extrabold tracking-[-0.06em] text-[#15201d]/[0.055] md:block">ABOUT</span>
       </div>
 
-      <div class="grid grid-cols-2 gap-10 max-lg:grid-cols-1 max-lg:gap-8">
-        <div class="glass-card gradient-border p-10 max-md:p-7 relative overflow-hidden reveal">
-          <div ref="avatarRef" class="relative w-[100px] h-[100px] mx-auto mb-6" style="will-change: transform;">
-            <div class="avatar-inner w-full h-full rounded-full bg-surface border-2 border-white/10 flex items-center justify-center text-muted relative z-[1]">
-              <svg viewBox="0 0 100 100" fill="none" class="w-3/5"><circle cx="50" cy="38" r="16" stroke="currentColor" stroke-width="2"/><path d="M20 85c0-16.569 13.431-30 30-30s30 13.431 30 30" stroke="currentColor" stroke-width="2"/></svg>
+      <div class="mt-6 grid gap-7 lg:mt-8 lg:grid-cols-[1.04fr_0.96fr] lg:gap-20">
+        <div class="relative z-10">
+          <span class="pointer-events-none absolute -left-3 top-[18%] hidden h-20 w-44 rotate-[-8deg] bg-[#dcecff]/65 lg:block" style="clip-path: polygon(7% 16%, 91% 0, 100% 73%, 18% 100%, 0 58%)" />
+          <h2 class="about-enter text-[clamp(2.5rem,5.2vw,5.7rem)] font-extrabold leading-[0.96] tracking-[-0.07em] text-[#15201d]">
+            <span class="relative inline-block -rotate-[1deg]">认真构建，</span><br><span class="relative ml-[6%] inline-block rotate-[1deg] text-[#5da9ff] lg:-mr-20">也持续保持好奇。</span>
+          </h2>
+          <p class="about-enter mt-6 max-w-2xl text-lg font-semibold leading-relaxed tracking-[-0.025em] text-[#15201d] md:text-2xl">
+            我是 {{ profile.name }}，一名计算机科学学生，也是一名正在形成自己方法的 AI 应用构建者。
+          </p>
+          <p class="about-enter mt-4 max-w-2xl text-xs leading-6 text-muted md:text-sm md:leading-7">
+            从计算机基础、Python 和数据库出发，我逐渐把注意力集中到本地模型、知识检索与 RAG 应用。希望做出的东西不仅能够展示，也能真正使用、理解和继续维护。
+          </p>
+        </div>
+
+        <aside class="about-enter relative lg:-ml-4 lg:pt-1">
+          <div class="flex items-center justify-between">
+            <p class="metadata text-[#3975b9]">Identity constellation / 2026</p>
+            <span class="hidden -rotate-6 bg-[#fff2c9] px-3 py-1 font-mono text-[8px] text-[#9a6a16] lg:inline">STILL GROWING</span>
+          </div>
+          <svg class="pointer-events-none absolute inset-x-3 top-12 hidden h-[270px] w-[95%] lg:block" viewBox="0 0 520 270" preserveAspectRatio="none" fill="none" aria-hidden="true">
+            <path class="growth-path" d="M25 50 C145 5 155 116 265 80 S382 28 500 82 M92 190 C170 142 265 238 360 171 S448 142 510 204" stroke="#acd8ca" stroke-width="1.2" stroke-dasharray="3 6" />
+            <path class="growth-path" d="M265 80 C245 126 260 147 360 171" stroke="#8dbdf2" stroke-width="1" />
+          </svg>
+          <dl class="relative mt-4 grid grid-cols-1 gap-x-7 gap-y-1 border-t-2 border-[#15201d] pt-2 md:grid-cols-2 lg:min-h-[280px] lg:content-center lg:border-0 lg:pt-0">
+            <div v-for="item in identityItems" :key="item.label" class="group relative z-10 border-b border-stroke bg-white/75 px-1 py-4 transition-transform duration-300 hover:-translate-y-1 md:py-5 lg:bg-white/90 lg:px-3" :class="item.offset">
+              <dt class="metadata flex items-center gap-2 text-muted"><component :is="item.icon" class="size-3.5" :style="{ color: item.color }" />{{ item.label }}</dt>
+              <dd class="mt-2 text-right text-sm font-semibold text-[#15201d]" :class="item.label === 'Name' ? 'text-lg font-bold' : item.label === 'Period' ? 'font-mono text-xs text-[#267f68]' : ''">{{ item.value }}</dd>
+              <i class="absolute -left-1 bottom-[-3px] h-1.5 w-1.5 rounded-full" :style="{ backgroundColor: item.color }" />
             </div>
-            <div class="absolute -inset-1.5 rounded-full animate-[spin_6s_linear_infinite]" style="border:2px solid transparent; background: linear-gradient(135deg,#89AACC,#4E85BF,#89AACC) border-box; mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); mask-composite: exclude;" />
+          </dl>
+          <div class="mt-4 flex flex-wrap gap-x-5 gap-y-2 lg:-mt-1 lg:justify-end">
+            <span v-for="(item,index) in ['AI 探索', '工程能力', '动手实践', '创意表达', '认真可靠']" :key="item" class="inline-block font-mono text-[9px] text-muted" :class="index % 2 ? 'rotate-2' : '-rotate-1'">{{ item }}</span>
           </div>
+        </aside>
+      </div>
 
-          <div class="flex flex-wrap gap-2.5 justify-center mb-6">
-            <span class="text-xs font-medium px-4 py-1.5 rounded-full border border-white/10 text-[#89AACC] bg-white/[0.025] font-mono">AI 应用开发</span>
-            <span class="text-xs font-medium px-4 py-1.5 rounded-full border border-white/10 text-[#89AACC] bg-white/[0.025] font-mono">Python</span>
-            <span class="text-xs font-medium px-4 py-1.5 rounded-full border border-white/10 text-[#89AACC] bg-white/[0.025] font-mono">计算机科学</span>
-          </div>
-
-          <div ref="bioRef" class="text-muted text-sm leading-relaxed space-y-4">
-            <p>我是 牛帅 (Shawn)，郑州工商学院计算机科学与技术专业在读学生（2025.09 – 2027.06 预计毕业）。</p>
-            <p>相信「动手实践 + 技术理解」是最好的学习方式。从课程中掌握操作系统、数据库、计算机网络等核心基础，同时主动尝试新技术：用 LangChain + FAISS 构建本地知识库 RAG 问答系统，用 Gradio 搭建 AI 应用界面。</p>
-            <p>目前的学习路线：夯实计算机基础 → 掌握 Python/JavaScript 开发 → 深入 AI 应用实践。目标是成为能将 AI 技术落地为实际应用的工程师。</p>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-5 max-md:gap-3">
-          <div v-for="s in stats" :key="s.label" class="stat-card glass-card p-7 max-md:p-5 text-center flex flex-col items-center gap-2.5 cursor-default reveal" data-interactive>
-            <span class="text-[#89AACC]/80">
-              <svg v-if="s.icon === 'project'" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="12" y2="17"/></svg>
-              <svg v-else-if="s.icon === 'star'" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
-              <svg v-else-if="s.icon === 'time'" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              <svg v-else width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            </span>
-            <span class="stat-number text-4xl font-extrabold leading-none text-transparent bg-clip-text bg-gradient-to-r from-[#89AACC] to-[#4E85BF] max-md:text-3xl" style="font-family: Inter, sans-serif;" :data-target="s.target" :data-suffix="s.suffix">0</span>
-            <span class="text-xs text-muted font-medium">{{ s.label }}</span>
-          </div>
-        </div>
+      <div class="about-enter relative mt-6 hidden grid-cols-3 gap-8 pt-5 md:grid lg:mt-2">
+        <svg class="pointer-events-none absolute inset-x-0 top-0 h-6 w-full" viewBox="0 0 1200 24" preserveAspectRatio="none" fill="none"><path d="M0 18 C280 0 405 25 650 11 S935 3 1200 16" stroke="#cfe0db" /></svg>
+        <article v-for="principle in principles" :key="principle.number" class="border-l-2 pl-4" :class="principle.offset" :style="{ borderColor: principle.color }">
+          <div class="flex items-center gap-2"><span class="font-mono text-[8px] text-muted">{{ principle.number }}</span><span class="text-sm font-bold text-[#15201d]">{{ principle.title }}</span></div>
+          <p class="mt-2 text-[10px] leading-5 text-muted">{{ principle.text }}</p>
+        </article>
       </div>
     </div>
   </section>

@@ -1,5 +1,3 @@
-import animate from 'tailwindcss-animate'
-
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -16,37 +14,16 @@ export default {
         stroke: 'hsl(var(--stroke))',
       },
       fontFamily: {
-        body: ['Inter', 'sans-serif'],
-        display: ['Instrument Serif', 'serif'],
-        mono: ['JetBrains Mono', 'monospace'],
+        body: ['Manrope', 'sans-serif'],
+        display: ['Manrope', 'sans-serif'],
+        mono: ['IBM Plex Mono', 'monospace'],
       },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
-      animation: {
-        'scroll-down': 'scroll-down 1.5s ease-in-out infinite',
-        'role-fade-in': 'role-fade-in 0.4s ease-out',
-        'gradient-shift': 'gradient-shift 6s ease infinite',
-      },
-      keyframes: {
-        'scroll-down': {
-          '0%': { transform: 'translateY(-100%)', opacity: '0' },
-          '50%': { opacity: '1' },
-          '100%': { transform: 'translateY(200%)', opacity: '0' },
-        },
-        'role-fade-in': {
-          '0%': { opacity: '0', transform: 'translateY(8px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-        'gradient-shift': {
-          '0%': { backgroundPosition: '0% 50%' },
-          '50%': { backgroundPosition: '100% 50%' },
-          '100%': { backgroundPosition: '0% 50%' },
-        },
-      },
     },
   },
-  plugins: [animate],
+  plugins: [],
 }
