@@ -60,8 +60,14 @@ onUnmounted(() => ctx?.revert())
 
     <div class="relative z-10 mx-auto w-full max-w-[1280px]">
       <div class="about-enter flex items-center justify-between border-b border-stroke pb-4">
-        <div class="flex items-center gap-4">
-          <span class="flex h-10 w-10 items-center justify-center rounded-full bg-[#15201d] font-mono text-[9px] text-white">02</span>
+        <div class="flex items-center gap-3">
+          <svg class="h-6 w-12" viewBox="0 0 48 24" fill="none" aria-hidden="true">
+            <path d="M8 19C4 10 9 3 18 3c8 0 13 6 11 13-1 3-1 5 1 6" stroke="#5da9ff" stroke-width="1.2" stroke-linecap="round" />
+            <path d="M13 20c-3-7 0-13 6-13 6 0 9 5 7 10-1 3 0 5 2 6" stroke="#59d6b3" stroke-width="1.2" stroke-linecap="round" />
+            <path d="M18 20c-2-4-1-9 3-9 4 0 5 4 3 8" stroke="#267f68" stroke-width="1.2" stroke-linecap="round" />
+            <circle cx="38" cy="8" r="3" fill="#ffc964" />
+            <path d="M34 16h10" stroke="#15201d" stroke-width="1.2" stroke-linecap="round" />
+          </svg>
           <span class="metadata text-muted">Personal profile / 个人档案</span>
         </div>
         <span class="hidden text-4xl font-extrabold tracking-[-0.06em] text-[#15201d]/[0.055] md:block">ABOUT</span>

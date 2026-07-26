@@ -57,7 +57,15 @@ onUnmounted(() => ctx?.revert())
 
     <div class="relative z-10 mx-auto w-full max-w-[1280px]">
       <div class="contact-enter flex items-center justify-between">
-        <span class="flex h-11 w-11 -rotate-6 items-center justify-center rounded-[42%_58%_38%_62%] bg-[#15201d] font-mono text-[9px] text-white">06</span>
+        <span class="flex items-center gap-3 font-mono text-[8px] uppercase tracking-[0.14em] text-[#267f68]">
+          <svg class="h-6 w-12" viewBox="0 0 48 24" fill="none" aria-hidden="true">
+            <path d="M2 15C12 5 22 20 32 9S42 7 46 10" stroke="#267f68" stroke-width="1.2" />
+            <circle cx="2" cy="15" r="2.5" fill="#15201d" />
+            <circle cx="32" cy="9" r="2.5" fill="#5da9ff" />
+            <circle cx="46" cy="10" r="2.5" fill="#59d6b3" />
+          </svg>
+          Signal open
+        </span>
         <span class="rotate-2 metadata text-[#267f68]">Zhengzhou · China</span>
       </div>
 
@@ -69,20 +77,26 @@ onUnmounted(() => ctx?.revert())
       </div>
 
       <div class="mt-8 grid items-end gap-6 md:mt-12 md:grid-cols-[1fr_auto]">
-        <button v-magnetic="{ strength: 0.08, radius: 120 }" class="contact-enter group w-fit max-w-full text-left md:-rotate-1" @click="copyEmail">
+        <button class="email-button contact-enter group w-fit max-w-full origin-left text-left md:rotate-[0.7deg]" aria-label="复制邮箱地址" @click="copyEmail">
           <span class="metadata text-[#267f68]">Email · 点击复制</span>
-          <span class="relative mt-2 flex items-center gap-3 border-b-2 border-[#15201d] pb-2 text-xl font-extrabold tracking-[-0.04em] text-[#15201d] transition-colors group-hover:border-[#267f68] md:text-4xl">
-            {{ profile.email }} <Copy class="size-4 shrink-0 transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110 group-hover:text-[#267f68] md:size-5" />
+          <span class="relative mt-2 flex items-center gap-2 border-b-2 border-[#15201d] pb-2 text-[clamp(.95rem,2.5vw,2.25rem)] font-extrabold tracking-[-0.04em] text-[#15201d] transition-colors group-hover:border-[#267f68] sm:gap-3">
+            <span class="email-address inline-block">{{ profile.email }}</span>
+            <span class="relative shrink-0">
+              <Copy class="email-copy-icon size-4 md:size-5" />
+              <span class="copy-hint pointer-events-none absolute -right-1 -top-6 font-mono text-[7px] tracking-[0.12em] text-[#267f68]">COPY</span>
+            </span>
+            <i class="email-hover-line pointer-events-none absolute -bottom-0.5 left-0 h-0.5 w-full origin-left bg-gradient-to-r from-[#267f68] via-[#59d6b3] to-[#5da9ff]" />
+            <i class="email-hover-dot pointer-events-none absolute bottom-[-5px] left-0 h-2 w-2 rounded-full bg-[#15201d]" />
             <i class="copy-signal pointer-events-none absolute bottom-[-5px] left-0 h-2 w-2 rounded-full bg-[#5da9ff] opacity-0" />
           </span>
         </button>
 
-        <div class="contact-enter flex flex-wrap items-center gap-2 md:-translate-y-5 md:gap-1">
-          <a v-magnetic="{ strength: 0.12, radius: 100 }" :href="profile.github" target="_blank" rel="noopener noreferrer" class="group flex h-20 w-20 -rotate-6 flex-col items-center justify-center rounded-[46%_54%_42%_58%] bg-[#15201d] text-white transition-transform hover:-translate-y-1 md:h-24 md:w-24">
-            <ArrowUpRight class="size-5 transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:rotate-12" /><span class="mt-1 font-mono text-[8px]">GITHUB</span>
+        <div class="contact-enter flex flex-wrap items-center gap-3 md:-translate-y-2">
+          <a :href="profile.github" target="_blank" rel="noopener noreferrer" class="group flex h-20 w-20 flex-col items-center justify-center rounded-[46%_54%_42%_58%] bg-[#15201d] text-white shadow-[0_14px_35px_rgba(21,32,29,.14)] transition-transform duration-300 hover:-translate-y-1 hover:scale-[1.03] md:h-28 md:w-28">
+            <ArrowUpRight class="size-6 transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1" /><span class="mt-2 font-mono text-[9px] font-semibold tracking-[0.08em]">GITHUB</span>
           </a>
-          <div class="flex h-20 w-20 translate-y-3 rotate-6 flex-col items-center justify-center rounded-[58%_42%_60%_40%] border border-[#267f68]/30 bg-white/35 text-[#267f68] md:h-24 md:w-24">
-            <FileLock2 class="size-5" /><span class="mt-1 text-center font-mono text-[7px] leading-3">PDF<br>待提供</span>
+          <div class="flex h-20 w-20 flex-col items-center justify-center rounded-[58%_42%_60%_40%] border-2 border-[#267f68]/35 bg-white/75 text-[#267f68] shadow-[0_12px_30px_rgba(38,127,104,.08)] md:h-28 md:w-28">
+            <FileLock2 class="size-6" /><span class="mt-2 text-center font-mono text-[8px] font-semibold leading-4">PDF<br>待提供</span>
           </div>
         </div>
       </div>
@@ -95,3 +109,35 @@ onUnmounted(() => ctx?.revert())
     </div>
   </section>
 </template>
+
+<style scoped>
+.email-address,
+.email-copy-icon,
+.copy-hint,
+.email-hover-line,
+.email-hover-dot {
+  transition: transform .32s cubic-bezier(.22, 1, .36, 1), opacity .25s ease;
+}
+
+.copy-hint,
+.email-hover-dot { opacity: 0; }
+.email-hover-line { transform: scaleX(0); }
+
+.email-button:hover .email-address { transform: translateY(-3px); }
+.email-button:hover .email-copy-icon { transform: translate(2px, -2px) rotate(-8deg) scale(1.12); color: #267f68; }
+.email-button:hover .copy-hint { transform: translateY(-2px); opacity: 1; }
+.email-button:hover .email-hover-line { transform: scaleX(1); }
+.email-button:hover .email-hover-dot {
+  opacity: 1;
+  animation: email-scan 1.15s cubic-bezier(.22, 1, .36, 1) infinite;
+}
+
+@keyframes email-scan {
+  0% { left: 0; transform: scale(.7); }
+  70%, 100% { left: calc(100% - 8px); transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .email-button:hover .email-hover-dot { animation: none; left: calc(100% - 8px); }
+}
+</style>

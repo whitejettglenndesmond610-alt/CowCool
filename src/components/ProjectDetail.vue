@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue'
 import gsap from 'gsap'
-import { ArrowUpRight, X } from '@lucide/vue'
+import { ArrowUpRight, LockKeyhole, X } from '@lucide/vue'
 import { reducedMotion } from '@/lib/animations.js'
 
 const props = defineProps({ project: { type: Object, required: true } })
@@ -65,10 +65,17 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
           <span v-for="tech in project.tech" :key="tech" class="rounded-full border border-stroke px-3 py-1.5 font-mono text-[10px] text-muted">{{ tech }}</span>
         </div>
 
-        <a v-if="project.github" :href="project.github" target="_blank" rel="noopener noreferrer" class="studio-button-primary mt-10">
-          查看 GitHub <ArrowUpRight class="size-4" />
-        </a>
-        <p v-else class="mt-10 inline-flex rounded-full bg-[#e8f8f2] px-4 py-2 font-mono text-[10px] text-[#267f68]">GitHub 链接待补充</p>
+        <div class="mt-10 flex flex-wrap gap-3">
+          <a v-if="project.github" :href="project.github" target="_blank" rel="noopener noreferrer" class="studio-button-primary">
+            查看 GitHub <ArrowUpRight class="size-4" />
+          </a>
+          <a v-if="project.live" :href="project.live" target="_blank" rel="noopener noreferrer" class="studio-button-secondary">
+            在线预览 <ArrowUpRight class="size-4" />
+          </a>
+          <p v-if="project.visibility === 'private'" class="inline-flex items-center gap-2 rounded-full bg-[#e8f8f2] px-4 py-2 font-mono text-[10px] text-[#267f68]">
+            <LockKeyhole class="size-3.5" /> Private Build · 源码未公开
+          </p>
+        </div>
       </aside>
     </div>
   </Teleport>

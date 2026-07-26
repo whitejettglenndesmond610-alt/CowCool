@@ -36,7 +36,7 @@ Push to `origin` (`https://github.com/whitejettglenndesmond610-alt/nn.git`). Ver
 | `src/components/TransitionGlyph.vue` | Page-specific SVG glyphs used during transitions |
 | `src/components/KnowledgeCore.vue` | Hero wireframe Three.js scene |
 | `src/components/CapabilityIcon.vue` | Animated SVG icons for the three capability bands |
-| `src/components/ProjectFlow.vue` | Project-specific animated data-flow diagram |
+| `src/components/ProjectPreview.vue` | Four project-specific animated product scenes |
 | `src/components/ProjectDetail.vue` | Scrollable project side panel |
 | `src/lib/magnetic.js` | Reduced-motion-safe magnetic pointer directive |
 | `src/data/portfolio.js` | All portfolio copy and project data |
@@ -49,6 +49,6 @@ Push to `origin` (`https://github.com/whitejettglenndesmond610-alt/nn.git`). Ver
 - Sections use open editorial layouts, not repeated rounded cards. Reserve contained surfaces for the project product window and `ProjectDetail.vue`.
 - Fonts: Manrope for UI/display, IBM Plex Mono for metadata.
 - Page navigation emits `navigate` to `App.vue`; never use `scrollIntoView` or `window.scrollTo`.
-- Project links remain blank and visibly marked as pending until the user provides exact GitHub URLs.
+- Only public repositories expose GitHub links; private projects show `Private Build` and never expose private repository URLs.
 - Do not expose the phone number from `简历.docx`. Resume download stays unavailable until a redacted PDF is supplied.
 - All motion must respect `prefers-reduced-motion`; mobile layouts cannot depend on hover.
