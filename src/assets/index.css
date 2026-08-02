@@ -191,6 +191,328 @@ button {
   .studio-card { border-radius: 1.15rem; }
 }
 
+@media (max-width: 767px) {
+  #home,
+  #about,
+  #skills,
+  #projects,
+  #timeline,
+  #contact {
+    padding: 4.65rem 1rem 1rem;
+  }
+
+  .studio-kicker {
+    gap: 0.45rem;
+    font-size: 0.54rem;
+    letter-spacing: 0.12em;
+  }
+
+  .studio-kicker::before {
+    width: 1.15rem;
+  }
+
+  .metadata {
+    font-size: 0.52rem;
+    letter-spacing: 0.1em;
+  }
+
+  .studio-button-primary,
+  .studio-button-secondary {
+    min-height: 2.45rem;
+    padding: 0.65rem 1rem;
+    font-size: 0.72rem;
+  }
+
+  #home > .grid,
+  #home .mx-auto.grid {
+    gap: 0.65rem;
+  }
+
+  #home h1 {
+    margin-top: 1.05rem;
+    font-size: clamp(3rem, 21vw, 4.7rem);
+  }
+
+  #home p {
+    max-width: 100%;
+  }
+
+  #home .knowledge-stage.md\:hidden {
+    height: clamp(8.5rem, 24vh, 11rem);
+    margin-top: 0.2rem;
+  }
+
+  #home .hero-enter.mt-8 {
+    margin-top: 1.15rem;
+    padding-top: 0.85rem;
+  }
+
+  #about .about-enter.flex.items-center.justify-between,
+  #contact .contact-enter.flex.items-center.justify-between {
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  #about .mt-6.grid {
+    margin-top: 1rem;
+    gap: 1rem;
+  }
+
+  #about h2 {
+    font-size: clamp(2rem, 13.5vw, 3rem);
+  }
+
+  #about p.about-enter {
+    margin-top: 0.8rem;
+    line-height: 1.55;
+  }
+
+  #about dl {
+    margin-top: 0.65rem;
+  }
+
+  #about dl > div {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 0.75rem;
+    padding-top: 0.55rem;
+    padding-bottom: 0.55rem;
+  }
+
+  #about dd {
+    margin-top: 0;
+    font-size: 0.75rem;
+  }
+
+  #about aside > .mt-4.flex {
+    display: none;
+  }
+
+  #skills .skills-enter.relative.grid {
+    padding-bottom: 0.95rem;
+  }
+
+  #skills h2 {
+    margin-top: 0.75rem;
+    font-size: clamp(2rem, 13vw, 2.95rem);
+  }
+
+  #skills .skills-list {
+    margin-top: 0.3rem;
+  }
+
+  #skills article.skills-enter {
+    gap: 0.45rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  #skills article h3 {
+    font-size: 1rem;
+  }
+
+  #skills article p {
+    line-height: 1.35;
+  }
+
+  #skills article .flex.flex-wrap {
+    gap: 0.35rem 0.8rem;
+  }
+
+  #skills article .flex.flex-wrap span {
+    font-size: 0.48rem;
+  }
+
+  #skills .skills-enter.mt-5 {
+    margin-top: 0.8rem;
+  }
+
+  #projects > .relative.z-10.mx-auto.grid {
+    gap: 0.75rem;
+  }
+
+  #projects aside.project-enter {
+    align-items: flex-start;
+    gap: 0.7rem;
+  }
+
+  #projects aside.project-enter > .flex {
+    max-width: 100%;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+    scrollbar-width: none;
+  }
+
+  #projects aside.project-enter > .flex::-webkit-scrollbar {
+    display: none;
+  }
+
+  #projects aside.project-enter button {
+    flex: 0 0 auto;
+    padding: 0.35rem 0.6rem;
+  }
+
+  #projects article.project-enter {
+    min-height: 0;
+  }
+
+  #projects article.project-enter > div:first-child {
+    padding: 0.65rem 0 0;
+  }
+
+  #projects .project-number {
+    right: 0;
+    font-size: 5.4rem;
+  }
+
+  #projects h2 {
+    margin-top: 0.65rem;
+    font-size: clamp(2rem, 11.5vw, 2.75rem);
+  }
+
+  #projects h2 + p {
+    margin-top: 0.8rem;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    line-height: 1.65;
+  }
+
+  #projects .mt-5.flex.flex-wrap {
+    margin-top: 0.75rem;
+    gap: 0.25rem 0.65rem;
+  }
+
+  #projects .studio-button-primary {
+    margin-top: 1rem;
+  }
+
+  #projects .project-enter.lg\:hidden {
+    display: none;
+  }
+
+  #timeline .journey-enter.flex {
+    display: block;
+  }
+
+  #timeline h2 {
+    margin-top: 0.85rem;
+    font-size: clamp(2rem, 12.5vw, 3rem);
+  }
+
+  #timeline .journey-enter.mt-7 {
+    margin-top: 1.25rem;
+  }
+
+  #timeline button.group {
+    transform: none !important;
+  }
+
+  #timeline .journey-node-dot {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-width: 3px;
+  }
+
+  #timeline article.journey-enter {
+    margin-top: 1.35rem;
+    gap: 0.75rem;
+    padding-top: 1.25rem;
+  }
+
+  #timeline .journey-date {
+    font-size: clamp(2.5rem, 17vw, 4rem);
+  }
+
+  #timeline h3 {
+    font-size: clamp(1.35rem, 7vw, 1.85rem);
+  }
+
+  #timeline h3 + p {
+    margin-top: 0.65rem;
+    line-height: 1.65;
+  }
+
+  #contact .contact-enter.mt-8 {
+    margin-top: 1.45rem;
+  }
+
+  #contact h2 {
+    margin-top: 0.85rem;
+    font-size: clamp(2.75rem, 16vw, 4rem);
+  }
+
+  #contact .mt-8.grid {
+    margin-top: 1.35rem;
+    gap: 1rem;
+  }
+
+  #contact .email-address {
+    max-width: min(100%, 82vw);
+    overflow-wrap: anywhere;
+    line-height: 1.08;
+  }
+
+  #contact .email-button > span:last-child {
+    align-items: flex-end;
+    font-size: clamp(0.84rem, 4vw, 1rem);
+  }
+
+  #contact .contact-enter.flex.flex-wrap {
+    gap: 0.65rem;
+  }
+
+  #contact a.group,
+  #contact .contact-enter.flex.flex-wrap > div {
+    width: 4.25rem;
+    height: 4.25rem;
+  }
+
+  #contact .contact-enter.relative.mt-8 {
+    margin-top: 1.2rem;
+  }
+}
+
+@media (max-width: 390px), (max-height: 740px) {
+  #home,
+  #about,
+  #skills,
+  #projects,
+  #timeline,
+  #contact {
+    padding-top: 4.3rem;
+  }
+
+  #home h1,
+  #about h2,
+  #skills h2,
+  #projects h2,
+  #timeline h2,
+  #contact h2 {
+    letter-spacing: -0.065em;
+  }
+
+  #home .knowledge-stage.md\:hidden {
+    height: 7.4rem;
+  }
+
+  #about p.about-enter:nth-of-type(2),
+  #projects h2 + p,
+  #timeline h3 + p {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+
+  #skills article.skills-enter {
+    padding-top: 0.55rem;
+    padding-bottom: 0.55rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     scroll-behavior: auto !important;

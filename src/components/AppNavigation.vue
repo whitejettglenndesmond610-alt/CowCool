@@ -94,9 +94,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <header class="fixed left-0 right-0 top-0 z-[90] px-5 md:px-8">
-    <div class="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-white/20 to-transparent" />
-    <div class="relative mx-auto flex h-20 max-w-[1380px] items-center justify-between">
+  <header class="fixed left-0 right-0 top-0 z-[90] px-4 md:px-8">
+    <div class="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-white/20 to-transparent md:h-24" />
+    <div class="relative mx-auto flex h-16 max-w-[1380px] items-center justify-between md:h-20">
       <button class="group relative z-10 flex items-center gap-3 focus-visible:outline-none" aria-label="前往首页" @click="go('home')">
         <span class="relative flex h-9 w-9 -rotate-3 items-center justify-center rounded-[44%_56%_39%_61%] bg-[#15201d] text-[10px] font-extrabold text-white transition-transform duration-300 group-hover:rotate-3 group-hover:scale-105">
           SN
@@ -144,22 +144,22 @@ onUnmounted(() => {
 
   <Teleport to="body">
     <Transition name="nav-menu">
-      <div v-if="menuOpen" class="fixed inset-0 z-40 overflow-hidden bg-[#f2faf7]/96 px-6 pt-24 backdrop-blur-2xl md:hidden">
+      <div v-if="menuOpen" class="fixed inset-0 z-40 overflow-hidden bg-[#f2faf7]/96 px-5 pt-20 backdrop-blur-2xl md:hidden">
         <div class="pointer-events-none absolute -right-24 top-16 h-72 w-72 rounded-full border-[52px] border-[#5da9ff]/10" />
         <div class="pointer-events-none absolute -bottom-16 -left-20 h-72 w-72 rotate-12 bg-[#c9f3e5]/65" style="clip-path: polygon(18% 0, 100% 22%, 80% 100%, 0 76%)" />
-        <nav class="relative mx-auto h-[min(68vh,560px)] w-full max-w-md" aria-label="手机主导航">
+        <nav class="relative mx-auto h-[min(64vh,520px)] w-full max-w-md" aria-label="手机主导航">
           <svg class="pointer-events-none absolute left-2 top-2 h-[96%] w-[72%]" viewBox="0 0 280 560" preserveAspectRatio="none" fill="none" aria-hidden="true">
             <path d="M48 0 C205 62 30 145 166 224 S72 380 224 560" stroke="#8bcbb7" stroke-width="1.2" stroke-dasharray="4 7" />
           </svg>
           <button
             v-for="(page, index) in pages"
             :key="page.id"
-            class="group relative flex h-[15.5%] w-[78%] items-center gap-4 text-left focus-visible:outline-none"
+            class="group relative flex h-[15.5%] w-[78%] items-center gap-3 text-left focus-visible:outline-none"
             :class="mobileOffsets[index]"
             :aria-current="activeId === page.id ? 'page' : undefined"
             @click="go(page.id)">
             <span class="relative z-10 shrink-0 rounded-[43%_57%_39%_61%] transition-all duration-300" :class="activeId === page.id ? 'h-3 w-8 rotate-6 bg-[#15201d] shadow-[0_0_0_7px_rgba(89,214,179,.18)]' : 'h-3 w-3 border border-[#8bcbb7] bg-white/90 group-hover:scale-125'" />
-            <span class="relative text-2xl font-extrabold tracking-[-0.04em]" :class="activeId === page.id ? 'text-[#15201d]' : 'text-[#70807b]'">
+            <span class="relative text-xl font-extrabold tracking-[-0.04em]" :class="activeId === page.id ? 'text-[#15201d]' : 'text-[#70807b]'">
               {{ page.label }}
               <i v-if="activeId === page.id" class="absolute -bottom-2 left-0 h-2 w-[118%] -rotate-2 bg-[#dcecff]" style="clip-path: polygon(0 18%, 100% 0, 92% 100%, 4% 80%)" />
             </span>
