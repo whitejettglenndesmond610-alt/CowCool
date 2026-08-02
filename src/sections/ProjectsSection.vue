@@ -86,7 +86,7 @@ onUnmounted(() => {
           <button v-for="(project, index) in projects" :key="project.id" class="group relative flex items-center gap-2 rounded-full border px-2.5 py-2 transition-all lg:w-[118%] lg:rounded-none lg:border-0 lg:bg-transparent lg:px-4 lg:py-2.5" :class="[selectorOffsets[index], index === activeIndex ? 'border-[#15201d] bg-[#15201d] text-white lg:text-[#15201d]' : 'border-white bg-white/60 text-muted lg:hover:text-[#3975b9]']" :aria-label="`查看${project.title}`" @click="select(index)">
             <i class="absolute bottom-0 left-0 right-[14%] hidden h-px origin-left transition-transform duration-300 lg:block" :class="index === activeIndex ? 'scale-x-100 bg-[#15201d]' : 'scale-x-50 bg-[#bcd2e8] group-hover:scale-x-100'" />
             <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-[45%_55%_42%_58%] font-mono text-[8px]" :class="index === activeIndex ? 'bg-[#15201d] text-[#59d6b3]' : 'bg-white text-[#3975b9]'">{{ project.number }}</span>
-            <span class="hidden whitespace-nowrap text-xs font-bold lg:inline">{{ project.navTitle }}</span>
+            <span class="whitespace-nowrap text-[11px] font-bold lg:text-xs">{{ project.navTitle }}</span>
           </button>
         </div>
       </aside>
@@ -103,7 +103,7 @@ onUnmounted(() => {
               <div class="mt-5 flex flex-wrap gap-x-3 gap-y-2">
                 <span v-for="(tech,index) in activeProject.tech.slice(0, 5)" :key="tech" class="inline-block font-mono text-[8px] text-muted" :class="techRotations[index]">{{ tech }}</span>
               </div>
-              <div class="mt-6 hidden h-40 max-w-xl overflow-hidden border border-[#bfd7ef] bg-white/55 px-4 md:block lg:hidden" style="clip-path: polygon(3% 0, 97% 5%, 100% 82%, 90% 100%, 0 92%)">
+              <div class="mt-5 h-32 max-w-xl overflow-hidden border border-[#bfd7ef] bg-white/55 px-3 md:mt-6 md:h-40 md:px-4 lg:hidden" style="clip-path: polygon(3% 0, 97% 5%, 100% 82%, 90% 100%, 0 92%)">
                 <ProjectPreview :key="`compact-${activeProject.id}`" :project="activeProject" compact />
               </div>
               <button v-magnetic="{ strength: 0.14, radius: 110 }" class="studio-button-primary mt-7 -rotate-1" @click="emit('openProject', activeProject)">项目详情 <ArrowUpRight class="size-4" /></button>

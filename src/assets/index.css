@@ -192,45 +192,62 @@ button {
 }
 
 @media (max-width: 767px) {
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  }
+
   #home,
   #about,
   #skills,
   #projects,
   #timeline,
   #contact {
-    padding: 4.65rem 1rem 1rem;
+    align-items: flex-start;
+    padding: calc(4.75rem + env(safe-area-inset-top)) 1.25rem 1.15rem;
   }
 
   .studio-kicker {
-    gap: 0.45rem;
-    font-size: 0.54rem;
-    letter-spacing: 0.12em;
+    gap: 0.6rem;
+    font-size: 0.56rem;
+    letter-spacing: 0.16em;
   }
 
   .studio-kicker::before {
-    width: 1.15rem;
+    width: 1.55rem;
   }
 
   .metadata {
-    font-size: 0.52rem;
-    letter-spacing: 0.1em;
+    font-size: 0.58rem;
+    letter-spacing: 0.16em;
   }
 
   .studio-button-primary,
   .studio-button-secondary {
-    min-height: 2.45rem;
-    padding: 0.65rem 1rem;
-    font-size: 0.72rem;
+    min-height: 2.7rem;
+    padding: 0.72rem 1.15rem;
+    font-size: 0.75rem;
   }
 
-  #home > .grid,
+  #home h1,
+  #about h2,
+  #skills h2,
+  #projects h2,
+  #timeline h2,
+  #contact h2 {
+    font-family: inherit;
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+  }
+
   #home .mx-auto.grid {
-    gap: 0.65rem;
+    align-content: start;
+    gap: 1.2rem;
   }
 
   #home h1 {
-    margin-top: 1.05rem;
-    font-size: clamp(3rem, 21vw, 4.7rem);
+    margin-top: 1.3rem;
+    font-size: clamp(3.35rem, 21vw, 5rem);
   }
 
   #home p {
@@ -238,109 +255,138 @@ button {
   }
 
   #home .knowledge-stage.md\:hidden {
-    height: clamp(8.5rem, 24vh, 11rem);
-    margin-top: 0.2rem;
+    height: clamp(10rem, 27vh, 13.75rem);
+    margin-top: 0.35rem;
   }
 
   #home .hero-enter.mt-8 {
-    margin-top: 1.15rem;
-    padding-top: 0.85rem;
+    margin-top: 1.6rem;
   }
 
   #about .about-enter.flex.items-center.justify-between,
   #contact .contact-enter.flex.items-center.justify-between {
     align-items: flex-start;
-    gap: 0.75rem;
-  }
-
-  #about .mt-6.grid {
-    margin-top: 1rem;
     gap: 1rem;
   }
 
+  #about .mt-6.grid {
+    margin-top: 1.45rem;
+    gap: 1.35rem;
+  }
+
   #about h2 {
-    font-size: clamp(2rem, 13.5vw, 3rem);
+    font-size: clamp(2.35rem, 13vw, 3.4rem);
+    line-height: 1.02;
+  }
+
+  #about h2 span,
+  #skills h2 span,
+  #timeline h2 span,
+  #contact h2 span {
+    transform: none !important;
+    margin-left: 0 !important;
   }
 
   #about p.about-enter {
-    margin-top: 0.8rem;
-    line-height: 1.55;
+    margin-top: 1.05rem;
+    line-height: 1.75;
+  }
+
+  #about aside {
+    padding-top: 0.25rem;
   }
 
   #about dl {
-    margin-top: 0.65rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin-top: 0.85rem;
+    border-top-width: 1px;
+    padding-top: 0.85rem;
   }
 
   #about dl > div {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    gap: 0.75rem;
-    padding-top: 0.55rem;
-    padding-bottom: 0.55rem;
+    min-height: 5.15rem;
+    border: 1px solid #e1ece8;
+    border-bottom-width: 1px;
+    border-radius: 1.15rem;
+    background: rgba(255, 255, 255, 0.74);
+    padding: 0.75rem;
   }
 
   #about dd {
-    margin-top: 0;
-    font-size: 0.75rem;
-  }
-
-  #about aside > .mt-4.flex {
-    display: none;
-  }
-
-  #skills .skills-enter.relative.grid {
-    padding-bottom: 0.95rem;
-  }
-
-  #skills h2 {
-    margin-top: 0.75rem;
-    font-size: clamp(2rem, 13vw, 2.95rem);
-  }
-
-  #skills .skills-list {
-    margin-top: 0.3rem;
-  }
-
-  #skills article.skills-enter {
-    gap: 0.45rem;
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
-  }
-
-  #skills article h3 {
-    font-size: 1rem;
-  }
-
-  #skills article p {
+    margin-top: 0.8rem;
+    text-align: left;
+    font-size: 0.78rem;
     line-height: 1.35;
   }
 
+  #about aside > .mt-4.flex {
+    margin-top: 0.75rem;
+    gap: 0.4rem 0.8rem;
+  }
+
+  #skills .relative.z-10.mx-auto,
+  #projects > .relative.z-10.mx-auto.grid,
+  #timeline .relative.z-10.mx-auto,
+  #contact .relative.z-10.mx-auto {
+    padding-top: min(7vh, 3.5rem);
+  }
+
+  #skills .skills-enter.relative.grid {
+    padding-bottom: 1.4rem;
+  }
+
+  #skills h2 {
+    margin-top: 1rem;
+    font-size: clamp(2.15rem, 11.5vw, 3.1rem);
+    line-height: 1.02;
+  }
+
+  #skills .skills-list {
+    margin-top: 0.7rem;
+  }
+
+  #skills article.skills-enter {
+    gap: 0.8rem;
+    padding: 1rem 0;
+  }
+
+  #skills article h3 {
+    font-size: 1.25rem;
+    letter-spacing: -0.025em;
+  }
+
+  #skills article p {
+    line-height: 1.55;
+  }
+
   #skills article .flex.flex-wrap {
-    gap: 0.35rem 0.8rem;
+    gap: 0.45rem 1rem;
   }
 
   #skills article .flex.flex-wrap span {
-    font-size: 0.48rem;
+    font-size: 0.58rem;
+    transform: none !important;
   }
 
   #skills .skills-enter.mt-5 {
-    margin-top: 0.8rem;
+    margin-top: 1rem;
   }
 
   #projects > .relative.z-10.mx-auto.grid {
-    gap: 0.75rem;
+    align-content: start;
+    gap: 1rem;
   }
 
   #projects aside.project-enter {
-    align-items: flex-start;
-    gap: 0.7rem;
+    display: grid;
+    gap: 0.8rem;
   }
 
   #projects aside.project-enter > .flex {
     max-width: 100%;
     overflow-x: auto;
-    padding-bottom: 0.25rem;
+    padding-bottom: 0.35rem;
     scrollbar-width: none;
   }
 
@@ -350,43 +396,44 @@ button {
 
   #projects aside.project-enter button {
     flex: 0 0 auto;
-    padding: 0.35rem 0.6rem;
+    min-width: 4.9rem;
+    border-radius: 999px;
+    padding: 0.45rem 0.7rem;
   }
 
   #projects article.project-enter {
     min-height: 0;
+    grid-template-rows: auto;
   }
 
   #projects article.project-enter > div:first-child {
-    padding: 0.65rem 0 0;
+    padding: 0.25rem 0 0;
   }
 
   #projects .project-number {
-    right: 0;
-    font-size: 5.4rem;
+    right: -0.2rem;
+    top: 0.2rem;
+    font-size: 5.5rem;
   }
 
   #projects h2 {
-    margin-top: 0.65rem;
-    font-size: clamp(2rem, 11.5vw, 2.75rem);
+    margin-top: 0.8rem;
+    font-size: clamp(2.2rem, 10.5vw, 3rem);
+    line-height: 1.05;
   }
 
   #projects h2 + p {
-    margin-top: 0.8rem;
-    display: -webkit-box;
-    overflow: hidden;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    line-height: 1.65;
+    margin-top: 0.95rem;
+    line-height: 1.8;
   }
 
   #projects .mt-5.flex.flex-wrap {
-    margin-top: 0.75rem;
-    gap: 0.25rem 0.65rem;
+    margin-top: 1rem;
+    gap: 0.35rem 0.85rem;
   }
 
   #projects .studio-button-primary {
-    margin-top: 1rem;
+    margin-top: 1.15rem;
   }
 
   #projects .project-enter.lg\:hidden {
@@ -398,12 +445,13 @@ button {
   }
 
   #timeline h2 {
-    margin-top: 0.85rem;
-    font-size: clamp(2rem, 12.5vw, 3rem);
+    margin-top: 1rem;
+    font-size: clamp(2.3rem, 12vw, 3.35rem);
+    line-height: 1.02;
   }
 
   #timeline .journey-enter.mt-7 {
-    margin-top: 1.25rem;
+    margin-top: 1.6rem;
   }
 
   #timeline button.group {
@@ -411,91 +459,91 @@ button {
   }
 
   #timeline .journey-node-dot {
-    width: 2.25rem;
-    height: 2.25rem;
+    width: 2.65rem;
+    height: 2.65rem;
     border-width: 3px;
   }
 
   #timeline article.journey-enter {
-    margin-top: 1.35rem;
-    gap: 0.75rem;
-    padding-top: 1.25rem;
+    margin-top: 1.75rem;
+    gap: 1rem;
+    padding-top: 1.45rem;
   }
 
   #timeline .journey-date {
-    font-size: clamp(2.5rem, 17vw, 4rem);
+    font-size: clamp(3.4rem, 18vw, 5.4rem);
   }
 
   #timeline h3 {
-    font-size: clamp(1.35rem, 7vw, 1.85rem);
+    font-size: clamp(1.55rem, 7vw, 2.1rem);
+    letter-spacing: -0.03em;
   }
 
   #timeline h3 + p {
-    margin-top: 0.65rem;
-    line-height: 1.65;
+    margin-top: 0.85rem;
+    line-height: 1.85;
   }
 
   #contact .contact-enter.mt-8 {
-    margin-top: 1.45rem;
+    margin-top: 1.8rem;
   }
 
   #contact h2 {
-    margin-top: 0.85rem;
-    font-size: clamp(2.75rem, 16vw, 4rem);
+    margin-top: 1rem;
+    font-size: clamp(3rem, 14vw, 4.2rem);
+    line-height: 0.96;
   }
 
   #contact .mt-8.grid {
-    margin-top: 1.35rem;
-    gap: 1rem;
+    margin-top: 1.65rem;
+    gap: 1.25rem;
   }
 
   #contact .email-address {
     max-width: min(100%, 82vw);
     overflow-wrap: anywhere;
-    line-height: 1.08;
+    line-height: 1.18;
   }
 
   #contact .email-button > span:last-child {
     align-items: flex-end;
-    font-size: clamp(0.84rem, 4vw, 1rem);
+    font-size: clamp(0.92rem, 4.8vw, 1.22rem);
   }
 
   #contact .contact-enter.flex.flex-wrap {
-    gap: 0.65rem;
+    gap: 0.8rem;
   }
 
   #contact a.group,
   #contact .contact-enter.flex.flex-wrap > div {
-    width: 4.25rem;
-    height: 4.25rem;
+    width: 5.1rem;
+    height: 5.1rem;
   }
 
   #contact .contact-enter.relative.mt-8 {
-    margin-top: 1.2rem;
+    margin-top: 1.6rem;
   }
 }
 
-@media (max-width: 390px), (max-height: 740px) {
+@media (max-width: 390px), (max-height: 760px) {
   #home,
   #about,
   #skills,
   #projects,
   #timeline,
   #contact {
-    padding-top: 4.3rem;
+    padding-top: calc(4.4rem + env(safe-area-inset-top));
   }
 
-  #home h1,
-  #about h2,
-  #skills h2,
-  #projects h2,
-  #timeline h2,
-  #contact h2 {
-    letter-spacing: -0.065em;
+  #skills .relative.z-10.mx-auto,
+  #projects > .relative.z-10.mx-auto.grid,
+  #timeline .relative.z-10.mx-auto,
+  #contact .relative.z-10.mx-auto {
+    padding-top: min(4vh, 1.8rem);
   }
 
   #home .knowledge-stage.md\:hidden {
-    height: 7.4rem;
+    height: 8.5rem;
   }
 
   #about p.about-enter:nth-of-type(2),
@@ -508,8 +556,8 @@ button {
   }
 
   #skills article.skills-enter {
-    padding-top: 0.55rem;
-    padding-bottom: 0.55rem;
+    padding-top: 0.78rem;
+    padding-bottom: 0.78rem;
   }
 }
 
