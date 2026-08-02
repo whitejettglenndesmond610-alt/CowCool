@@ -203,7 +203,34 @@ button {
   #timeline,
   #contact {
     align-items: flex-start;
+    overflow-x: hidden;
+    overflow-y: auto;
     padding: calc(4.75rem + env(safe-area-inset-top)) 1.25rem 1.15rem;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    scrollbar-width: none;
+  }
+
+  #home::-webkit-scrollbar,
+  #about::-webkit-scrollbar,
+  #skills::-webkit-scrollbar,
+  #projects::-webkit-scrollbar,
+  #timeline::-webkit-scrollbar,
+  #contact::-webkit-scrollbar {
+    display: none;
+  }
+
+  #home > .relative,
+  #about > .relative,
+  #skills > .relative,
+  #projects > .relative,
+  #timeline > .relative,
+  #contact > .relative {
+    flex-shrink: 0;
+  }
+
+  #about > .absolute.right-0.top-0 {
+    display: none;
   }
 
   .studio-kicker {

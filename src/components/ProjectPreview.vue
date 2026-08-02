@@ -57,7 +57,7 @@ onUnmounted(() => ctx?.revert())
       <div v-else-if="project.preview === 'dance'" class="relative h-full overflow-hidden bg-[#eef7f7] p-3 text-[#16333b]" style="clip-path: polygon(2% 8%,96% 0,100% 88%,8% 100%,0 70%)">
         <div class="flex items-center justify-between"><span class="font-mono text-[7px] text-[#267f68]">SAM 2.1 / MOTION CROP</span><span class="rounded-full bg-[#16333b] px-2 py-1 font-mono text-[6px] text-white">9:16</span></div>
         <div class="absolute inset-x-[12%] bottom-5 top-8 overflow-hidden rounded-xl bg-gradient-to-br from-[#2d6471] via-[#387d82] to-[#8bc7b8]">
-          <i class="dance-photo absolute -inset-2 bg-cover" :style="{ backgroundImage: `linear-gradient(90deg,rgba(22,74,85,.35),rgba(22,74,85,.05)),url(${dancePreview})`, backgroundPosition: 'center 47%' }" />
+          <i class="dance-photo absolute -inset-2 bg-cover" :style="{ backgroundImage: `linear-gradient(90deg,rgba(22,74,85,.35),rgba(22,74,85,.05)),url(${dancePreview})`, backgroundPosition: 'center 42%' }" />
           <i class="dance-track absolute left-[18%] top-[7%] h-[84%] w-[64%] rounded-lg border border-[#ffc964] shadow-[0_0_0_1px_rgba(255,255,255,.25)]" />
           <i class="dance-playhead absolute bottom-0 left-[10%] top-0 w-px bg-white/65" />
         </div>
@@ -102,7 +102,7 @@ onUnmounted(() => ctx?.revert())
         <div class="grid h-[calc(100%-3rem)] grid-cols-[0.76fr_0.24fr] gap-3 p-4">
           <main class="grid grid-rows-[1fr_auto] gap-3">
             <div class="preview-enter relative overflow-hidden rounded-[1.5rem_1rem_1.8rem_1rem] bg-gradient-to-br from-[#255664] via-[#3a7d82] to-[#9acdbd]">
-              <div class="dance-photo absolute -inset-3 bg-cover" :style="{ backgroundImage: `linear-gradient(90deg,rgba(19,75,86,.5),rgba(19,75,86,.08) 58%,rgba(19,75,86,.25)),url(${dancePreview})`, backgroundPosition: 'center 48%' }" />
+              <div class="dance-photo absolute -inset-3 bg-cover" :style="{ backgroundImage: `linear-gradient(90deg,rgba(19,75,86,.5),rgba(19,75,86,.08) 58%,rgba(19,75,86,.25)),url(${dancePreview})`, backgroundPosition: 'center 42%' }" />
               <div class="absolute inset-0 opacity-20" style="background-image:linear-gradient(rgba(255,255,255,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.16) 1px,transparent 1px);background-size:48px 48px"/>
               <div class="absolute inset-y-0 left-[29%] right-[29%] border-x border-dashed border-white/35" />
               <svg class="absolute inset-0 h-full w-full" viewBox="0 0 520 260" preserveAspectRatio="none" fill="none"><path class="dance-ribbon" d="M-30 205C88 112 150 238 267 118S421 97 558 22" stroke="#d9f4eb" stroke-opacity=".45" stroke-width="2" stroke-dasharray="8 8"/><path d="M-20 232C108 171 172 270 287 181S431 151 550 90" stroke="#5da9ff" stroke-opacity=".35"/></svg>
