@@ -319,8 +319,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section ref="rootRef" id="about" class="relative flex h-full items-center overflow-hidden bg-white px-5 pb-5 pt-24 md:px-8 md:pb-7 md:pt-24">
-    <div class="absolute right-0 top-0 h-full w-[7px] bg-gradient-to-b from-[#5da9ff] via-[#59d6b3] to-[#ffc964]" />
+  <section ref="rootRef" id="about" class="relative flex h-full items-center overflow-hidden bg-[#f3f8ff] px-5 pb-5 pt-24 md:px-8 md:pb-7 md:pt-24">
     <div class="px-layer absolute right-[8%] top-[17%] h-24 w-24 border-r border-t border-[#5da9ff]/20" data-depth="0.6" aria-hidden="true" />
     <div class="px-layer absolute bottom-[13%] left-[4%] h-16 w-16 border-b border-l border-[#59d6b3]/25" data-depth="0.9" aria-hidden="true" />
 
