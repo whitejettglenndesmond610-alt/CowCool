@@ -105,7 +105,16 @@ onUnmounted(() => ctx?.revert())
       <div class="skills-enter relative grid items-end gap-4 pb-5 lg:grid-cols-[1fr_0.45fr]">
         <svg class="pointer-events-none absolute -bottom-2 left-0 h-7 w-full" viewBox="0 0 1200 28" preserveAspectRatio="none" fill="none"><path d="M0 19 C225 3 388 31 605 13 S970 4 1200 20" stroke="#15201d" stroke-width="2" /></svg>
         <div>
-          <span class="studio-kicker">Capability system / 能力结构</span>
+          <span class="studio-kicker flex items-center gap-3">
+            <svg class="h-6 w-12" viewBox="0 0 48 24" fill="none" aria-hidden="true">
+              <path d="M6 17 C14 13 18 15 24 11 S36 7 42 9" stroke="#8dbdf2" stroke-width="1.1" stroke-linecap="round" />
+              <circle cx="8" cy="17" r="3" fill="#5da9ff" />
+              <circle cx="24" cy="11" r="3" fill="#59d6b3" />
+              <circle cx="41" cy="9" r="3" fill="#ffc964" />
+              <path d="M4 21 C16 19 32 20 44 19" stroke="#267f68" stroke-width="1" stroke-linecap="round" opacity=".5" />
+            </svg>
+            Capability system / 能力结构
+          </span>
           <h2 class="mt-4 text-[clamp(2.4rem,5.2vw,5.3rem)] font-extrabold leading-[0.96] tracking-[-0.07em] text-[#15201d]">
             <span class="inline-block -rotate-1"><span v-for="(ch, i) in titleLine1" :key="`a${i}`" class="title-char inline-block will-change-transform">{{ ch }}</span></span>
             <span class="ml-[3%] inline-block translate-y-1 rotate-1 text-[#267f68]"><span v-for="(ch, i) in titleLine2" :key="`b${i}`" class="title-char inline-block will-change-transform">{{ ch }}</span></span>

@@ -276,7 +276,16 @@ onUnmounted(() => {
     <div class="relative z-10 mx-auto w-full max-w-[1280px]">
       <div class="journey-enter flex items-start justify-between">
         <div>
-          <span class="studio-kicker">Journey map / 成长路径</span>
+          <span class="studio-kicker flex items-center gap-3">
+            <svg class="h-6 w-12" viewBox="0 0 48 24" fill="none" aria-hidden="true">
+              <path d="M4 19 C12 11 18 21 26 13 S36 5 40 8" stroke="#c88713" stroke-width="1.2" stroke-linecap="round" stroke-dasharray="3 4" />
+              <circle cx="12" cy="14" r="2.4" fill="#ffc964" />
+              <circle cx="27" cy="12" r="2.4" fill="#e8a33d" />
+              <path d="M40 8 L40 3" stroke="#c88713" stroke-width="1.2" stroke-linecap="round" />
+              <path d="M40 3 L46 5 L40 7.5 Z" fill="#59d6b3" />
+            </svg>
+            Journey map / 成长路径
+          </span>
           <h2 class="relative mt-4 max-w-5xl text-[clamp(2.3rem,5vw,5rem)] font-extrabold leading-[0.94] tracking-[-0.065em] text-[#15201d]">
             <span class="inline-block -rotate-1"><span v-for="(ch, i) in titleLine1" :key="`a${i}`" class="title-char inline-block will-change-transform">{{ ch }}</span></span><br><span class="title-line-2 ml-[5%] inline-block rotate-1 text-[#c88713] md:whitespace-nowrap"><span v-for="(ch, i) in titleLine2a" :key="`b${i}`" class="title-char inline-block will-change-transform">{{ ch }}</span><span class="whitespace-nowrap"><span v-for="(ch, i) in titleLine2b" :key="`c${i}`" class="title-char inline-block will-change-transform">{{ ch }}</span></span></span>
           </h2>
