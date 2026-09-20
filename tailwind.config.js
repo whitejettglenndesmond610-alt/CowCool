@@ -15,7 +15,7 @@ export default {
       },
       fontFamily: {
         body: ['Manrope', 'sans-serif'],
-        display: ['Manrope', 'sans-serif'],
+        display: ['Instrument Serif', 'serif'],
         mono: ['IBM Plex Mono', 'monospace'],
       },
       borderRadius: {

@@ -1,6 +1,13 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue'
 
+const props = defineProps({
+  activeIndex: {
+    type: Number,
+    default: -1,
+  },
+})
+
 const canvasRef = ref(null)
 const rootRef = ref(null)
 let renderer = null
@@ -63,7 +70,7 @@ onMounted(async () => {
   const nodes = nodePositions.map((position, index) => {
     const node = new THREE.Mesh(
       new THREE.SphereGeometry(index % 2 ? 0.09 : 0.12, 16, 16),
-      new THREE.MeshBasicMaterial({ color: index % 2 ? 0x5da9ff : 0x59d6b3 }),
+      new THREE.MeshBasicMaterial({ color: index % 2 ? 0x5da9ff : 0x59d6b3, transparent: true, opacity: 1 }),
     )
     node.position.set(...position)
     group.add(node)
@@ -103,7 +110,16 @@ onMounted(async () => {
     inner.rotation.x = -time * 0.28
     inner.rotation.y = time * 0.22
     rings.forEach((ring, index) => { ring.rotation.z += 0.0008 * (index + 1) })
-    nodes.forEach((node, index) => { node.scale.setScalar(1 + Math.sin(time * 1.3 + index) * 0.12) })
+    const selected = props.activeIndex
+    nodes.forEach((node, index) => {
+      const idle = selected < 0
+      const on = selected === index
+      const pulse = 1 + Math.sin(time * 1.3 + index) * 0.12
+      node.scale.setScalar(idle ? pulse : on ? 1.85 : 0.72)
+      node.material.opacity = idle ? 1 : on ? 1 : 0.18
+    })
+    core.material.opacity = selected < 0 ? 0.72 : 0.42
+    inner.material.opacity = selected < 0 ? 0.18 : 0.08
     renderer.render(scene, camera)
     frame = requestAnimationFrame(render)
   }
